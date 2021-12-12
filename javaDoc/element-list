@@ -1,0 +1,9 @@
+unnamed package
+domain
+domain.validation
+repository
+repository.database
+repository.file
+repository.memory
+service
+userinterface
