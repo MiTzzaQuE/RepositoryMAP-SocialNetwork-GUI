@@ -1,4 +1,4 @@
-package domain;
+package com.example.social_network_gui_v2.domain;
 
 import org.junit.jupiter.api.Test;
 

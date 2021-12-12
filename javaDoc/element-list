@@ -1,9 +1,9 @@
 unnamed package
-domain
-domain.validation
-repository
-repository.database
-repository.file
-repository.memory
-service
+com.example.social_network_gui_v2.domain
+com.example.social_network_gui_v2.domain.validation
+com.example.social_network_gui_v2.repository
+com.example.social_network_gui_v2.repository.database
+com.example.social_network_gui_v2.repository.file
+com.example.social_network_gui_v2.repository.memory
+com.example.social_network_gui_v2.service
 userinterface

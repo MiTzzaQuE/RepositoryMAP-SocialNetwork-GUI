@@ -1,22 +1,22 @@
 package com.example.social_network_gui_v2;
 
-import domain.Friendship;
-import domain.Message;
-import domain.Tuple;
-import domain.User;
-import domain.validation.FriendshipValidator;
-import domain.validation.MessageValidator;
-import domain.validation.UserValidator;
+import com.example.social_network_gui_v2.domain.Friendship;
+import com.example.social_network_gui_v2.domain.Message;
+import com.example.social_network_gui_v2.domain.Tuple;
+import com.example.social_network_gui_v2.domain.User;
+import com.example.social_network_gui_v2.domain.validation.FriendshipValidator;
+import com.example.social_network_gui_v2.domain.validation.MessageValidator;
+import com.example.social_network_gui_v2.domain.validation.UserValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import repository.Repository;
-import repository.database.MessageDbRepository;
-import repository.database.UserDbRepository;
-import service.ServiceFriendship;
-import service.ServiceMessage;
-import service.ServiceUser;
+import com.example.social_network_gui_v2.repository.Repository;
+import com.example.social_network_gui_v2.repository.database.MessageDbRepository;
+import com.example.social_network_gui_v2.repository.database.UserDbRepository;
+import com.example.social_network_gui_v2.service.ServiceFriendship;
+import com.example.social_network_gui_v2.service.ServiceMessage;
+import com.example.social_network_gui_v2.service.ServiceUser;
 
 import java.io.IOException;
 
