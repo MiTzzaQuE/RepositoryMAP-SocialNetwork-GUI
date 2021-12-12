@@ -1,6 +1,11 @@
 package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
+import com.example.social_network_gui_v2.domain.User;
+import com.example.social_network_gui_v2.domain.validation.ValidationException;
+import com.example.social_network_gui_v2.service.ServiceFriendship;
+import com.example.social_network_gui_v2.service.ServiceMessage;
+import com.example.social_network_gui_v2.service.ServiceUser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,22 +26,33 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    @FXML
-    public void initialize(){
+    private ServiceUser servUser;
+    private ServiceFriendship servFriendship;
+    private ServiceMessage servMessage;
+    private User user;
 
+    @FXML
+    public void initialize(){ }
+
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage) {
+        this.servUser = servUser;
+        this.servFriendship = servFriendship;
+        this.servMessage = servMessage;
     }
 
     @FXML
     public void handleSubmitButtonAction(ActionEvent actionEvent) {
 
         actiontarget.setText("Sign in button pressed");
+
+        String ID = usernameField.getText();
+        String password = passwordField.getText();
+
         try {
+            long id = Long.parseLong(ID);
+            user = servUser.findOne(id);
+
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-//            fxmlLoader.setLocation(getClass().getResource("hello-view.fxml"));
-            /*
-             * if "fx:controller" is not set in fxml
-             * fxmlLoader.setController(NewWindowController);
-             */
             Scene scene = new Scene(fxmlLoader.load(), 630, 400);
             Stage stage = new Stage();
             stage.setTitle("New Window");
@@ -44,10 +60,15 @@ public class LoginController {
             stage.show();
             // Hide this current window (if this is what you want)
             ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
-        } catch (IOException e) {
-            //System.Logger logger = System.Logger.getLogger(getClass().getName());
-            //logger.log(System.Logger.Level.SEVERE, "Failed to create new Window.", e);
+        }
+        catch (IOException e) {
             e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"ID null!");
         }
     }
 }
