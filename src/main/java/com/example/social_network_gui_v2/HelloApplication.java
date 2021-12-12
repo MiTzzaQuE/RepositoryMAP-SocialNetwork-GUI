@@ -19,7 +19,7 @@ import com.example.social_network_gui_v2.service.ServiceMessage;
 import com.example.social_network_gui_v2.service.ServiceUser;
 
 import java.io.IOException;
-
+/*silvis*/
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
