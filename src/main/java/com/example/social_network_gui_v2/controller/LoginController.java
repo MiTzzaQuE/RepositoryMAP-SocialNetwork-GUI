@@ -53,10 +53,15 @@ public class LoginController {
             user = servUser.findOne(id);
 
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+
             Scene scene = new Scene(fxmlLoader.load(), 630, 400);
             Stage stage = new Stage();
-            stage.setTitle("New Window");
+            stage.setTitle("Main Menu");
             stage.setScene(scene);
+
+//            MenuController menuController = fxmlLoader.getController();
+//            menuController.setService(servUser,servFriendship,servMessage,user);
+
             stage.show();
             // Hide this current window (if this is what you want)
             ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
