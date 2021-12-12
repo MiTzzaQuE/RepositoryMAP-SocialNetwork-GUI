@@ -9,4 +9,6 @@ module com.example.social_network_gui_v2 {
 
     opens com.example.social_network_gui_v2 to javafx.fxml;
     exports com.example.social_network_gui_v2;
+    exports com.example.social_network_gui_v2.controller;
+    opens com.example.social_network_gui_v2.controller to javafx.fxml;
 }

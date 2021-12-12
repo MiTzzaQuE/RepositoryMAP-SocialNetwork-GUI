@@ -1,5 +1,6 @@
 package com.example.social_network_gui_v2;
 
+import com.example.social_network_gui_v2.controller.LoginController;
 import com.example.social_network_gui_v2.domain.Friendship;
 import com.example.social_network_gui_v2.domain.Message;
 import com.example.social_network_gui_v2.domain.Tuple;
@@ -10,6 +11,7 @@ import com.example.social_network_gui_v2.domain.validation.UserValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import com.example.social_network_gui_v2.repository.Repository;
 import com.example.social_network_gui_v2.repository.database.MessageDbRepository;
@@ -38,9 +40,11 @@ public class HelloApplication extends Application {
         ServiceFriendship servFr = new ServiceFriendship(repo,repofriends);
         ServiceMessage servMsg = new ServiceMessage(repo,repoMessage);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("RideWithMe!");
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+        GridPane rootLayout = (GridPane)fxmlLoader.load();
+        LoginController loginController = fxmlLoader.getController();
+        Scene scene = new Scene(rootLayout, 320, 240);
+        stage.setTitle("Log in!");
         stage.setScene(scene);
         stage.show();
     }
