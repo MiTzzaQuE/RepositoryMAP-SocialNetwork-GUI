@@ -1,5 +1,6 @@
 package com.example.social_network_gui_v2.controller;
 
+import com.example.social_network_gui_v2.HelloApplication;
 import com.example.social_network_gui_v2.domain.Friendship;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.UserFriendDTO;
@@ -10,11 +11,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -93,7 +99,24 @@ public class MenuController{
     @FXML
     public void onRequestButtonClick(ActionEvent actionEvent) {
 
+        try {
 
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("requests-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Friendship requests");
+            stage.setScene(scene);
+
+            RequestsController requestsController = fxmlLoader.getController();
+            requestsController.setService(servUser, servFriendship, servMessage, userLogin);
+
+            stage.show();
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane prefHeight="202.0" prefWidth="228.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.social_network_gui_v2.controller.RequestsController">
+   <center>
+      <TableView fx:id="tableViewFriendhipRequests" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="tableColumnFrom" prefWidth="150.0" text="From" />
+          <TableColumn fx:id="tableColumnStatus" prefWidth="150.0" text="Status" />
+            <TableColumn fx:id="tableColumnDate" prefWidth="150.0" text="Date" />
+        </columns>
+      </TableView>
+   </center>
+</BorderPane>
