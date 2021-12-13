@@ -14,7 +14,5 @@ public class FriendshipValidator implements  Validator<Friendship>{
     public void validate(Friendship entity) throws ValidationException {
         if(Objects.equals(entity.getId().getLeft(), entity.getId().getRight()))
             throw new ValidationException("\uD83C\uDD74\uD83C\uDD81\uD83C\uDD81\uD83C\uDD7E\uD83C\uDD81 : You Cannot Add You As A Friend");
-        if(Objects.equals(entity.getState(),"Pending"))
-            throw new ValidationException("\uD83C\uDD74\uD83C\uDD81\uD83C\uDD81\uD83C\uDD7E\uD83C\uDD81 : Friend Request Already Sent");
     }
 }
