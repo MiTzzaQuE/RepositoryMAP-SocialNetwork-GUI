@@ -125,6 +125,25 @@ public class MenuController{
 
     @FXML
     public void onRequestButtonClick(ActionEvent actionEvent) {
+
+        try {
+
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("requests-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Friendship requests");
+            stage.setScene(scene);
+
+            RequestsController requestsController = fxmlLoader.getController();
+            requestsController.setService(servUser, servFriendship, servMessage, userLogin);
+
+            stage.show();
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
