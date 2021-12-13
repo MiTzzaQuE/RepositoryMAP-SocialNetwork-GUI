@@ -12,7 +12,7 @@ public class FriendshipValidator implements  Validator<Friendship>{
 
     @Override
     public void validate(Friendship entity) throws ValidationException {
-        if(Objects.equals(entity.getId().getLeft(), entity.getId().getRight()))
+        if (Objects.equals(entity.getId().getLeft(), entity.getId().getRight()))
             throw new ValidationException("\uD83C\uDD74\uD83C\uDD81\uD83C\uDD81\uD83C\uDD7E\uD83C\uDD81 : You Cannot Add You As A Friend");
     }
 }
