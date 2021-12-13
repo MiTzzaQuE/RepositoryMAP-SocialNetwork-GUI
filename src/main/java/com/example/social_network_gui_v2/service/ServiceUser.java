@@ -102,9 +102,9 @@ public class ServiceUser {
                         ": id invalid!");
             else
                 for (Friendship fr : repoFriends.findAll()){
-                    if(Objects.equals(fr.getId().getLeft(), id))
+                    if(Objects.equals(fr.getId().getLeft(), id) && Objects.equals(fr.getState(), "Approved"))
                         users.add(repoUser.findOne(fr.getId().getRight()));
-                    if(Objects.equals(fr.getId().getRight(), id))
+                    if(Objects.equals(fr.getId().getRight(), id) && Objects.equals(fr.getState(), "Approved"))
                         users.add(repoUser.findOne(fr.getId().getLeft()));
                 }
             return users;

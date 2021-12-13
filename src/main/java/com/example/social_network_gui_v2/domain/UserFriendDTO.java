@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public class UserFriendDTO {
 
-    private final String firtsName;
-    private final String lastName;
-    private final LocalDateTime friendshipDate;
+    private String firtsName;
+    private String lastName;
+    private LocalDateTime friendshipDate;
 
     public UserFriendDTO(String firtsName, String lastName, LocalDateTime friendshipDate) {
         this.firtsName = firtsName;
