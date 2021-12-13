@@ -8,6 +8,7 @@ import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.repository.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * class Service
@@ -39,15 +40,18 @@ public class ServiceFriendship {
         User u2 = repoUser.findOne(id2);
         try{
             if(u1 != null && u2 != null) {
-                if(repoFriends.findOne(new Tuple<>(id1,id2)) == null) {
+                Friendship fr = repoFriends.findOne(new Tuple<>(id1,id2));
+                if(fr == null) {
                     Friendship friendship = new Friendship();
                     Tuple t = new Tuple(id1, id2);
                     friendship.setId(t);
                     friendship.setDate(LocalDateTime.now());
                     Friendship response = repoFriends.save(friendship);
                     if (response != null)
-                        throw new ValidationException("Friendship already made!");
+                        throw new ValidationException("Friendship already made!1");
                 }
+                else if( Objects.equals(fr.getState(),"Pending") )
+                    throw new ValidationException("Friend Request Already Sent!");
                 else
                     throw new ValidationException("Friendship already made!");
             }
