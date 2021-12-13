@@ -14,11 +14,11 @@
 
 <BorderPane prefHeight="428.0" prefWidth="652.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.social_network_gui_v2.controller.MenuController">
    <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableViewUsers" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn prefWidth="91.0" text="ID Friend" />
-          <TableColumn prefWidth="106.0" text="First Name" />
-            <TableColumn prefWidth="110.0" text="Last Name" />
+          <TableColumn fx:id="tableColumnFirstName" prefWidth="106.0" text="First Name" />
+            <TableColumn fx:id="tableColumnLastName" prefWidth="110.0" text="Last Name" />
         </columns>
       </TableView>
    </center>

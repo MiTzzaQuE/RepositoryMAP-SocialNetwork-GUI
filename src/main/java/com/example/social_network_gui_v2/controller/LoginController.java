@@ -52,15 +52,15 @@ public class LoginController {
             long id = Long.parseLong(ID);
             user = servUser.findOne(id);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-view.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load(), 630, 400);
             Stage stage = new Stage();
             stage.setTitle("Main Menu");
             stage.setScene(scene);
 
-//            MenuController menuController = fxmlLoader.getController();
-//            menuController.setService(servUser,servFriendship,servMessage,user);
+            MenuController menuController = fxmlLoader.getController();
+            menuController.setService(servUser,servFriendship,servMessage,user);
 
             stage.show();
             // Hide this current window (if this is what you want)
