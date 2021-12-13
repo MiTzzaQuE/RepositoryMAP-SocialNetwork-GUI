@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="316.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.social_network_gui_v2.controller.SearchController">
+   <children>
+      <FlowPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="61.0" prefWidth="136.0" text="Search User Name" />
+            <TextField fx:id="textFieldSearch" />
+         </children>
+      </FlowPane>
+      <TableView fx:id="tableViewUsersSearch" prefHeight="464.0" prefWidth="380.0">
+        <columns>
+          <TableColumn fx:id="tableColumnFirstNameS" prefWidth="126.0" text="First Name" />
+          <TableColumn fx:id="tableColumnLastNameS" prefWidth="129.0" text="Last Name" />
+        </columns>
+      </TableView>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0">
+        <buttons>
+          <Button fx:id="buttonAddFriend" mnemonicParsing="false" onAction="#onButtonAddFriend" text="Add Friend" />
+            <Button fx:id="buttonCloseSerachWindow" mnemonicParsing="false" onAction="#onButtonCloseSearch" text="Close" />
+        </buttons>
+      </ButtonBar>
+   </children>
+</VBox>

@@ -1,8 +1,10 @@
 package com.example.social_network_gui_v2.controller;
 
+import com.example.social_network_gui_v2.HelloApplication;
 import com.example.social_network_gui_v2.domain.Friendship;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.UserFriendDTO;
+import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
 import com.example.social_network_gui_v2.service.ServiceMessage;
 import com.example.social_network_gui_v2.service.ServiceUser;
@@ -10,11 +12,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,7 +69,6 @@ public class MenuController{
         Iterable<User> users = servUser.getFriends(userLogin.getId());
         List<User> userList = StreamSupport.stream(users.spliterator(),false)
                 .collect(Collectors.toList());
-        System.out.println(userList);
         modelUser.setAll(userList);
     }
 
@@ -84,10 +90,37 @@ public class MenuController{
 
     @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("user-search-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Main Menu");
+            stage.setScene(scene);
+
+            SearchController searchController = fxmlLoader.getController();
+            searchController.setService(servUser,servFriendship,servMessage,userLogin,stage);
+
+            stage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     public void onDelButtonClick(ActionEvent actionEvent) {
+        User selectedUser = tableViewUsers.getSelectionModel().getSelectedItem();
+        if(selectedUser != null) {
+            try {
+                servFriendship.deleteFriend(userLogin.getId(), selectedUser.getId());
+                tableViewUsers.getItems().removeAll(tableViewUsers.getSelectionModel().getSelectedItem());
+            } catch (ValidationException validationException) {
+                MessageAlert.showErrorMessage(null, validationException.getMessage());
+            }
+        }
+        else MessageAlert.showErrorMessage(null,"No selected user!");
+
     }
 
     @FXML
@@ -100,6 +133,7 @@ public class MenuController{
 
     @FXML
     public void onCloseButtonClick(ActionEvent actionEvent) {
+
     }
 
 }

@@ -114,6 +114,7 @@ public class ServiceUser {
         }
     }
 
+
     /** Function which returns all the users from list
      * @return all the users
      */
