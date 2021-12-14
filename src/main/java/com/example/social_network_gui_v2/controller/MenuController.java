@@ -19,6 +19,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class MenuController{
     private ServiceFriendship servFriendship;
     private ServiceMessage servMessage;
     User userLogin;
+    Stage dialogStage;
     ObservableList<User> modelUser = FXCollections.observableArrayList();
 
     @FXML
@@ -52,12 +54,13 @@ public class MenuController{
     @FXML
     TableView<User> tableViewUsers;
 
-    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,User user){
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,User user, Stage dialogStage){
 
         this.servUser = servUser;
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
         this.userLogin = user;
+        this.dialogStage = dialogStage;
         if(user != null){
             setFields(user);
         }
@@ -95,7 +98,7 @@ public class MenuController{
 
             Scene scene = new Scene(fxmlLoader.load(), 630, 400);
             Stage stage = new Stage();
-            stage.setTitle("Main Menu");
+            stage.setTitle("Search Friends");
             stage.setScene(scene);
 
             SearchController searchController = fxmlLoader.getController();
@@ -151,8 +154,15 @@ public class MenuController{
     }
 
     @FXML
-    public void onCloseButtonClick(ActionEvent actionEvent) {
-
+    public void onCloseButtonClick(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+        GridPane rootLayout = (GridPane)fxmlLoader.load();
+        LoginController loginController = fxmlLoader.getController();
+        loginController.setService(servUser,servFriendship,servMessage,dialogStage);
+        Scene scene = new Scene(rootLayout, 320, 240);
+        dialogStage.setTitle("Log in!");
+        dialogStage.setScene(scene);
+        dialogStage.show();
     }
 
 }

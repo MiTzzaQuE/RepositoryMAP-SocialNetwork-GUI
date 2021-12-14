@@ -52,7 +52,7 @@
             <ButtonBar layoutX="438.0" layoutY="8.0" prefHeight="40.0" prefWidth="200.0">
                <buttons>
                   <Button fx:id="helpButton" mnemonicParsing="false" onAction="#onHelpButtonClick" prefHeight="30.0" text="Help" />
-                <Button fx:id="closeButton" mnemonicParsing="false" onAction="#onCloseButtonClick" text="Close" />
+                <Button fx:id="closeButton" mnemonicParsing="false" onAction="#onCloseButtonClick" text="Log Out" />
                </buttons>
             </ButtonBar>
          </children>

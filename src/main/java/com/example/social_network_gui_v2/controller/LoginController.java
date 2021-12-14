@@ -30,14 +30,16 @@ public class LoginController {
     private ServiceFriendship servFriendship;
     private ServiceMessage servMessage;
     private User user;
+    Stage dialogStage;
 
     @FXML
     public void initialize(){ }
 
-    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage) {
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,Stage dialogStage) {
         this.servUser = servUser;
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
+        this.dialogStage = dialogStage;
     }
 
     @FXML
@@ -60,7 +62,7 @@ public class LoginController {
             stage.setScene(scene);
 
             MenuController menuController = fxmlLoader.getController();
-            menuController.setService(servUser,servFriendship,servMessage,user);
+            menuController.setService(servUser,servFriendship,servMessage,user,stage);
 
             stage.show();
             // Hide this current window (if this is what you want)

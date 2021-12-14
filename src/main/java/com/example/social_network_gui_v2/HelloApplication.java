@@ -43,7 +43,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
         GridPane rootLayout = (GridPane)fxmlLoader.load();
         LoginController loginController = fxmlLoader.getController();
-        loginController.setService(serv,servFr,servMsg);
+        loginController.setService(serv,servFr,servMsg,stage);
         Scene scene = new Scene(rootLayout, 320, 240);
         stage.setTitle("Log in!");
         stage.setScene(scene);
