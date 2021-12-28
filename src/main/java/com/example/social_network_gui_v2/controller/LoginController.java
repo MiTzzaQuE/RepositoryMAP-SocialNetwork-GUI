@@ -54,7 +54,7 @@ public class LoginController {
             long id = Long.parseLong(ID);
             user = servUser.findOne(id);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu2.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-view.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load(), 615, 450);
             Stage stage = new Stage();
