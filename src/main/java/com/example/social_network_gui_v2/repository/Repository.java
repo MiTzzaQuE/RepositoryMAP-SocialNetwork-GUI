@@ -58,4 +58,5 @@ public interface Repository<ID, E extends Entity<ID>> {
      *             if the given entity is null.
      */
     E update(E entity);
+
 }
