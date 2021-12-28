@@ -88,26 +88,26 @@ public class UserDbRepository implements Repository<Long, User> {
             throw new IllegalArgumentException("Entity must not be null");
         validator.validate(entity);
         String sql = "insert into users (first_name, last_name ) values (?, ?)";
-        String sql2 = "select users.id from users order by users.id desc limit 1";
-        String sql3 = "insert into usernames (id,username,password) values (?, ?, ?)";
+        //String sql2 = "select users.id from users order by users.id desc limit 1";
+        String sql3 = "insert into usernames (id,username,password) values ((select users.id from users order by users.id desc limit 1), ?, ?)";
 
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            PreparedStatement ps2 = connection.prepareStatement(sql2);
+            //PreparedStatement ps2 = connection.prepareStatement(sql2);
             PreparedStatement ps3 = connection.prepareStatement(sql3);
 
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
             ps.executeUpdate();
 
-            ResultSet resultSet = ps2.executeQuery();
-            int id = resultSet.getInt("id");
+            //ResultSet resultSet = ps2.executeQuery();
+            //int id = resultSet.getInt("id");
 
-            ps3.setInt(1,id);
-            ps3.setString(2,entity.getUsername());
-            ps3.setString(3,entity.getPassword());
+            //ps3.setInt(1,id);
+            ps3.setString(1,entity.getUsername());
+            ps3.setString(2,entity.getPassword());
             ps3.executeUpdate();
 
         } catch (SQLException e) {
