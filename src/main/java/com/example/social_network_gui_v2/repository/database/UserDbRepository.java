@@ -3,6 +3,7 @@ package com.example.social_network_gui_v2.repository.database;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.Validator;
 import com.example.social_network_gui_v2.repository.Repository;
+import com.example.social_network_gui_v2.utils.BCrypt;
 
 import java.sql.*;
 import java.util.HashSet;
@@ -87,14 +88,28 @@ public class UserDbRepository implements Repository<Long, User> {
             throw new IllegalArgumentException("Entity must not be null");
         validator.validate(entity);
         String sql = "insert into users (first_name, last_name ) values (?, ?)";
+        String sql2 = "select users.id from users order by users.id desc limit 1";
+        String sql3 = "insert into usernames (id,username,password) values (?, ?, ?)";
+
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
+            PreparedStatement ps2 = connection.prepareStatement(sql2);
+            PreparedStatement ps3 = connection.prepareStatement(sql3);
+
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
-
             ps.executeUpdate();
+
+            ResultSet resultSet = ps2.executeQuery();
+            int id = resultSet.getInt("id");
+
+            ps3.setInt(1,id);
+            ps3.setString(2,entity.getUsername());
+            ps3.setString(3,entity.getPassword());
+            ps3.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -142,5 +157,39 @@ public class UserDbRepository implements Repository<Long, User> {
         if(row_count > 0)
             return null;
         return entity;
+    }
+
+    public User findUserByUsernameAndPassword(String username, String password){
+        if(username == null || password == null)
+            throw new IllegalArgumentException("Username and password must not be null");
+
+        String sql = "select u.id, u.first_name, u.last_name, un.username, un.password from users u inner join usernames un on u.id = un.id where un.username = ?";
+        User user;
+
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1,username);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                Long id = resultSet.getLong("id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String uname = resultSet.getString("username");
+                String pass = resultSet.getString("password");
+
+                if(BCrypt.checkpw(password,pass)){
+                    user = new User(firstName,lastName,uname,pass);
+                    user.setId(id);
+                    return user;
+                }
+                else{
+                    throw new IllegalArgumentException("Invalid password");
+                }
+
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 }
