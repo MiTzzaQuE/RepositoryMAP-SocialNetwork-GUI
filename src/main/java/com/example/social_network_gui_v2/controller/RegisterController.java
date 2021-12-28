@@ -80,10 +80,16 @@ public class RegisterController {
 
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
+        String userName = userNameField.getText();
         String password = passwordField.getText();
         String confrim = confirmPasswordField.getText();
+        user = new User(firstName,lastName);
 
         try {
+            if(password.equals(confrim))
+                servUser.save(firstName,lastName,userName,password);
+            else
+                MessageAlert.showErrorMessage(null,"Invalid Password!");
 
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-view.fxml"));
 

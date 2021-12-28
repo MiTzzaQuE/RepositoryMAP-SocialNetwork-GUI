@@ -103,9 +103,10 @@ public class UserDbRepository implements Repository<Long, User> {
             ps.executeUpdate();
 
             ResultSet resultSet = ps2.executeQuery();
-            int id = resultSet.getInt("id");
+            System.out.println(resultSet.getLong("id"));
+            Long id = resultSet.getLong("id");
 
-            ps3.setInt(1,id);
+            ps3.setLong(1,id);
             ps3.setString(2,entity.getUsername());
             ps3.setString(3,entity.getPassword());
             ps3.executeUpdate();

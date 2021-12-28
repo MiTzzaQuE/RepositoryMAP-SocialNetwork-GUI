@@ -51,8 +51,9 @@ public class LoginController {
         String password = passwordField.getText();
 
         try {
-            long id = Long.parseLong(ID);
-            user = servUser.findOne(id);
+//            long id = Long.parseLong(ID);
+//            user = servUser.findOne(id);
+            user = servUser.findUserByUsernamePassword(ID,password);
 
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-view.fxml"));
 
