@@ -91,18 +91,18 @@
                         <Font name="Segoe UI Black" size="20.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="79.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="79.0" promptText="UserName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="30.0" prefWidth="137.0" text="Password:" textFill="#bcfd4c" GridPane.rowIndex="2">
                      <font>
                         <Font name="Segoe UI Black" size="20.0" />
                      </font>
                   </Label>
-                  <PasswordField fx:id="passwordField" onAction="#handleSubmitButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <PasswordField fx:id="passwordField" onAction="#handleSubmitButtonAction" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Button contentDisplay="CENTER" onAction="#handleSubmitButtonAction" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: #bcfd4c; -fx-border-radius: 25px;" text="Login" textFill="#6e6e6e" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Button>
-                  <Button prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" text="Register" textFill="#bcfd4c" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                  <Button fx:id="registerButton" onAction="#handleRegisterButtonAction" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" text="Register" textFill="#bcfd4c" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

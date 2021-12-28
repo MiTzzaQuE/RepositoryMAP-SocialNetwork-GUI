@@ -12,19 +12,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
-public class LoginController {
+public class RegisterController {
     @FXML
     private Text actiontarget;
     @FXML
-    private TextField usernameField;
+    private TextField firstNameField;
+    @FXML
+    private TextField lastNameField;
+    @FXML
+    private TextField userNameField;
     @FXML
     private PasswordField passwordField;
+    @FXML
+    private PasswordField confirmPasswordField;
 
     private ServiceUser servUser;
     private ServiceFriendship servFriendship;
@@ -43,30 +49,18 @@ public class LoginController {
     }
 
     @FXML
-    public void handleSubmitButtonAction(ActionEvent actionEvent) {
-
-        actiontarget.setText("Sign in button pressed");
-
-        String ID = usernameField.getText();
-        String password = passwordField.getText();
-
+    public void handleSignInButtonAction(ActionEvent actionEvent) throws IOException {
         try {
-            long id = Long.parseLong(ID);
-            user = servUser.findOne(id);
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
 
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu2.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
+            dialogStage.setTitle("Sign In!");
+            dialogStage.setScene(scene);
 
-            Scene scene = new Scene(fxmlLoader.load(), 615, 450);
-            Stage stage = new Stage();
-            stage.setTitle("Main Menu");
-            stage.setScene(scene);
+            LoginController loginController = fxmlLoader.getController();
+            loginController.setService(servUser, servFriendship, servMessage, dialogStage);
 
-            MenuController menuController = fxmlLoader.getController();
-            menuController.setService(servUser,servFriendship,servMessage,user,stage);
-
-            stage.show();
-            // Hide this current window (if this is what you want)
-            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+            dialogStage.show();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -80,21 +74,27 @@ public class LoginController {
     }
 
     @FXML
-    public void handleRegisterButtonAction(ActionEvent actionEvent) {
+    public void handleSignUpAction(ActionEvent actionEvent) {
+
+//        actiontarget.setText("Sign in button pressed");
+
+        String firstName = firstNameField.getText();
+        String lastName = lastNameField.getText();
+        String password = passwordField.getText();
+        String confrim = confirmPasswordField.getText();
+
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("register-view.fxml"));
+
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu2.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load(), 615, 450);
-            Stage stage = new Stage();
-            stage.setTitle("Sign Up");
-            stage.setScene(scene);
+            dialogStage.setTitle("Main Menu");
+            dialogStage.setScene(scene);
 
-            RegisterController registerController = fxmlLoader.getController();
-            registerController.setService(servUser,servFriendship,servMessage,stage);
+            MenuController menuController = fxmlLoader.getController();
+            menuController.setService(servUser,servFriendship,servMessage,user,dialogStage);
 
-            stage.show();
-            // Hide this current window (if this is what you want)
-            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+            dialogStage.show();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -105,5 +105,6 @@ public class LoginController {
         catch (IllegalArgumentException exception){
             MessageAlert.showErrorMessage(null,"ID null!");
         }
+
     }
 }
