@@ -15,10 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -47,8 +44,6 @@ public class MenuController{
     TextField Last_Name;
 
     @FXML
-    TableColumn<User,String> tableColumnID;
-    @FXML
     TableColumn<User,String> tableColumnFirstName;
     @FXML
     TableColumn<User,String> tableColumnLastName;
@@ -63,7 +58,7 @@ public class MenuController{
         this.userLogin = user;
         this.dialogStage = dialogStage;
         if(user != null){
-            setFields(user);
+//            setFields(user);
         }
         initModel();
     }
@@ -79,11 +74,10 @@ public class MenuController{
     @FXML
     public void initialize(){
         //TODO
-//        tableColumnID.setCellValueFactory(new PropertyValueFactory<UserFriendDTO, String>("ID"));
-        tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
-        tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
-
-        tableViewUsers.setItems(modelUser);
+//        tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
+//        tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
+//
+//        tableViewUsers.setItems(modelUser);
     }
 
     private void setFields(User user) {
@@ -166,4 +160,12 @@ public class MenuController{
         dialogStage.show();
     }
 
+    public void handleOpenChatButtonAction(ActionEvent actionEvent) {
+    }
+
+    public void handleExportActivityButtonAction(ActionEvent actionEvent) {
+    }
+
+    public void handleExportPrivateButtonAction(ActionEvent actionEvent) {
+    }
 }
