@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -156,10 +157,10 @@ public class MenuController{
     @FXML
     public void onCloseButtonClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-        GridPane rootLayout = (GridPane)fxmlLoader.load();
+        SplitPane rootLayout = (SplitPane)fxmlLoader.load();
         LoginController loginController = fxmlLoader.getController();
         loginController.setService(servUser,servFriendship,servMessage,dialogStage);
-        Scene scene = new Scene(rootLayout, 320, 240);
+        Scene scene = new Scene(rootLayout, 630, 400);
         dialogStage.setTitle("Log in!");
         dialogStage.setScene(scene);
         dialogStage.show();
