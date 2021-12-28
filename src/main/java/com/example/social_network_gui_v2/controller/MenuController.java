@@ -50,6 +50,10 @@ public class MenuController{
     TextField userFilter;
     @FXML
     TextField friendFilter;
+    @FXML
+    private TextField genderTypeField;
+    @FXML
+    private DatePicker datePickerDataField;
 
     @FXML
     TableView<User> tableViewUsers;
@@ -204,14 +208,27 @@ public class MenuController{
 
     @FXML
     public void onCloseButtonClick(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-        SplitPane rootLayout = (SplitPane)fxmlLoader.load();
-        LoginController loginController = fxmlLoader.getController();
-        loginController.setService(servUser,servFriendship,servMessage,dialogStage);
-        Scene scene = new Scene(rootLayout, 630, 400);
-        dialogStage.setTitle("Log in!");
-        dialogStage.setScene(scene);
-        dialogStage.show();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
+            dialogStage.setTitle("Sign In!");
+            dialogStage.setScene(scene);
+
+            LoginController loginController = fxmlLoader.getController();
+            loginController.setService(servUser, servFriendship, servMessage, dialogStage);
+
+            dialogStage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"ID null!");
+        }
     }
 
     @FXML

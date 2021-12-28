@@ -177,9 +177,6 @@ public class UserDbRepository implements Repository<Long, User> {
                 String uname = resultSet.getString("username");
                 String pass = resultSet.getString("password");
 
-                System.out.println(pass);
-                System.out.println(passwordC);
-
                 if(BCrypt.checkpw(passwordC,pass)){
                     user = new User(firstName,lastName,uname,pass);
                     user.setId(id);

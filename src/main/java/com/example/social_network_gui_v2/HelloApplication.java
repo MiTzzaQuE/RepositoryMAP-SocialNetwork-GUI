@@ -46,7 +46,7 @@ public class HelloApplication extends Application {
         LoginController loginController = fxmlLoader.getController();
         loginController.setService(serv,servFr,servMsg,stage);
         Scene scene = new Scene(rootLayout, 630, 400);
-        stage.setTitle("Log in!");
+        stage.setTitle("Sign in!");
         stage.setScene(scene);
         stage.show();
     }

@@ -9,14 +9,16 @@ import com.example.social_network_gui_v2.service.ServiceUser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegisterController {
     @FXML
@@ -31,6 +33,11 @@ public class RegisterController {
     private PasswordField passwordField;
     @FXML
     private PasswordField confirmPasswordField;
+    @FXML
+    private ComboBox genderComboBox;
+
+
+    List<String> genders = new ArrayList<>();
 
     private ServiceUser servUser;
     private ServiceFriendship servFriendship;
@@ -46,6 +53,10 @@ public class RegisterController {
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
         this.dialogStage = dialogStage;
+        genders.add("Male");
+        genders.add("Female");
+        genders.add("Other");
+        genderComboBox.getItems().setAll(genders);
     }
 
     @FXML
@@ -91,7 +102,7 @@ public class RegisterController {
             else
                 MessageAlert.showErrorMessage(null,"Invalid Password!");
 
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-v2.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load(), 615, 450);
             dialogStage.setTitle("Main Menu");
