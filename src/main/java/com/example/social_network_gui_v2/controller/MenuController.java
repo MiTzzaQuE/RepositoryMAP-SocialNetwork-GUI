@@ -34,21 +34,38 @@ public class MenuController{
     private ServiceUser servUser;
     private ServiceFriendship servFriendship;
     private ServiceMessage servMessage;
+    private List<User> users;
+    private List<User> friends;
+
     User userLogin;
     Stage dialogStage;
     ObservableList<User> modelUser = FXCollections.observableArrayList();
+    ObservableList<User> modelFriends = FXCollections.observableArrayList();
 
     @FXML
     TextField First_Name;
     @FXML
     TextField Last_Name;
+    @FXML
+    TextField userFilter;
+    @FXML
+    TextField friendFilter;
 
     @FXML
-    TableColumn<User,String> tableColumnFirstName;
-    @FXML
-    TableColumn<User,String> tableColumnLastName;
-    @FXML
     TableView<User> tableViewUsers;
+    @FXML
+    TableColumn<User,String> tableColumnFirstNameU;
+    @FXML
+    TableColumn<User,String> tableColumnLastNameU;
+
+    @FXML
+    TableView<User> tableViewFriends;
+    @FXML
+    TableColumn<User,String> tableColumnFirstNameF;
+    @FXML
+    TableColumn<User,String> tableColumnLastNameF;
+
+
 
     public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,User user, Stage dialogStage){
 
@@ -58,66 +75,103 @@ public class MenuController{
         this.userLogin = user;
         this.dialogStage = dialogStage;
         if(user != null){
-//            setFields(user);
+            setFields(user);
         }
         initModel();
     }
 
     private void initModel() {
 
-        Iterable<User> users = servUser.getFriends(userLogin.getId());
-        List<User> userList = StreamSupport.stream(users.spliterator(),false)
-                .collect(Collectors.toList());
-        modelUser.setAll(userList);
+        users = getUsersNoFriends();
+        friends = getFriends();
+        modelUser.setAll(users);
+        modelFriends.setAll(friends);
     }
 
     @FXML
     public void initialize(){
         //TODO
-//        tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
-//        tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
-//
-//        tableViewUsers.setItems(modelUser);
+        tableColumnFirstNameU.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
+        tableColumnLastNameU.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
+        tableViewUsers.setItems(modelUser);
+
+        tableColumnFirstNameF.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
+        tableColumnLastNameF.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
+        tableViewFriends.setItems(modelFriends);
+
+        userFilter.textProperty().addListener(o -> handleFilter1());
+        friendFilter.textProperty().addListener(o -> handleFilter2());
     }
 
     private void setFields(User user) {
 
         First_Name.setText(user.getFirstName());
         Last_Name.setText(user.getLastName());
+        First_Name.setEditable(false);
+        Last_Name.setEditable(false);
+    }
+
+    private void handleFilter1() {
+        Predicate<User> p1 = n -> n.getFirstName().startsWith(userFilter.getText());
+        Predicate<User> p2 = n -> n.getLastName().startsWith(userFilter.getText());
+
+        modelUser.setAll(users
+                .stream()
+                .filter(p1.or(p2))
+                .collect(Collectors.toList()));
+
+
+    }
+    private void handleFilter2() {
+            Predicate<User> p1 = n -> n.getFirstName().startsWith(friendFilter.getText());
+            Predicate<User> p2 = n -> n.getLastName().startsWith(friendFilter.getText());
+
+            modelFriends.setAll(friends
+                    .stream()
+                    .filter(p1.or(p2))
+                    .collect(Collectors.toList()));
+        }
+
+    private List<User> getUsersNoFriends() {
+        Iterable<User> users = servUser.printUs();
+        List<User> userList = StreamSupport.stream(users.spliterator(),false)
+                .collect(Collectors.toList());
+        return userList;
+    }
+
+    private List<User> getFriends(){
+        Iterable<User> friends = servUser.getFriends(userLogin.getId());
+        List<User> friendList = StreamSupport.stream(friends.spliterator(),false)
+                .collect(Collectors.toList());
+        return friendList;
     }
 
     @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("user-search-view.fxml"));
-
-            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
-            Stage stage = new Stage();
-            stage.setTitle("Search Friends");
-            stage.setScene(scene);
-
-            SearchController searchController = fxmlLoader.getController();
-            searchController.setService(servUser,servFriendship,servMessage,userLogin,stage);
-
-            stage.show();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void onDelButtonClick(ActionEvent actionEvent) {
         User selectedUser = tableViewUsers.getSelectionModel().getSelectedItem();
         if(selectedUser != null) {
             try {
-                servFriendship.deleteFriend(userLogin.getId(), selectedUser.getId());
+                servFriendship.addFriend(userLogin.getId(), selectedUser.getId());
                 tableViewUsers.getItems().removeAll(tableViewUsers.getSelectionModel().getSelectedItem());
             } catch (ValidationException validationException) {
                 MessageAlert.showErrorMessage(null, validationException.getMessage());
             }
         }
         else MessageAlert.showErrorMessage(null,"No selected user!");
+    }
+
+    @FXML
+    public void onDelButtonClick(ActionEvent actionEvent) {
+        User selectedUser = tableViewFriends.getSelectionModel().getSelectedItem();
+        if(selectedUser != null) {
+            try {
+                servFriendship.deleteFriend(userLogin.getId(), selectedUser.getId());
+                tableViewFriends.getItems().removeAll(tableViewFriends.getSelectionModel().getSelectedItem());
+            } catch (ValidationException validationException) {
+                MessageAlert.showErrorMessage(null, validationException.getMessage());
+            }
+        }
+        else MessageAlert.showErrorMessage(null,"No selected friend!");
 
     }
 
@@ -160,12 +214,15 @@ public class MenuController{
         dialogStage.show();
     }
 
+    @FXML
     public void handleOpenChatButtonAction(ActionEvent actionEvent) {
     }
 
+    @FXML
     public void handleExportActivityButtonAction(ActionEvent actionEvent) {
     }
 
+    @FXML
     public void handleExportPrivateButtonAction(ActionEvent actionEvent) {
     }
 }
