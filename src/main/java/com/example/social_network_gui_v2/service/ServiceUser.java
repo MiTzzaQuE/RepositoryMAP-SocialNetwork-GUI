@@ -219,4 +219,20 @@ public class ServiceUser {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Shows all friendship requests sent by a given user
+     * An user is a sents a friendship request if he is on the left side of the tuple (id1)
+     * @param id -Long
+     * @return a list with all the friendship requests
+     */
+    public Iterable<Friendship> getRequestsSentForUser(Long id){
+        if(repoUser.findOne(id) == null)
+            throw new ValidationException("\uD83C\uDD74\uD83C\uDD81\uD83C\uDD81\uD83C\uDD7E\uD83C\uDD81" +
+                    "ID does not exist!");
+
+        return StreamSupport.stream(repoFriends.findAll().spliterator(),false)
+                .filter(friendship -> friendship.getId().getLeft().equals(id) && friendship.getState().equals("Pending"))
+                .collect(Collectors.toList());
+    }
+
 }
