@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterController {
+public class RegisterController extends MenuController{
     @FXML
     private Text actiontarget;
     @FXML
@@ -35,7 +35,6 @@ public class RegisterController {
     private PasswordField confirmPasswordField;
     @FXML
     private ComboBox genderComboBox;
-
 
     List<String> genders = new ArrayList<>();
 
@@ -102,14 +101,14 @@ public class RegisterController {
             else
                 MessageAlert.showErrorMessage(null,"Invalid Password!");
 
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-v2.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load(), 615, 450);
             dialogStage.setTitle("Main Menu");
             dialogStage.setScene(scene);
 
             MenuController menuController = fxmlLoader.getController();
-            menuController.setService(servUser,servFriendship,servMessage,user,dialogStage);
+            menuController.setService(servUser,servFriendship,servMessage,userLogin,dialogStage);
 
             dialogStage.show();
         }
