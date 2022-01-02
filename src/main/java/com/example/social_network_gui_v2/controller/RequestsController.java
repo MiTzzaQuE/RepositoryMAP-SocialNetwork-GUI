@@ -15,6 +15,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 import java.time.LocalDateTime;
@@ -68,16 +70,27 @@ public class RequestsController {
     private void initModel() {
 
         Iterable<Friendship> friendships = servUser.getFriendshipRequestForUser(userLogin.getId());
+        //Image image = new Image("file:src/main/resources/com/example/social_network_gui_v2/trash.png");
         List<FriendshipDTO> friendshipDTOList = StreamSupport.stream(friendships.spliterator(),false)
                 .map(y -> {
+
                     Button dup1 = new Button();
                     dup1.setStyle(acceptBtn.getStyle());
                     dup1.setOnAction((ActionEvent e) -> onAcceptButtonClick(e));
+
                     Button dup2 = new Button();
                     dup2.setStyle(rejectBtn.getStyle());
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
+
                     Button dup3 = new Button();
                     dup3.setStyle(cancelBtn.getStyle());
+//                    Image image = new Image("/trash.png");
+//                    ImageView imageView = new ImageView(image);
+//                    imageView.setFitWidth(20);
+//                    imageView.setFitWidth(20);
+//                    dup3.setGraphic(imageView);
+                    //dup3.getStylesheets().add("src/main/resources/com/example/social_network_gui_v2/buttons.css");
+                    //dup3.getStyleClass().add("cancelbutton");
                     dup3.setOnAction((ActionEvent e) -> onCancelButtonClick(e));
                     return new FriendshipDTO(servUser.findOne(y.getId().getLeft()).getId(),servUser.findOne(y.getId().getLeft()).getFirstName() + " " + servUser.findOne(y.getId().getLeft()).getLastName(),
                         servUser.findOne(y.getId().getRight()).getId(),servUser.findOne(y.getId().getRight()).getFirstName() + " " + servUser.findOne(y.getId().getRight()).getLastName(),

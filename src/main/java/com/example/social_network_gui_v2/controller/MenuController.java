@@ -2,6 +2,7 @@ package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
 import com.example.social_network_gui_v2.domain.Friendship;
+import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.UserFriendDTO;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
@@ -31,21 +32,20 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class MenuController{
-    private ServiceUser servUser;
-    private ServiceFriendship servFriendship;
-    private ServiceMessage servMessage;
-    private List<User> users;
-    private List<User> friends;
+    protected ServiceUser servUser;
+    protected ServiceFriendship servFriendship;
+    protected ServiceMessage servMessage;
+    protected List<User> users;
+    protected List<User> friends;
 
-    User userLogin;
-    Stage dialogStage;
+    protected Page userLogin;
+    protected Stage dialogStage;
+
     ObservableList<User> modelUser = FXCollections.observableArrayList();
     ObservableList<User> modelFriends = FXCollections.observableArrayList();
 
     @FXML
     TextField Name;
-    @FXML
-    TextField Last_Name;
     @FXML
     TextField userFilter;
     @FXML
@@ -61,7 +61,6 @@ public class MenuController{
     TableColumn<User,String> tableColumnFirstNameU;
     @FXML
     TableColumn<User,String> tableColumnLastNameU;
-
     @FXML
     TableView<User> tableViewFriends;
     @FXML
@@ -70,8 +69,7 @@ public class MenuController{
     TableColumn<User,String> tableColumnLastNameF;
 
 
-
-    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,User user, Stage dialogStage){
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,Page user, Stage dialogStage){
 
         this.servUser = servUser;
         this.servFriendship = servFriendship;
@@ -121,9 +119,8 @@ public class MenuController{
                 .stream()
                 .filter(p1.or(p2))
                 .collect(Collectors.toList()));
-
-
     }
+
     private void handleFilter2() {
             Predicate<User> p1 = n -> n.getFirstName().startsWith(friendFilter.getText());
             Predicate<User> p2 = n -> n.getLastName().startsWith(friendFilter.getText());
@@ -174,14 +171,12 @@ public class MenuController{
             }
         }
         else MessageAlert.showErrorMessage(null,"No selected friend!");
-
     }
 
     @FXML
     public void onRequestButtonClick(ActionEvent actionEvent) {
 
         try {
-
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("requests-view.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load(), 630, 400);

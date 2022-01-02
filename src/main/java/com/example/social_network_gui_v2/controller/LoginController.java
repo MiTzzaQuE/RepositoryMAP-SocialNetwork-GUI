@@ -1,6 +1,7 @@
 package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
+import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
@@ -17,6 +18,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class LoginController {
     @FXML
@@ -29,7 +34,7 @@ public class LoginController {
     private ServiceUser servUser;
     private ServiceFriendship servFriendship;
     private ServiceMessage servMessage;
-    private User user;
+    private Page user;
     Stage dialogStage;
 
     @FXML
@@ -51,9 +56,12 @@ public class LoginController {
         String password = passwordField.getText();
 
         try {
-            user = servUser.findUserByUsernamePassword(ID,password);
+            User userC = servUser.findUserByUsernamePassword(ID, password);
+            user = new Page(userC.getFirstName(),userC.getLastName());
+            user.setId(userC.getId());
+            initPage();
 
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-v2.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load(), 615, 450);
             Stage stage = new Stage();
@@ -105,4 +113,54 @@ public class LoginController {
             MessageAlert.showErrorMessage(null,"ID null!");
         }
     }
+
+    private void initPage() {
+        initModelFriendsUser();
+//        initModelFriendshipReqUser();
+//        initModelFriendshipReqUser2();
+        initModelChatUser();
+
+    }
+
+    private void initModelChatUser() {
+        user.setMessages( servMessage.userMessages(user));
+    }
+
+    protected void initModelFriendsUser()
+    {
+        Iterable<User> friends = servUser.getFriends(user.getId());
+        List<User> friendList = StreamSupport.stream(friends.spliterator(),false)
+                .collect(Collectors.toList());
+        user.setFriends(friendList);
+    }
+//    protected void initModelFriendshipReqUser() {
+//        Predicate<FriendRequest> certainUserRight = x -> x.getId().getRight().equals(user.getId());
+//
+//        List<DtoFriendReq> friendshipsReqList = StreamSupport.stream(serviceFriendRequest.findAllRenew().spliterator(), false)
+//                .filter(certainUserRight)
+//                .map(x ->
+//                {
+//                    User u1 = servUser.findOne(x.getId().getLeft());
+//                    DtoFriendReq pp=new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), user.getFirstName() + " " + user.getLastName(), x.getDate(), x.getStatus());
+//                    return pp;
+//                })
+//                .collect(Collectors.toList());
+//
+//        user.setFriendRequestsReceived(friendshipsReqList);
+//
+//    }
+//    protected void initModelFriendshipReqUser2() {
+//        Predicate<FriendRequest> certainUserLeft = x -> x.getId().getLeft().equals(user.getId());
+//
+////am facut aici o susta de functie pt findall()
+//        List<DtoFriendReq> friendshipsReqList = StreamSupport.stream(serviceFriendRequest.findAllRenew().spliterator(), false)
+//                .filter(certainUserLeft)
+//                .map(x ->
+//                {
+//                    User u1 = servUser.findOne(x.getId().getRight());
+//                    return new DtoFriendReq(user.getFirstName() + " " + user.getLastName(), u1.getFirstName() + " " + u1.getLastName(), x.getDate(), x.getStatus());
+//                })
+//                .collect(Collectors.toList());
+//        user.setFriendRequestsSent(friendshipsReqList);
+//    }
 }

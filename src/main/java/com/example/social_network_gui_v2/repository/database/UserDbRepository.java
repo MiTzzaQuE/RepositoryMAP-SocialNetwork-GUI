@@ -190,7 +190,6 @@ public class UserDbRepository implements Repository<Long, User> {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        System.out.println("Silviu");
         return null;
     }
 }

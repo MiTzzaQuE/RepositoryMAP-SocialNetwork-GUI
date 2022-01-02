@@ -2,6 +2,7 @@ package com.example.social_network_gui_v2.service;
 
 import com.example.social_network_gui_v2.domain.Entity;
 import com.example.social_network_gui_v2.domain.Message;
+import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.repository.Repository;
@@ -39,7 +40,7 @@ public class ServiceMessage {
      * @param toIds - list of user's ids
      * @param message -string
      */
-    public void save( Long fromId, List<Long> toIds, String message ){
+    public Long save( Long fromId, List<Long> toIds, String message ){
 
         User from = repoUser.findOne(fromId);
         List<User> to = new ArrayList<>();
@@ -53,6 +54,7 @@ public class ServiceMessage {
         Message save = repoMessage.save(msg);
         if(save != null)
             throw new ValidationException("Id already used!");
+        return id;
     }
 
     /**
@@ -168,5 +170,43 @@ public class ServiceMessage {
         }
         id++;
         return id;
+    }
+
+    public List<Message> groupChat(List<Message> messagesUser,List<Long> ids)
+    {
+
+        List<Message> result=messagesUser.stream()
+                .filter(m-> (ids.contains(m.getFrom().getId())))
+                .filter(m-> m.getTo().size()==ids.size()-1)
+                .filter(m-> (m.getTo().stream().allMatch(x->ids.contains(x.getId()))))
+                .sorted(Comparator.comparing(Message::getDate))
+                .collect(Collectors.toList());
+        return result;
+
+
+    }
+    public List<Message> userMessages(Page user)
+    {List<Message> listOfMess=new ArrayList<>();
+        for(Message ms:this.findAll())
+        {
+//            System.out.println(ms.getFrom());
+            if(Objects.equals(ms.getFrom().getId(), user.getId()))
+            {
+                listOfMess.add(ms);
+            }
+            else
+                for(User ur:ms.getTo())
+                {
+                    if(Objects.equals(user.getId(), ur.getId()))
+                    {listOfMess.add(ms);
+                        break;}
+                }
+        }
+        return  listOfMess;
+    }
+
+    public Iterable<Message> findAll()
+    {
+        return repoMessage.findAll();
     }
 }
