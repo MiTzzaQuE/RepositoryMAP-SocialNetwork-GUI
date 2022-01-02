@@ -9,7 +9,10 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="450.0" prefWidth="610.0" style="-fx-background-color: #505050;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.social_network_gui_v2.controller.MenuController">
@@ -18,21 +21,31 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="235.0" style="-fx-background-color: #505050;">
                <children>
-                  <Label fx:id="TextT" alignment="CENTER" layoutX="3.0" layoutY="280.0" prefHeight="17.0" prefWidth="190.0" text="PERSONAL DATA" textFill="WHITE">
-                     <font>
-                        <Font name="Segoe UI Semibold" size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="Last_Name" layoutX="98.0" layoutY="42.0" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #505050;">
-                     <font>
-                        <Font name="Segoe UI Semibold" size="11.0" />
-                     </font>
-                  </TextField>
-                  <TextField fx:id="First_Name" alignment="CENTER_RIGHT" layoutX="38.0" layoutY="42.0" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #505050;">
+                  <VBox layoutX="3.0" layoutY="280.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label fx:id="TextT" alignment="CENTER" prefHeight="17.0" prefWidth="190.0" text="PERSONAL DATA" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="genderTypeField" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #505050;">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="12.0" />
+                           </font>
+                        </TextField>
+                        <DatePicker fx:id="datePickerDataField" prefHeight="25.0" prefWidth="190.0" style="-fx-background-color: #505050;" />
+                     </children>
+                  </VBox>
+                  <TextField fx:id="Name" alignment="CENTER" layoutX="38.0" layoutY="42.0" prefHeight="27.0" prefWidth="131.0" style="-fx-background-color: transparent; -fx-border-color: #bcfd4c;">
                      <font>
                         <Font name="Segoe UI Semibold" size="12.0" />
                      </font>
                   </TextField>
+                  <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="-1.0" layoutY="385.0" onMouseClicked="#onCloseButtonClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/Logo.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #6e6e6e;">
@@ -92,8 +105,13 @@
                   <DatePicker layoutX="154.0" layoutY="81.0" prefHeight="25.0" prefWidth="131.0" promptText="to" />
                   <TextField fx:id="userFilter" layoutX="26.0" layoutY="136.0" promptText="users filter" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" />
                   <TextField fx:id="friendFilter" layoutX="230.0" layoutY="136.0" promptText="friends filter" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" />
+<<<<<<< HEAD:src/main/resources/com/example/social_network_gui_v2/menu-view.fxml
                   <Button fx:id="requestButton" layoutX="304.0" layoutY="57.0" mnemonicParsing="false" onAction="#onRequestButtonClick" prefHeight="40.0" prefWidth="41.0" styleClass="addfriendbutton" stylesheets="@buttons.css" />
                   <Button fx:id="logoutButton" layoutX="355.0" layoutY="57.0" mnemonicParsing="false" onAction="#onCloseButtonClick" prefHeight="40.0" prefWidth="42.0" styleClass="logoutbutton" stylesheets="@buttons.css" />
+=======
+                  <Button fx:id="requestButton" layoutX="304.0" layoutY="57.0" mnemonicParsing="false" onAction="#onRequestButtonClick" prefHeight="40.0" prefWidth="41.0" style="-fx-background-image: url(&quot;images/add_friend.png&quot;); -fx-background-size: 60; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
+                  <Button fx:id="logoutButton" layoutX="355.0" layoutY="57.0" mnemonicParsing="false" onAction="#onCloseButtonClick" prefHeight="40.0" prefWidth="42.0" style="-fx-background-image: url(&quot;file:/C:/SILVIA/SEM%20III/Metode%20avansate%20de%20programare/Laborator/design/logout.png&quot;); -fx-background-size: 34; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
+>>>>>>> a41fba2cbff7afb46cc47e49c3a66a4ef85febbe:build/resources/main/com/example/social_network_gui_v2/menu-v2.fxml
                </children>
             </AnchorPane>
         </items>
