@@ -36,14 +36,9 @@
                         <DatePicker fx:id="datePickerDataField" prefHeight="25.0" prefWidth="190.0" style="-fx-background-color: #505050;" />
                      </children>
                   </VBox>
-                  <TextField fx:id="First_Name" alignment="CENTER_RIGHT" layoutX="38.0" layoutY="42.0" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #505050;">
+                  <TextField fx:id="Name" alignment="CENTER" layoutX="38.0" layoutY="42.0" prefHeight="27.0" prefWidth="131.0" style="-fx-background-color: transparent; -fx-border-color: #bcfd4c;">
                      <font>
                         <Font name="Segoe UI Semibold" size="12.0" />
-                     </font>
-                  </TextField>
-                  <TextField fx:id="Last_Name" layoutX="98.0" layoutY="42.0" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #505050;">
-                     <font>
-                        <Font name="Segoe UI Semibold" size="11.0" />
                      </font>
                   </TextField>
                   <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="-1.0" layoutY="385.0" onMouseClicked="#onCloseButtonClick" pickOnBounds="true" preserveRatio="true">
@@ -110,7 +105,7 @@
                   <DatePicker layoutX="154.0" layoutY="81.0" prefHeight="25.0" prefWidth="131.0" promptText="to" />
                   <TextField fx:id="userFilter" layoutX="26.0" layoutY="136.0" promptText="users filter" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" />
                   <TextField fx:id="friendFilter" layoutX="230.0" layoutY="136.0" promptText="friends filter" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" />
-                  <Button fx:id="requestButton" layoutX="304.0" layoutY="57.0" mnemonicParsing="false" onAction="#onRequestButtonClick" prefHeight="40.0" prefWidth="41.0" style="-fx-background-image: url(&quot; file:/C:/SILVIA/SEM%20III/Metode%20avansate%20de%20programare/Laborator/design/add_friend.png&quot;); -fx-background-size: 60; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
+                  <Button fx:id="requestButton" layoutX="304.0" layoutY="57.0" mnemonicParsing="false" onAction="#onRequestButtonClick" prefHeight="40.0" prefWidth="41.0" style="-fx-background-image: url(&quot;images/add_friend.png&quot;); -fx-background-size: 60; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
                   <Button fx:id="logoutButton" layoutX="355.0" layoutY="57.0" mnemonicParsing="false" onAction="#onCloseButtonClick" prefHeight="40.0" prefWidth="42.0" style="-fx-background-image: url(&quot;file:/C:/SILVIA/SEM%20III/Metode%20avansate%20de%20programare/Laborator/design/logout.png&quot;); -fx-background-size: 34; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
                </children>
             </AnchorPane>

@@ -43,7 +43,7 @@ public class MenuController{
     ObservableList<User> modelFriends = FXCollections.observableArrayList();
 
     @FXML
-    TextField First_Name;
+    TextField Name;
     @FXML
     TextField Last_Name;
     @FXML
@@ -108,11 +108,9 @@ public class MenuController{
     }
 
     private void setFields(User user) {
-
-        First_Name.setText(user.getFirstName());
-        Last_Name.setText(user.getLastName());
-        First_Name.setEditable(false);
-        Last_Name.setEditable(false);
+        String name = new String(user.getFirstName()+ " " + user.getLastName());
+        Name.setText(name);
+        Name.setEditable(false);
     }
 
     private void handleFilter1() {
