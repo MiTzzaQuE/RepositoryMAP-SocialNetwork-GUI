@@ -76,7 +76,6 @@ public class ChatController extends MenuController{
                 messageInvolved.add(ms.getFrom().getId());
                 List<Long> messageInvolvedSorted = messageInvolved.stream().sorted().collect(Collectors.toList());
 
-
                 if (!containsPeople(messageInvolvedSorted, chats) && messageInvolved.size() > 2) {
                     Chat chatNew = new Chat("Group " + messageInvolvedSorted, messageInvolvedSorted);
                     chats.add(chatNew);
