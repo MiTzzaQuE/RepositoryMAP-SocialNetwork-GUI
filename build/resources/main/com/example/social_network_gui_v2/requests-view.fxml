@@ -24,8 +24,8 @@
                   <Font name="Segoe UI Semibold" size="24.0" />
                </font>
             </Label>
-            <Button id="acceptID" fx:id="acceptBtn" layoutX="203.0" layoutY="13.0" mnemonicParsing="false" onAction="#onAcceptButtonClick" prefHeight="26.0" prefWidth="22.0" style="-fx-background-image: url(&quot;file:/C:/SILVIA/SEM%20III/Metode%20avansate%20de%20programare/Laborator/design/accept_icon2.png&quot;); -fx-background-size: 20; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
-            <Button fx:id="rejectBtn" layoutX="240.0" layoutY="13.0" mnemonicParsing="false" onAction="#onRejectButtonClick" prefHeight="26.0" prefWidth="22.0" style="-fx-background-image: url(&quot;file:/C:/SILVIA/SEM%20III/Metode%20avansate%20de%20programare/Laborator/design/reject.png&quot;); -fx-background-size: 20; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
+            <Button id="acceptID" fx:id="acceptBtn" layoutX="203.0" layoutY="13.0" mnemonicParsing="false" onAction="#onAcceptButtonClick" prefHeight="26.0" prefWidth="22.0" styleClass="acceptbutton" stylesheets="@buttons.css" />
+            <Button fx:id="rejectBtn" layoutX="240.0" layoutY="13.0" mnemonicParsing="false" onAction="#onRejectButtonClick" prefHeight="26.0" prefWidth="22.0" styleClass="rejectbutton" stylesheets="@buttons.css" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #6e6e6e;">
          <children>
@@ -40,7 +40,7 @@
                   <Font name="Segoe UI Semibold" size="24.0" />
                </font>
             </Label>
-            <Button fx:id="cancelBtn" layoutX="261.0" layoutY="17.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="23.0" prefWidth="22.0" style="-fx-background-image: url(&quot;file:/C:/SILVIA/SEM%20III/Metode%20avansate%20de%20programare/Laborator/design/trash.png&quot;); -fx-background-size: 20; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
+            <Button fx:id="cancelBtn" layoutX="261.0" layoutY="17.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="23.0" prefWidth="22.0" styleClass="cancelbutton" stylesheets="@buttons.css" />
          </children>
       </AnchorPane>
   </items>
