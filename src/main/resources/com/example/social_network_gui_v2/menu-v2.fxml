@@ -110,6 +110,8 @@
                   <DatePicker layoutX="154.0" layoutY="81.0" prefHeight="25.0" prefWidth="131.0" promptText="to" />
                   <TextField fx:id="userFilter" layoutX="26.0" layoutY="136.0" promptText="users filter" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" />
                   <TextField fx:id="friendFilter" layoutX="230.0" layoutY="136.0" promptText="friends filter" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" />
+                  <Button fx:id="requestButton" layoutX="304.0" layoutY="57.0" mnemonicParsing="false" onAction="#onRequestButtonClick" prefHeight="40.0" prefWidth="41.0" style="-fx-background-image: url(&quot; file:/C:/SILVIA/SEM%20III/Metode%20avansate%20de%20programare/Laborator/design/add_friend.png&quot;); -fx-background-size: 60; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
+                  <Button fx:id="logoutButton" layoutX="355.0" layoutY="57.0" mnemonicParsing="false" onAction="#onCloseButtonClick" prefHeight="40.0" prefWidth="42.0" style="-fx-background-image: url(&quot;file:/C:/SILVIA/SEM%20III/Metode%20avansate%20de%20programare/Laborator/design/logout.png&quot;); -fx-background-size: 34; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;" />
                </children>
             </AnchorPane>
         </items>
