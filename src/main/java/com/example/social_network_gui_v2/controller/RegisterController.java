@@ -1,6 +1,7 @@
 package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
+import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
@@ -37,12 +38,6 @@ public class RegisterController extends MenuController{
     private ComboBox genderComboBox;
 
     List<String> genders = new ArrayList<>();
-
-    private ServiceUser servUser;
-    private ServiceFriendship servFriendship;
-    private ServiceMessage servMessage;
-    private User user;
-    Stage dialogStage;
 
     @FXML
     public void initialize(){ }
@@ -88,29 +83,22 @@ public class RegisterController extends MenuController{
 
 //        actiontarget.setText("Sign in button pressed");
 
+        Long id;
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
         String userName = userNameField.getText();
         String password = passwordField.getText();
-        String confrim = confirmPasswordField.getText();
-        user = new User(firstName,lastName);
+        String confirm = confirmPasswordField.getText();
+        userLogin = new Page(firstName,lastName);
 
         try {
-            if(password.equals(confrim))
-                servUser.save(firstName,lastName,userName,password);
+            if(password.equals(confirm)) {
+                id = servUser.save(firstName, lastName, userName, password);
+                userLogin.setId(id);
+            }
             else
                 MessageAlert.showErrorMessage(null,"Invalid Password!");
-
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
-
-            Scene scene = new Scene(fxmlLoader.load(), 615, 450);
-            dialogStage.setTitle("Main Menu");
-            dialogStage.setScene(scene);
-
-            MenuController menuController = fxmlLoader.getController();
-            menuController.setService(servUser,servFriendship,servMessage,userLogin,dialogStage);
-
-            dialogStage.show();
+            showMenuDialogStage();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -121,6 +109,18 @@ public class RegisterController extends MenuController{
         catch (IllegalArgumentException exception){
             MessageAlert.showErrorMessage(null,"ID null!");
         }
+    }
 
+    private void showMenuDialogStage() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
+
+        Scene scene = new Scene(fxmlLoader.load(), 615, 450);
+        dialogStage.setTitle("Main Menu");
+        dialogStage.setScene(scene);
+
+        MenuController menuController = fxmlLoader.getController();
+        menuController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
+
+        dialogStage.show();
     }
 }

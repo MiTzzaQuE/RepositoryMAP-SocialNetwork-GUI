@@ -46,15 +46,22 @@ public class MenuController{
     ObservableList<User> modelFriends = FXCollections.observableArrayList();
 
     @FXML
-    TextField Name;
+    Label Name;
     @FXML
     TextField userFilter;
     @FXML
     TextField friendFilter;
     @FXML
-    private TextField genderTypeField;
+    private Label genderTypeField;
     @FXML
     private DatePicker datePickerDataField;
+
+    @FXML
+    Button accountButtonTab;
+    @FXML
+    Button notificationsEventsButtonTab;
+    @FXML
+    Button chatButtonTab;
 
     @FXML
     TableView<User> tableViewUsers;
@@ -109,7 +116,6 @@ public class MenuController{
     private void setFields(User user) {
         String name = new String(user.getFirstName()+ " " + user.getLastName());
         Name.setText(name);
-        Name.setEditable(false);
     }
 
     private void handleFilter1() {
@@ -180,7 +186,7 @@ public class MenuController{
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("requests-view.fxml"));
 
-            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
             Stage stage = new Stage();
             stage.setTitle("Friendship requests");
             stage.setScene(scene);
@@ -205,7 +211,7 @@ public class MenuController{
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
 
-            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
             dialogStage.setTitle("Sign In!");
             dialogStage.setScene(scene);
 
@@ -241,19 +247,16 @@ public class MenuController{
     public void handleChatButtonTab(ActionEvent actionEvent) {
 
         try{
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("chat-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("chat-view.fxml"));
 
-            Scene scene = new Scene(loader.load(), 615, 450);
-            Stage stage = new Stage();
-            stage.setTitle("Chat Menu");
-            stage.setScene(scene);
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            dialogStage.setTitle("Chat Menu!");
+            dialogStage.setScene(scene);
 
-            ChatController chatController = loader.getController();
-            chatController.setService(servUser,servFriendship,servMessage,userLogin,stage);
+            ChatController chatController = fxmlLoader.getController();
+            chatController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
 
-            stage.show();
-            // Hide this current window (if this is what you want)
-            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+            dialogStage.show();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -264,5 +267,37 @@ public class MenuController{
         catch (IllegalArgumentException exception){
             MessageAlert.showErrorMessage(null,"Error!");
         }
+    }
+
+    @FXML
+    public void handleAccountButtonTab(ActionEvent actionEvent) {
+
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            dialogStage.setTitle("Main Menu!");
+            dialogStage.setScene(scene);
+
+            MenuController menuController = fxmlLoader.getController();
+            menuController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
+
+            dialogStage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"Error!");
+        }
+    }
+
+    @FXML
+    public void handleNotificationsEventsButtonTab(ActionEvent actionEvent) {
+
+
     }
 }

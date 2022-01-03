@@ -37,7 +37,7 @@ public class ServiceUser {
      * @param firstname - String
      * @param lastname - String
      */
-    public void save(String firstname, String lastname, String username, String password) {
+    public Long save(String firstname, String lastname, String username, String password) {
         String hashedPassword = hashPassword(password);
         User user = new User(firstname, lastname, username, hashedPassword);
         long id = get_size();
@@ -46,6 +46,8 @@ public class ServiceUser {
         User save = repoUser.save(user);
         if (save != null)
             throw new ValidationException("\uD83C\uDD74\uD83C\uDD81\uD83C\uDD81\uD83C\uDD7E\uD83C\uDD81 : id already used");
+
+        return id;
     }
 
     private String hashPassword(String password){

@@ -16,14 +16,6 @@ public class FriendshipDTO {
     private Button rejectButton;
     private Button cancelButton;
 
-
-//    public FriendshipDTO(String userFrom, String userTo, String status, LocalDateTime date) {
-//        this.userFrom = userFrom;
-//        this.userTo = userTo;
-//        this.status = status;
-//        this.date = date;
-//    }
-
     public FriendshipDTO(Long idFrom, String userFrom, Long idTo, String userTo, String status, LocalDateTime date, Button acceptButton, Button rejectButton, Button cancelButton) {
         this.idFrom = idFrom;
         this.userFrom = userFrom;

@@ -19,7 +19,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -34,7 +33,7 @@ public class LoginController {
     private ServiceUser servUser;
     private ServiceFriendship servFriendship;
     private ServiceMessage servMessage;
-    private Page user;
+    private Page userLogin;
     Stage dialogStage;
 
     @FXML
@@ -57,23 +56,11 @@ public class LoginController {
 
         try {
             User userC = servUser.findUserByUsernamePassword(ID, password);
-            user = new Page(userC.getFirstName(),userC.getLastName());
-            user.setId(userC.getId());
+            userLogin = new Page(userC.getFirstName(),userC.getLastName());
+            userLogin.setId(userC.getId());
             initPage();
 
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
-
-            Scene scene = new Scene(fxmlLoader.load(), 615, 450);
-            Stage stage = new Stage();
-            stage.setTitle("Main Menu");
-            stage.setScene(scene);
-
-            MenuController menuController = fxmlLoader.getController();
-            menuController.setService(servUser,servFriendship,servMessage,user,stage);
-
-            stage.show();
-            // Hide this current window (if this is what you want)
-            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+            showMenuDialogStage();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -86,22 +73,32 @@ public class LoginController {
         }
     }
 
+    public void showMenuDialogStage() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
+
+        Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+        dialogStage.setTitle("Main Menu");
+        dialogStage.setScene(scene);
+
+        MenuController menuController = fxmlLoader.getController();
+        menuController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
+
+        dialogStage.show();
+    }
+
     @FXML
     public void handleRegisterButtonAction(ActionEvent actionEvent) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("register-view.fxml"));
 
-            Scene scene = new Scene(fxmlLoader.load(), 615, 450);
-            Stage stage = new Stage();
-            stage.setTitle("Sign Up");
-            stage.setScene(scene);
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            dialogStage.setTitle("Sign Up");
+            dialogStage.setScene(scene);
 
             RegisterController registerController = fxmlLoader.getController();
-            registerController.setService(servUser,servFriendship,servMessage,stage);
+            registerController.setService(servUser,servFriendship,servMessage,dialogStage);
 
-            stage.show();
-            // Hide this current window (if this is what you want)
-            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+            dialogStage.show();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -123,42 +120,42 @@ public class LoginController {
     }
 
     private void initModelChatUser() {
-        user.setMessages( servMessage.userMessages(user));
+        userLogin.setMessages( servMessage.userMessages(userLogin));
     }
 
     protected void initModelFriendsUser()
     {
-        Iterable<User> friends = servUser.getFriends(user.getId());
+        Iterable<User> friends = servUser.getFriends(userLogin.getId());
         List<User> friendList = StreamSupport.stream(friends.spliterator(),false)
                 .collect(Collectors.toList());
-        user.setFriends(friendList);
+        userLogin.setFriends(friendList);
     }
+
 //    protected void initModelFriendshipReqUser() {
 //        Predicate<FriendRequest> certainUserRight = x -> x.getId().getRight().equals(user.getId());
 //
-//        List<DtoFriendReq> friendshipsReqList = StreamSupport.stream(serviceFriendRequest.findAllRenew().spliterator(), false)
+//        List<FriendRequestDTO> friendshipsReqList = StreamSupport.stream(servFriendRequest.findAllRenew().spliterator(), false)
 //                .filter(certainUserRight)
 //                .map(x ->
 //                {
 //                    User u1 = servUser.findOne(x.getId().getLeft());
-//                    DtoFriendReq pp=new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), user.getFirstName() + " " + user.getLastName(), x.getDate(), x.getStatus());
+//                    FriendRequestDTO pp=new FriendRequestDTO(u1.getFirstName() + " " + u1.getLastName(), user.getFirstName() + " " + user.getLastName(), x.getDate(), x.getStatus());
 //                    return pp;
 //                })
 //                .collect(Collectors.toList());
-//
 //        user.setFriendRequestsReceived(friendshipsReqList);
-//
 //    }
+//
 //    protected void initModelFriendshipReqUser2() {
 //        Predicate<FriendRequest> certainUserLeft = x -> x.getId().getLeft().equals(user.getId());
 //
-////am facut aici o susta de functie pt findall()
-//        List<DtoFriendReq> friendshipsReqList = StreamSupport.stream(serviceFriendRequest.findAllRenew().spliterator(), false)
+//        //am facut aici o susta de functie pt findall()
+//        List<FriendRequestDTO> friendshipsReqList = StreamSupport.stream(servFriendRequest.findAllRenew().spliterator(), false)
 //                .filter(certainUserLeft)
 //                .map(x ->
 //                {
 //                    User u1 = servUser.findOne(x.getId().getRight());
-//                    return new DtoFriendReq(user.getFirstName() + " " + user.getLastName(), u1.getFirstName() + " " + u1.getLastName(), x.getDate(), x.getStatus());
+//                    return new FriendRequestDTO(user.getFirstName() + " " + user.getLastName(), u1.getFirstName() + " " + u1.getLastName(), x.getDate(), x.getStatus());
 //                })
 //                .collect(Collectors.toList());
 //        user.setFriendRequestsSent(friendshipsReqList);

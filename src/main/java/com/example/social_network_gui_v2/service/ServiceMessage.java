@@ -54,6 +54,7 @@ public class ServiceMessage {
         Message save = repoMessage.save(msg);
         if(save != null)
             throw new ValidationException("Id already used!");
+
         return id;
     }
 
@@ -63,7 +64,7 @@ public class ServiceMessage {
      * @param message-string
      * @param reply-the id of the old message
      */
-    public void saveReply( Long fromId, String message, Long reply ){
+    public Long saveReply( Long fromId, String message, Long reply ){
 
         User from = repoUser.findOne(fromId);
         List<User> to;
@@ -79,6 +80,8 @@ public class ServiceMessage {
         Message save = repoMessage.save(msg);
         if( save != null )
             throw new ValidationException("Id already used!");
+
+        return id;
     }
 
     /**

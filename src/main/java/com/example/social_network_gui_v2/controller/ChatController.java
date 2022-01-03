@@ -1,5 +1,6 @@
 package com.example.social_network_gui_v2.controller;
 
+import com.example.social_network_gui_v2.HelloApplication;
 import com.example.social_network_gui_v2.domain.Chat;
 import com.example.social_network_gui_v2.domain.Message;
 import com.example.social_network_gui_v2.domain.Page;
@@ -19,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -42,7 +44,7 @@ public class ChatController extends MenuController{
     private ListView<Message> lvChatWindow;
 
     ObservableList<Chat> modelChat = FXCollections.observableArrayList();
-    ObservableList<Message> chatMessages = FXCollections.observableArrayList();//create observablelist for listview
+    ObservableList<Message> chatMessages = FXCollections.observableArrayList();//create observable list for listview
 
     public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, Page user, Stage dialogStage){
 
@@ -53,7 +55,6 @@ public class ChatController extends MenuController{
         this.userLogin = user;
 
         initModelChat();
-//        setLabelName();
     }
 
     @FXML
@@ -65,7 +66,6 @@ public class ChatController extends MenuController{
 
     public List<Chat> initModelChat() {
         Iterable<Message> mess = userLogin.getMessages();
-
 
         List<Chat> chats = new ArrayList<>();
         for (Message ms : mess) {
@@ -119,13 +119,13 @@ public class ChatController extends MenuController{
         lvChatWindow.setItems(chatMessages);//attach the observable list to the listview
         lvChatWindow.setCellFactory(param -> {
             ListCell<Message> cell = new ListCell<Message>() {
-                Label lblUserLeft = new Label();
-                Label lblTextLeft = new Label();
-                HBox hBoxLeft = new HBox(lblUserLeft, lblTextLeft);
+                final Label lblUserLeft = new Label();
+                final Label lblTextLeft = new Label();
+                final HBox hBoxLeft = new HBox(lblUserLeft, lblTextLeft);
 
-                Label lblUserRight = new Label();
-                Label lblTextRight = new Label();
-                HBox hBoxRight = new HBox(lblTextRight, lblUserRight);
+                final Label lblUserRight = new Label();
+                final Label lblTextRight = new Label();
+                final HBox hBoxRight = new HBox(lblTextRight, lblUserRight);
 
                 {
                     hBoxLeft.setAlignment(Pos.CENTER_LEFT);
@@ -142,22 +142,20 @@ public class ChatController extends MenuController{
                         setText(null);
                         setGraphic(null);
                     } else {
-                        System.out.println(item.getFrom());
+//                        System.out.println(item.getFrom());
                         if (!item.getFrom().getId().equals(userLogin.getId())) {
                             lblUserLeft.setText(item.getFrom().getFirstName() + " " + item.getFrom().getLastName() + ":");
                             lblTextLeft.setText(item.getMessage());
                             //lblTextLeft.setTextFill(Color.color(1, 0, 0));
                             setGraphic(hBoxLeft);
                         } else {
-                            lblUserRight.setText(":" + item.getFrom().getFirstName() + " " + item.getFrom().getLastName());
+                            lblUserRight.setText(": " + item.getFrom().getFirstName() + " " + item.getFrom().getLastName());
                             lblTextRight.setText(item.getMessage());
                             setGraphic(hBoxRight);
                         }
                     }
                 }
-
             };
-
             return cell;
         });
     }
@@ -166,12 +164,18 @@ public class ChatController extends MenuController{
     private void handleUser1SubmitMessage(ActionEvent event) {
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
         try {
-            Long Id=servMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
+            Long Id = null;
+            Message selectedMessage = lvChatWindow.getSelectionModel().getSelectedItem();
+            if(selectedMessage != null)
+                Id = servMessage.saveReply(userLogin.getId(), newMessage.getText(), selectedMessage.getId());
+            else
+                Id = servMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
+
+            lvChatWindow.getSelectionModel().clearSelection();
+
             Message newMess = servMessage.findOne(Id);
             userLogin.addMessage(newMess);
-
             chatMessages.add(newMess);//get 1st user's text from his/her textfield and add message to observablelist
-            initializeChat();
             newMessage.setText("");//clear 1st user's textfield
         } catch (ValidationException e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
@@ -185,7 +189,6 @@ public class ChatController extends MenuController{
         for (Long id : ids)
             if (id != userLogin.getId())
                 idsNew.add(servUser.findOne(id));
-
         return idsNew;
     }
 
@@ -194,30 +197,23 @@ public class ChatController extends MenuController{
         for (Long id : ids)
             if (id != userLogin.getId())
                 idsNew.add(id);
-
         return idsNew;
     }
 
     @FXML
     private void showNewChatEditDialog() {
         try {
-            // create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("newchat.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("chat-new-view.fxml"));
 
-            AnchorPane root = (AnchorPane) loader.load();
-            // Create the dialog Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit New Chat");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            Stage stage = new Stage();
+            stage.setTitle("New Chat Menu!");
+            stage.setScene(scene);
 
-//            NewChatController controller = loader.getController();
-//            controller.set(serviceUser,serviceMessage,dialogStage,userLogin,this);
+            NewChatController controller = fxmlLoader.getController();
+            controller.setService(servUser,servMessage,stage,userLogin,this);
 
-            dialogStage.show();
+            stage.show();
 
         }
         catch (IOException e) {

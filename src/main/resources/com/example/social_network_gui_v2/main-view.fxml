@@ -13,6 +13,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="450.0" prefWidth="610.0" style="-fx-background-color: #505050;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.social_network_gui_v2.controller.MenuController">
@@ -21,6 +22,11 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="235.0" style="-fx-background-color: #505050;">
                <children>
+                  <Label fx:id="Name" alignment="CENTER" layoutX="3.0" layoutY="42.0" prefHeight="17.0" prefWidth="190.0" text="Label" textFill="WHITE">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="18.0" />
+                     </font>
+                  </Label>
                   <VBox layoutX="3.0" layoutY="280.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Label fx:id="TextT" alignment="CENTER" prefHeight="17.0" prefWidth="190.0" text="PERSONAL DATA" textFill="WHITE">
@@ -28,19 +34,14 @@
                               <Font name="Segoe UI Semibold" size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="genderTypeField" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #505050;">
+                        <Label fx:id="NamegenderTypeField" alignment="CENTER" prefHeight="17.0" prefWidth="190.0" text="Gender Label" textFill="WHITE">
                            <font>
-                              <Font name="Segoe UI Semibold" size="12.0" />
+                              <Font name="Segoe UI Semibold" size="18.0" />
                            </font>
-                        </TextField>
-                        <DatePicker fx:id="datePickerDataField" prefHeight="25.0" prefWidth="190.0" style="-fx-background-color: #505050;" />
+                        </Label>
+                        <DatePicker fx:id="datePickerDataField" editable="false" prefHeight="25.0" prefWidth="190.0" promptText="Birthdate" style="-fx-background-color: #505050;" />
                      </children>
                   </VBox>
-                  <TextField fx:id="Name" alignment="CENTER" layoutX="38.0" layoutY="42.0" prefHeight="27.0" prefWidth="131.0" style="-fx-background-color: transparent; -fx-border-color: #bcfd4c;">
-                     <font>
-                        <Font name="Segoe UI Semibold" size="12.0" />
-                     </font>
-                  </TextField>
                   <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="-1.0" layoutY="385.0" onMouseClicked="#onCloseButtonClick" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/Logo.png" />
@@ -103,8 +104,10 @@
                   </Label>
                   <DatePicker layoutX="154.0" layoutY="48.0" prefHeight="25.0" prefWidth="131.0" promptText="from" />
                   <DatePicker layoutX="154.0" layoutY="81.0" prefHeight="25.0" prefWidth="131.0" promptText="to" />
-                  <TextField fx:id="userFilter" layoutX="26.0" layoutY="136.0" promptText="users filter" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" />
-                  <TextField fx:id="friendFilter" layoutX="230.0" layoutY="136.0" promptText="friends filter" style="-fx-background-color: #6e6e6e; -fx-border-color: #bcfd4c;" />
+                  <TextField fx:id="userFilter" layoutX="26.0" layoutY="136.0" promptText="users filter" style="-fx-background-color: #6e6e6e;" />
+                  <Line endX="50.0" layoutX="127.0" layoutY="163.0" startX="-100.0" stroke="#bcfd4c" />
+                  <TextField fx:id="friendFilter" layoutX="230.0" layoutY="136.0" promptText="friends filter" style="-fx-background-color: #6e6e6e;" />
+                  <Line endX="50.0" layoutX="330.0" layoutY="163.0" startX="-100.0" stroke="#bcfd4c" />
                   <Button fx:id="requestButton" layoutX="304.0" layoutY="57.0" mnemonicParsing="false" onAction="#onRequestButtonClick" prefHeight="40.0" prefWidth="40.0" style="-fx-background-size: 60; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" scaleX="1.5" scaleY="1.5">
@@ -127,12 +130,12 @@
       </SplitPane>
       <ToolBar prefHeight="40.0" prefWidth="607.0" style="-fx-background-color: #505050;">
         <items>
-          <Button mnemonicParsing="false" prefWidth="190.0" style="-fx-background-color: #6e6e6e;" text="Account" textFill="WHITE">
+          <Button fx:id="accountButtonTab" mnemonicParsing="false" onAction="#handleAccountButtonTab" prefWidth="190.0" style="-fx-background-color: #6e6e6e;" text="Account" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Semibold" size="12.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefWidth="190.0" style="-fx-background-color: #6e6e6e;" text="Notifications &amp; Events" textFill="WHITE">
+            <Button fx:id="notificationsEventsButtonTab" mnemonicParsing="false" onAction="#handleNotificationsEventsButtonTab" prefWidth="190.0" style="-fx-background-color: #6e6e6e;" text="Notifications &amp; Events" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Semibold" size="12.0" />
                </font>

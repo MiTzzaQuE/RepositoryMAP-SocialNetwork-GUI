@@ -11,8 +11,8 @@ public class Friendship extends Entity<Tuple<Long,Long>> {
     /**
      * LocalDateTime
      */
-    private LocalDateTime date;
-    private String state;
+    protected LocalDateTime date;
+    protected String state;
 
     /**
      * default constructor for object Friendship
