@@ -144,12 +144,12 @@ public class ChatController extends MenuController{
                     } else {
 //                        System.out.println(item.getFrom());
                         if (!item.getFrom().getId().equals(userLogin.getId())) {
-                            lblUserLeft.setText(item.getFrom().getFirstName() + " " + item.getFrom().getLastName() + ":");
+                            lblUserLeft.setText(item.getFrom().getFirstName() + ":");
                             lblTextLeft.setText(item.getMessage());
                             //lblTextLeft.setTextFill(Color.color(1, 0, 0));
                             setGraphic(hBoxLeft);
                         } else {
-                            lblUserRight.setText(": " + item.getFrom().getFirstName() + " " + item.getFrom().getLastName());
+                            lblUserRight.setText(": " + item.getFrom().getFirstName());
                             lblTextRight.setText(item.getMessage());
                             setGraphic(hBoxRight);
                         }

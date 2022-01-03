@@ -104,10 +104,12 @@
                   </Label>
                   <DatePicker layoutX="154.0" layoutY="48.0" prefHeight="25.0" prefWidth="131.0" promptText="from" />
                   <DatePicker layoutX="154.0" layoutY="81.0" prefHeight="25.0" prefWidth="131.0" promptText="to" />
+
                   <TextField fx:id="userFilter" layoutX="26.0" layoutY="136.0" promptText="users filter" style="-fx-background-color: #6e6e6e;" />
                   <Line endX="50.0" layoutX="127.0" layoutY="163.0" startX="-100.0" stroke="#bcfd4c" />
                   <TextField fx:id="friendFilter" layoutX="230.0" layoutY="136.0" promptText="friends filter" style="-fx-background-color: #6e6e6e;" />
                   <Line endX="50.0" layoutX="330.0" layoutY="163.0" startX="-100.0" stroke="#bcfd4c" />
+
                   <Button fx:id="requestButton" layoutX="304.0" layoutY="57.0" mnemonicParsing="false" onAction="#onRequestButtonClick" prefHeight="40.0" prefWidth="40.0" style="-fx-background-size: 60; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" scaleX="1.5" scaleY="1.5">

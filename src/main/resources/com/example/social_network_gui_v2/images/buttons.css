@@ -1,0 +1,39 @@
+.addfriendbutton {
+    -fx-background-image: url("com/example/social_network_gui_v2/images/add_friend.png");
+    -fx-background-size: 60;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: #bcfd4c;
+}
+
+.logoutbutton {
+    fx-background-image: url("com/example/social_network_gui_v2/images/logout.png");
+    -fx-background-size: 34;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: #bcfd4c;
+}
+
+.acceptbutton {
+    -fx-background-image: url("com/example/social_network_gui_v2/images/accept_icon2.png");
+    -fx-background-size: 20;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: #bcfd4c;
+}
+
+.rejectbutton {
+    -fx-background-image: url("com/example/social_network_gui_v2/images/reject.png");
+    -fx-background-size: 20;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: #bcfd4c;
+}
+
+.cancelbutton{
+    -fx-background-image: url("com/example/social_network_gui_v2/images/trash.png");
+    -fx-background-size: 20;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: #bcfd4c;
+}
