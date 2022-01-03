@@ -20,9 +20,7 @@ public class Page extends User{
         super(firstName, lastName);
     }
 
-    public List<Message> getMessages() {
-        return messages;
-    }
+    public List<Message> getMessages() { return messages; }
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;

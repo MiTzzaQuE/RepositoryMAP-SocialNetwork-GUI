@@ -26,6 +26,7 @@ import java.util.stream.StreamSupport;
 
 public class RequestsController {
 
+
     private ServiceUser servUser;
     private ServiceFriendship servFriendship;
     private ServiceMessage servMessage;
@@ -40,7 +41,7 @@ public class RequestsController {
     @FXML
     public Button cancelBtn;
     @FXML
-    public AnchorPane pane1;
+    public Button simpleBtn;  //provizoriu pana ne dam seama cum sa punem imagine pe buton
 
     @FXML
     TableColumn<FriendshipDTO, String> tableColumnFrom;
@@ -74,23 +75,17 @@ public class RequestsController {
         List<FriendshipDTO> friendshipDTOList = StreamSupport.stream(friendships.spliterator(),false)
                 .map(y -> {
 
-                    Button dup1 = new Button();
-                    dup1.setStyle(acceptBtn.getStyle());
+                    Button dup1 = new Button("Accept");
+                    dup1.setStyle(simpleBtn.getStyle());
                     dup1.setOnAction((ActionEvent e) -> onAcceptButtonClick(e));
 
-                    Button dup2 = new Button();
-                    dup2.setStyle(rejectBtn.getStyle());
+                    Button dup2 = new Button("Decline");
+                    dup2.setStyle(simpleBtn.getStyle());
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
 
                     Button dup3 = new Button();
                     dup3.setStyle(cancelBtn.getStyle());
-//                    Image image = new Image("/trash.png");
-//                    ImageView imageView = new ImageView(image);
-//                    imageView.setFitWidth(20);
-//                    imageView.setFitWidth(20);
-//                    dup3.setGraphic(imageView);
-                    //dup3.getStylesheets().add("src/main/resources/com/example/social_network_gui_v2/buttons.css");
-                    //dup3.getStyleClass().add("cancelbutton");
+                    //dup3.setStyle(cancelBtn.getStyle());
                     dup3.setOnAction((ActionEvent e) -> onCancelButtonClick(e));
                     return new FriendshipDTO(servUser.findOne(y.getId().getLeft()).getId(),servUser.findOne(y.getId().getLeft()).getFirstName() + " " + servUser.findOne(y.getId().getLeft()).getLastName(),
                         servUser.findOne(y.getId().getRight()).getId(),servUser.findOne(y.getId().getRight()).getFirstName() + " " + servUser.findOne(y.getId().getRight()).getLastName(),
@@ -107,8 +102,18 @@ public class RequestsController {
                     Button dup2 = new Button();
                     dup2.setStyle(rejectBtn.getStyle());
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
-                    Button dup3 = new Button();
-                    dup3.setStyle(cancelBtn.getStyle());
+                    Button dup3 = new Button("Cancel");
+                    dup3.setStyle(simpleBtn.getStyle());
+//                    Image image = new Image("/trash.png");
+//                    ImageView imageView = new ImageView(image);
+//                    imageView.setFitWidth(10);
+//                    imageView.setFitWidth(10);
+//                    imageView.setScaleX(1.5);
+//                    imageView.setScaleY(1.5);
+//                    imageView.setScaleZ(1);
+//                    dup3.setGraphic(imageView);
+                    //dup3.getStylesheets().add("src/main/resources/com/example/social_network_gui_v2/buttons.css");
+                    //dup3.getStyleClass().add("cancelbutton");
                     dup3.setOnAction((ActionEvent e) -> onCancelButtonClick(e));
                     return new FriendshipDTO(servUser.findOne(y.getId().getLeft()).getId(),servUser.findOne(y.getId().getLeft()).getFirstName() + " " + servUser.findOne(y.getId().getLeft()).getLastName(),
                         servUser.findOne(y.getId().getRight()).getId(),servUser.findOne(y.getId().getRight()).getFirstName() + " " + servUser.findOne(y.getId().getRight()).getLastName(),
@@ -134,6 +139,7 @@ public class RequestsController {
         acceptBtn.setVisible(false);
         rejectBtn.setVisible(false);
         cancelBtn.setVisible(false);
+        simpleBtn.setVisible(false);
     }
 
     @FXML

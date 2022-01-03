@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 
 public class Chat extends Entity<Long>{
     String name;
-    private List<Long> people=new ArrayList<>();;
+    private List<Long> people = new ArrayList<>();;
 
     public Chat(String name, List<Long> people) {
+
         this.name = name;
         this.people = people.stream().sorted().collect(Collectors.toList());//we lost the sorted array at constructor
-
     }
 
     public String getName() {

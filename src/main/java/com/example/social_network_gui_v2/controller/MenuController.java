@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -234,5 +235,34 @@ public class MenuController{
 
     @FXML
     public void handleExportPrivateButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void handleChatButtonTab(ActionEvent actionEvent) {
+
+        try{
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("chat-view.fxml"));
+
+            Scene scene = new Scene(loader.load(), 615, 450);
+            Stage stage = new Stage();
+            stage.setTitle("Chat Menu");
+            stage.setScene(scene);
+
+            ChatController chatController = loader.getController();
+            chatController.setService(servUser,servFriendship,servMessage,userLogin,stage);
+
+            stage.show();
+            // Hide this current window (if this is what you want)
+            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"Error!");
+        }
     }
 }
