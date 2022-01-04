@@ -14,6 +14,8 @@ public class User extends Entity<Long> {
      * First and last nama of an user
      */
     private String firstName, lastName;
+    private String username;
+    private String password;
     /**
      * list of all user friends
      */
@@ -26,6 +28,13 @@ public class User extends Entity<Long> {
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public User(String firstName, String lastName, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
     }
 
     /**
@@ -61,6 +70,21 @@ public class User extends Entity<Long> {
         this.lastName = lastName;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public String toString() {

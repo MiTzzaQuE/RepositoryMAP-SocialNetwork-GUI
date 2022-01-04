@@ -116,6 +116,7 @@ public class ServiceFriendship {
         Friendship friendship = repoFriends.findOne(tuple);
         if(friendship != null){
             friendship.setState("Approved");
+            repoFriends.update(friendship);
         }
         else
             throw new ValidationException("\uD83C\uDD74\uD83C\uDD81\uD83C\uDD81\uD83C\uDD7E\uD83C\uDD81 " +

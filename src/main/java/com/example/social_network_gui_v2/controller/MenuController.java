@@ -2,6 +2,7 @@ package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
 import com.example.social_network_gui_v2.domain.Friendship;
+import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.UserFriendDTO;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
@@ -15,10 +16,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -33,28 +33,51 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class MenuController{
-    private ServiceUser servUser;
-    private ServiceFriendship servFriendship;
-    private ServiceMessage servMessage;
-    User userLogin;
-    Stage dialogStage;
+    protected ServiceUser servUser;
+    protected ServiceFriendship servFriendship;
+    protected ServiceMessage servMessage;
+    protected List<User> users;
+    protected List<User> friends;
+
+    protected Page userLogin;
+    protected Stage dialogStage;
+
     ObservableList<User> modelUser = FXCollections.observableArrayList();
+    ObservableList<User> modelFriends = FXCollections.observableArrayList();
 
     @FXML
-    TextField First_Name;
+    Label Name;
     @FXML
-    TextField Last_Name;
+    TextField userFilter;
+    @FXML
+    TextField friendFilter;
+    @FXML
+    private Label genderTypeField;
+    @FXML
+    private DatePicker datePickerDataField;
 
     @FXML
-    TableColumn<User,String> tableColumnID;
+    Button accountButtonTab;
     @FXML
-    TableColumn<User,String> tableColumnFirstName;
+    Button notificationsEventsButtonTab;
     @FXML
-    TableColumn<User,String> tableColumnLastName;
+    Button chatButtonTab;
+
     @FXML
     TableView<User> tableViewUsers;
+    @FXML
+    TableColumn<User,String> tableColumnFirstNameU;
+    @FXML
+    TableColumn<User,String> tableColumnLastNameU;
+    @FXML
+    TableView<User> tableViewFriends;
+    @FXML
+    TableColumn<User,String> tableColumnFirstNameF;
+    @FXML
+    TableColumn<User,String> tableColumnLastNameF;
 
-    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,User user, Stage dialogStage){
+
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,Page user, Stage dialogStage){
 
         this.servUser = servUser;
         this.servFriendship = servFriendship;
@@ -69,71 +92,101 @@ public class MenuController{
 
     private void initModel() {
 
-        Iterable<User> users = servUser.getFriends(userLogin.getId());
-        List<User> userList = StreamSupport.stream(users.spliterator(),false)
-                .collect(Collectors.toList());
-        modelUser.setAll(userList);
+        users = getUsersNoFriends();
+        friends = getFriends();
+        modelUser.setAll(users);
+        modelFriends.setAll(friends);
     }
 
     @FXML
     public void initialize(){
         //TODO
-//        tableColumnID.setCellValueFactory(new PropertyValueFactory<UserFriendDTO, String>("ID"));
-        tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
-        tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
-
+        tableColumnFirstNameU.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
+        tableColumnLastNameU.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
         tableViewUsers.setItems(modelUser);
+
+        tableColumnFirstNameF.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
+        tableColumnLastNameF.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
+        tableViewFriends.setItems(modelFriends);
+
+        userFilter.textProperty().addListener(o -> handleFilter1());
+        friendFilter.textProperty().addListener(o -> handleFilter2());
     }
 
     private void setFields(User user) {
+        String name = new String(user.getFirstName()+ " " + user.getLastName());
+        Name.setText(name);
+    }
 
-        First_Name.setText(user.getFirstName());
-        Last_Name.setText(user.getLastName());
+    private void handleFilter1() {
+        Predicate<User> p1 = n -> n.getFirstName().startsWith(userFilter.getText());
+        Predicate<User> p2 = n -> n.getLastName().startsWith(userFilter.getText());
+
+        modelUser.setAll(users
+                .stream()
+                .filter(p1.or(p2))
+                .collect(Collectors.toList()));
+    }
+
+    private void handleFilter2() {
+            Predicate<User> p1 = n -> n.getFirstName().startsWith(friendFilter.getText());
+            Predicate<User> p2 = n -> n.getLastName().startsWith(friendFilter.getText());
+
+            modelFriends.setAll(friends
+                    .stream()
+                    .filter(p1.or(p2))
+                    .collect(Collectors.toList()));
+        }
+
+    private List<User> getUsersNoFriends() {
+        Iterable<User> users = servUser.printUs();
+        List<User> userList = StreamSupport.stream(users.spliterator(),false)
+                .collect(Collectors.toList());
+        return userList;
+    }
+
+    private List<User> getFriends(){
+        Iterable<User> friends = servUser.getFriends(userLogin.getId());
+        List<User> friendList = StreamSupport.stream(friends.spliterator(),false)
+                .collect(Collectors.toList());
+        return friendList;
     }
 
     @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("user-search-view.fxml"));
-
-            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
-            Stage stage = new Stage();
-            stage.setTitle("Search Friends");
-            stage.setScene(scene);
-
-            SearchController searchController = fxmlLoader.getController();
-            searchController.setService(servUser,servFriendship,servMessage,userLogin,stage);
-
-            stage.show();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void onDelButtonClick(ActionEvent actionEvent) {
         User selectedUser = tableViewUsers.getSelectionModel().getSelectedItem();
         if(selectedUser != null) {
             try {
-                servFriendship.deleteFriend(userLogin.getId(), selectedUser.getId());
+                servFriendship.addFriend(userLogin.getId(), selectedUser.getId());
                 tableViewUsers.getItems().removeAll(tableViewUsers.getSelectionModel().getSelectedItem());
             } catch (ValidationException validationException) {
                 MessageAlert.showErrorMessage(null, validationException.getMessage());
             }
         }
         else MessageAlert.showErrorMessage(null,"No selected user!");
+    }
 
+    @FXML
+    public void onDelButtonClick(ActionEvent actionEvent) {
+        User selectedUser = tableViewFriends.getSelectionModel().getSelectedItem();
+        if(selectedUser != null) {
+            try {
+                servFriendship.deleteFriend(userLogin.getId(), selectedUser.getId());
+                tableViewFriends.getItems().removeAll(tableViewFriends.getSelectionModel().getSelectedItem());
+            } catch (ValidationException validationException) {
+                MessageAlert.showErrorMessage(null, validationException.getMessage());
+            }
+        }
+        else MessageAlert.showErrorMessage(null,"No selected friend!");
     }
 
     @FXML
     public void onRequestButtonClick(ActionEvent actionEvent) {
 
         try {
-
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("requests-view.fxml"));
 
-            Scene scene = new Scene(fxmlLoader.load(), 630, 400);
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
             Stage stage = new Stage();
             stage.setTitle("Friendship requests");
             stage.setScene(scene);
@@ -155,14 +208,96 @@ public class MenuController{
 
     @FXML
     public void onCloseButtonClick(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-        GridPane rootLayout = (GridPane)fxmlLoader.load();
-        LoginController loginController = fxmlLoader.getController();
-        loginController.setService(servUser,servFriendship,servMessage,dialogStage);
-        Scene scene = new Scene(rootLayout, 320, 240);
-        dialogStage.setTitle("Log in!");
-        dialogStage.setScene(scene);
-        dialogStage.show();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            dialogStage.setTitle("Sign In!");
+            dialogStage.setScene(scene);
+
+            LoginController loginController = fxmlLoader.getController();
+            loginController.setService(servUser, servFriendship, servMessage, dialogStage);
+
+            dialogStage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"ID null!");
+        }
     }
 
+    @FXML
+    public void handleOpenChatButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void handleExportActivityButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void handleExportPrivateButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void handleChatButtonTab(ActionEvent actionEvent) {
+
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("chat-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            dialogStage.setTitle("Chat Menu!");
+            dialogStage.setScene(scene);
+
+            ChatController chatController = fxmlLoader.getController();
+            chatController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
+
+            dialogStage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"Error!");
+        }
+    }
+
+    @FXML
+    public void handleAccountButtonTab(ActionEvent actionEvent) {
+
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            dialogStage.setTitle("Main Menu!");
+            dialogStage.setScene(scene);
+
+            MenuController menuController = fxmlLoader.getController();
+            menuController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
+
+            dialogStage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"Error!");
+        }
+    }
+
+    @FXML
+    public void handleNotificationsEventsButtonTab(ActionEvent actionEvent) {
+
+
+    }
 }

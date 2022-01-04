@@ -3,6 +3,8 @@ package com.example.social_network_gui_v2.service;
 import com.example.social_network_gui_v2.domain.*;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.repository.Repository;
+import com.example.social_network_gui_v2.repository.database.UserDbRepository;
+import com.example.social_network_gui_v2.utils.BCrypt;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,7 +16,8 @@ import java.util.stream.StreamSupport;
  * repoFriends-Repository for Friendships
  */
 public class ServiceUser {
-    private final Repository<Long, User> repoUser;
+    //private final Repository<Long, User> repoUser;
+    private UserDbRepository repoUser;
     private final Repository<Tuple<Long, Long>, Friendship> repoFriends;
 
     /**
@@ -22,7 +25,7 @@ public class ServiceUser {
      * @param RepoUser UserRepository
      * @param RepoFriends FriendsRepository
      */
-    public ServiceUser(Repository<Long, User> RepoUser, Repository<Tuple<Long, Long>, Friendship> RepoFriends) {
+    public ServiceUser(UserDbRepository RepoUser, Repository<Tuple<Long, Long>, Friendship> RepoFriends) {
         repoFriends = RepoFriends;
         repoUser = RepoUser;
     }
@@ -34,14 +37,21 @@ public class ServiceUser {
      * @param firstname - String
      * @param lastname - String
      */
-    public void save(String firstname, String lastname) {
-        User user = new User(firstname, lastname);
+    public Long save(String firstname, String lastname, String username, String password) {
+        String hashedPassword = hashPassword(password);
+        User user = new User(firstname, lastname, username, hashedPassword);
         long id = get_size();
         id++;
         user.setId(id);
         User save = repoUser.save(user);
         if (save != null)
             throw new ValidationException("\uD83C\uDD74\uD83C\uDD81\uD83C\uDD81\uD83C\uDD7E\uD83C\uDD81 : id already used");
+
+        return id;
+    }
+
+    private String hashPassword(String password){
+        return BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
     /**
@@ -135,6 +145,9 @@ public class ServiceUser {
                     ": id invalid!");
     }
 
+    public User findUserByUsernamePassword(String username, String password){
+        return repoUser.findUserByUsernameAndPassword(username, password);
+    }
 
     /**
      * Function which show friends of an user, with friendship made on a specific mounth
@@ -205,6 +218,22 @@ public class ServiceUser {
 
         return StreamSupport.stream(repoFriends.findAll().spliterator(),false)
                 .filter(friendship -> friendship.getId().getRight().equals(id) && friendship.getState().equals("Pending"))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Shows all friendship requests sent by a given user
+     * An user is a sents a friendship request if he is on the left side of the tuple (id1)
+     * @param id -Long
+     * @return a list with all the friendship requests
+     */
+    public Iterable<Friendship> getRequestsSentForUser(Long id){
+        if(repoUser.findOne(id) == null)
+            throw new ValidationException("\uD83C\uDD74\uD83C\uDD81\uD83C\uDD81\uD83C\uDD7E\uD83C\uDD81" +
+                    "ID does not exist!");
+
+        return StreamSupport.stream(repoFriends.findAll().spliterator(),false)
+                .filter(friendship -> friendship.getId().getLeft().equals(id) && friendship.getState().equals("Pending"))
                 .collect(Collectors.toList());
     }
 

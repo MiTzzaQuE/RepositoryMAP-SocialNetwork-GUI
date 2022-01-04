@@ -90,4 +90,7 @@ public class SearchController {
     public void onButtonCloseSearch(ActionEvent actionEvent) {
         dialogStage.close();
     }
+
+    public void handleAddUser(ActionEvent actionEvent) {
+    }
 }

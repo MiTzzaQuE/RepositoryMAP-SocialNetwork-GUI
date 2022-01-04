@@ -11,6 +11,7 @@ import com.example.social_network_gui_v2.domain.validation.UserValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import com.example.social_network_gui_v2.repository.Repository;
@@ -29,7 +30,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        Repository<Long, User> repo =
+        UserDbRepository repo =
                 new UserDbRepository("jdbc:postgresql://localhost:5432/socialnetwork","postgres","1234",new UserValidator());
         Repository<Tuple<Long,Long>, Friendship> repofriends =
                 new com.example.social_network_gui_v2.repository.database.FriendshipDbRepository("jdbc:postgresql://localhost:5432/socialnetwork","postgres","1234", new FriendshipValidator());
@@ -41,11 +42,11 @@ public class HelloApplication extends Application {
         ServiceMessage servMsg = new ServiceMessage(repo,repoMessage);
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-        GridPane rootLayout = (GridPane)fxmlLoader.load();
+        SplitPane rootLayout = (SplitPane)fxmlLoader.load();
         LoginController loginController = fxmlLoader.getController();
         loginController.setService(serv,servFr,servMsg,stage);
-        Scene scene = new Scene(rootLayout, 320, 240);
-        stage.setTitle("Log in!");
+        Scene scene = new Scene(rootLayout, 630, 400);
+        stage.setTitle("Sign in!");
         stage.setScene(scene);
         stage.show();
     }
