@@ -58,9 +58,9 @@ public class LoginController {
             User userC = servUser.findUserByUsernamePassword(ID, password);
             userLogin = new Page(userC.getFirstName(),userC.getLastName());
             userLogin.setId(userC.getId());
-            initPage();
 
             showMenuDialogStage();
+            initPage();             //RED FLAG, AM INVERSAT PUTIN ASTEA PENTRU IMPROVEMENT
         }
         catch (IOException e) {
             e.printStackTrace();

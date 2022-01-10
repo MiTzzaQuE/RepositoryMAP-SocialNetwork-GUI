@@ -15,16 +15,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class RequestsController {
+public class RequestsController extends MenuController{
 
 
     private ServiceUser servUser;
@@ -65,10 +61,10 @@ public class RequestsController {
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
         this.userLogin = user;
-        initModel();
+        initModelRequest();
     }
 
-    private void initModel() {
+    private void initModelRequest() {
 
         Iterable<Friendship> friendships = servUser.getFriendshipRequestForUser(userLogin.getId());
         //Image image = new Image("file:src/main/resources/com/example/social_network_gui_v2/trash.png");
@@ -150,6 +146,8 @@ public class RequestsController {
             try {
                 servFriendship.acceptFriendship(selected.getIdFrom(), selected.getIdTo());
                 tableViewFriendhipRequests.getItems().removeAll(tableViewFriendhipRequests.getSelectionModel().getSelectedItem());
+                System.out.println(userLogin);
+
             } catch (ValidationException validationException) {
                 MessageAlert.showErrorMessage(null, validationException.getMessage());
             }

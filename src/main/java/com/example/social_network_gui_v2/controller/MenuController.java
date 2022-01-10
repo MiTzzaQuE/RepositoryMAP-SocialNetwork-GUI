@@ -1,10 +1,8 @@
 package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
-import com.example.social_network_gui_v2.domain.Friendship;
 import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
-import com.example.social_network_gui_v2.domain.UserFriendDTO;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
 import com.example.social_network_gui_v2.service.ServiceMessage;
@@ -14,20 +12,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -87,10 +78,10 @@ public class MenuController{
         if(user != null){
             setFields(user);
         }
-        initModel();
+        initModelMenu();
     }
 
-    private void initModel() {
+    protected void initModelMenu() {
 
         users = getUsersNoFriends();
         friends = getFriends();
@@ -145,7 +136,7 @@ public class MenuController{
         return userList;
     }
 
-    private List<User> getFriends(){
+    protected List<User> getFriends(){
         Iterable<User> friends = servUser.getFriends(userLogin.getId());
         List<User> friendList = StreamSupport.stream(friends.spliterator(),false)
                 .collect(Collectors.toList());

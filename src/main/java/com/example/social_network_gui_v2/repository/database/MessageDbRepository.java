@@ -50,7 +50,7 @@ public class MessageDbRepository implements Repository<Long, Message> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()){
-                msg = extractMessage(resultSet);
+                msg = extractMessage(resultSet, connection);
                 return msg;
             }
         }
@@ -71,7 +71,7 @@ public class MessageDbRepository implements Repository<Long, Message> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()){
-                msg = extractMessage(resultSet);
+                msg = extractMessage(resultSet, connection);
                 messages.add(msg);
             }
             return messages;
@@ -87,15 +87,15 @@ public class MessageDbRepository implements Repository<Long, Message> {
      * @param resultSet - attribute that contains information from the table
      * @return - the message from the table
      */
-    private Message extractMessage(ResultSet resultSet) throws SQLException {
+    private Message extractMessage(ResultSet resultSet, Connection connection) throws SQLException {
         Message msg;
         Long idm = resultSet.getLong("id");
         LocalDateTime date = resultSet.getTimestamp("datem").toLocalDateTime();
         Long fromId = resultSet.getLong("fromm");
-        User from = findOneUser(fromId);
+        User from = findOneUser(fromId, connection);
         List<User> to = new ArrayList<>();
 
-        findTo(idm).forEach( x -> to.add(findOneUser(x)) );
+        findTo(idm).forEach( x -> to.add(findOneUser(x, connection)) );
         String message = resultSet.getString("messagem");
         Long idReply = resultSet.getLong("replym");
 
@@ -180,15 +180,14 @@ public class MessageDbRepository implements Repository<Long, Message> {
      * @param fromId - integer, id of user
      * @return the User with the given id
      */
-    private User findOneUser( Long fromId ) {
+    private User findOneUser( Long fromId , Connection connection) {
 
         if(fromId == null)
             throw new IllegalArgumentException("Id must not be null");
 
         User user;
 
-        try(Connection connection = DriverManager.getConnection(url,username,password);
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users where users.id = ?")){
+        try(PreparedStatement statement = connection.prepareStatement("SELECT * FROM users where users.id = ?")){
             statement.setInt(1, Math.toIntExact(fromId));
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
@@ -232,40 +231,40 @@ public class MessageDbRepository implements Repository<Long, Message> {
         return null;
     }
 
-    /**
-     * Find the friends of one user
-     * @param id - integer, user id
-     * @return - list of users
-     */
-    private List<User> FindFriends (Long id){
-
-        List<User> users = new ArrayList<>();
-
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("""
-                     select id, first_name, last_name, date
-                     from users u inner join friendships f on u.id = f.id1 or u.id=f.id2
-                     where (f.id1= ? or f.id2 = ? )and u.id!= ?""")){
-            statement.setLong(1, id);
-            statement.setLong(2, id);
-            statement.setLong(3, id);
-            try(ResultSet resultSet = statement.executeQuery()){
-                while(resultSet.next()){
-                    Long idNew = resultSet.getLong("id");
-                    String firstName = resultSet.getString("first_name");
-                    String lastName = resultSet.getString("last_name");
-
-                    User user = new User(firstName,lastName);
-                    user.setId(idNew);
-
-                    users.add(user);
-                }
-                return users;
-            }
-        }
-        catch (SQLException throwables){
-            throwables.printStackTrace();
-        }
-        return null;
-    }
+//    /**
+//     * Find the friends of one user
+//     * @param id - integer, user id
+//     * @return - list of users
+//     */
+//    private List<User> FindFriends (Long id){
+//
+//        List<User> users = new ArrayList<>();
+//
+//        try (Connection connection = DriverManager.getConnection(url, username, password);
+//             PreparedStatement statement = connection.prepareStatement("""
+//                     select id, first_name, last_name, date
+//                     from users u inner join friendships f on u.id = f.id1 or u.id=f.id2
+//                     where (f.id1= ? or f.id2 = ? )and u.id!= ?""")){
+//            statement.setLong(1, id);
+//            statement.setLong(2, id);
+//            statement.setLong(3, id);
+//            try(ResultSet resultSet = statement.executeQuery()){
+//                while(resultSet.next()){
+//                    Long idNew = resultSet.getLong("id");
+//                    String firstName = resultSet.getString("first_name");
+//                    String lastName = resultSet.getString("last_name");
+//
+//                    User user = new User(firstName,lastName);
+//                    user.setId(idNew);
+//
+//                    users.add(user);
+//                }
+//                return users;
+//            }
+//        }
+//        catch (SQLException throwables){
+//            throwables.printStackTrace();
+//        }
+//        return null;
+//    }
 }
