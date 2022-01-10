@@ -6,6 +6,7 @@ import com.example.social_network_gui_v2.domain.Message;
 import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
+import com.example.social_network_gui_v2.service.ServiceEvent;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
 import com.example.social_network_gui_v2.service.ServiceMessage;
 import com.example.social_network_gui_v2.service.ServiceUser;
@@ -46,11 +47,12 @@ public class ChatController extends MenuController{
     ObservableList<Chat> modelChat = FXCollections.observableArrayList();
     ObservableList<Message> chatMessages = FXCollections.observableArrayList();//create observable list for listview
 
-    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, Page user, Stage dialogStage){
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, ServiceEvent servEvent, Page user, Stage dialogStage){
 
         this.servUser = servUser;
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
+        this.servEvent = servEvent;
         this.dialogStage = dialogStage;
         this.userLogin = user;
 

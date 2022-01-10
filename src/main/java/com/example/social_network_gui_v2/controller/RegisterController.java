@@ -2,8 +2,8 @@ package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
 import com.example.social_network_gui_v2.domain.Page;
-import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
+import com.example.social_network_gui_v2.service.ServiceEvent;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
 import com.example.social_network_gui_v2.service.ServiceMessage;
 import com.example.social_network_gui_v2.service.ServiceUser;
@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -42,10 +41,11 @@ public class RegisterController extends MenuController{
     @FXML
     public void initialize(){ }
 
-    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,Stage dialogStage) {
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, ServiceEvent servEvent, Stage dialogStage) {
         this.servUser = servUser;
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
+        this.servEvent = servEvent;
         this.dialogStage = dialogStage;
         genders.add("Male");
         genders.add("Female");
@@ -63,7 +63,7 @@ public class RegisterController extends MenuController{
             dialogStage.setScene(scene);
 
             LoginController loginController = fxmlLoader.getController();
-            loginController.setService(servUser, servFriendship, servMessage, dialogStage);
+            loginController.setService(servUser, servFriendship, servMessage, servEvent, dialogStage);
 
             dialogStage.show();
         }
@@ -119,7 +119,7 @@ public class RegisterController extends MenuController{
         dialogStage.setScene(scene);
 
         MenuController menuController = fxmlLoader.getController();
-        menuController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
+        menuController.setService(servUser, servFriendship, servMessage, servEvent, userLogin, dialogStage);
 
         dialogStage.show();
     }
