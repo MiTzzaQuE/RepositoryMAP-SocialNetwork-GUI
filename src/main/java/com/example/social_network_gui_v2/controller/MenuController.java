@@ -1,11 +1,10 @@
 package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
-import com.example.social_network_gui_v2.domain.Friendship;
 import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
-import com.example.social_network_gui_v2.domain.UserFriendDTO;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
+import com.example.social_network_gui_v2.service.ServiceEvent;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
 import com.example.social_network_gui_v2.service.ServiceMessage;
 import com.example.social_network_gui_v2.service.ServiceUser;
@@ -14,20 +13,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -36,6 +28,7 @@ public class MenuController{
     protected ServiceUser servUser;
     protected ServiceFriendship servFriendship;
     protected ServiceMessage servMessage;
+    protected ServiceEvent servEvent;
     protected List<User> users;
     protected List<User> friends;
 
@@ -77,20 +70,21 @@ public class MenuController{
     TableColumn<User,String> tableColumnLastNameF;
 
 
-    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,Page user, Stage dialogStage){
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, ServiceEvent servEvent,Page user, Stage dialogStage){
 
         this.servUser = servUser;
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
+        this.servEvent = servEvent;
         this.userLogin = user;
         this.dialogStage = dialogStage;
         if(user != null){
             setFields(user);
         }
-        initModel();
+        initModelMenu();
     }
 
-    private void initModel() {
+    protected void initModelMenu() {
 
         users = getUsersNoFriends();
         friends = getFriends();
@@ -145,7 +139,7 @@ public class MenuController{
         return userList;
     }
 
-    private List<User> getFriends(){
+    protected List<User> getFriends(){
         Iterable<User> friends = servUser.getFriends(userLogin.getId());
         List<User> friendList = StreamSupport.stream(friends.spliterator(),false)
                 .collect(Collectors.toList());
@@ -216,7 +210,7 @@ public class MenuController{
             dialogStage.setScene(scene);
 
             LoginController loginController = fxmlLoader.getController();
-            loginController.setService(servUser, servFriendship, servMessage, dialogStage);
+            loginController.setService(servUser, servFriendship, servMessage, servEvent, dialogStage);
 
             dialogStage.show();
         }
@@ -254,7 +248,7 @@ public class MenuController{
             dialogStage.setScene(scene);
 
             ChatController chatController = fxmlLoader.getController();
-            chatController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
+            chatController.setService(servUser, servFriendship, servMessage, servEvent, userLogin, dialogStage);
 
             dialogStage.show();
         }
@@ -280,7 +274,7 @@ public class MenuController{
             dialogStage.setScene(scene);
 
             MenuController menuController = fxmlLoader.getController();
-            menuController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
+            menuController.setService(servUser, servFriendship, servMessage, servEvent, userLogin, dialogStage);
 
             dialogStage.show();
         }
@@ -298,6 +292,26 @@ public class MenuController{
     @FXML
     public void handleNotificationsEventsButtonTab(ActionEvent actionEvent) {
 
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("notifications-events-view.fxml"));
 
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            dialogStage.setTitle("Notifications/Events Menu!");
+            dialogStage.setScene(scene);
+
+            NotificationsEventController notificationsEventController = fxmlLoader.getController();
+            notificationsEventController.setService(servUser, servFriendship, servMessage, servEvent, userLogin, dialogStage);
+
+            dialogStage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"Error!");
+        }
     }
 }

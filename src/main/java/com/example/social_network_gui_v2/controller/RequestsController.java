@@ -15,16 +15,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class RequestsController {
+public class RequestsController extends MenuController{
 
 
     private ServiceUser servUser;
@@ -65,10 +61,10 @@ public class RequestsController {
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
         this.userLogin = user;
-        initModel();
+        initModelRequest();
     }
 
-    private void initModel() {
+    private void initModelRequest() {
 
         Iterable<Friendship> friendships = servUser.getFriendshipRequestForUser(userLogin.getId());
         //Image image = new Image("file:src/main/resources/com/example/social_network_gui_v2/trash.png");
@@ -77,14 +73,27 @@ public class RequestsController {
 
                     Button dup1 = new Button("Accept");
                     dup1.setStyle(simpleBtn.getStyle());
+//                    Button dup1 = new Button();
+//                    dup1.setStyle(simpleBtn.getStyle());
+//                    Image image = new Image("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\accept_icon2.png",30,20,true,true);
+//                    ImageView imageView = new ImageView(image);
+//                    imageView.setPreserveRatio(true);
+//                    dup1.setGraphic(imageView);
                     dup1.setOnAction((ActionEvent e) -> onAcceptButtonClick(e));
+
 
                     Button dup2 = new Button("Decline");
                     dup2.setStyle(simpleBtn.getStyle());
+//                    Button dup2 = new Button();
+//                    dup2.setStyle(simpleBtn.getStyle());
+//                    Image image2 = new Image("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\reject.png",30,20,true,true);
+//                    ImageView imageView2 = new ImageView(image2);
+//                    imageView.setPreserveRatio(true);
+//                    dup2.setGraphic(imageView2);
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
 
                     Button dup3 = new Button();
-                    dup3.setStyle(cancelBtn.getStyle());
+                    dup3.setStyle(simpleBtn.getStyle());
                     //dup3.setStyle(cancelBtn.getStyle());
                     dup3.setOnAction((ActionEvent e) -> onCancelButtonClick(e));
                     return new FriendshipDTO(servUser.findOne(y.getId().getLeft()).getId(),servUser.findOne(y.getId().getLeft()).getFirstName() + " " + servUser.findOne(y.getId().getLeft()).getLastName(),
@@ -103,17 +112,17 @@ public class RequestsController {
                     dup2.setStyle(rejectBtn.getStyle());
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
                     Button dup3 = new Button("Cancel");
-                    dup3.setStyle(simpleBtn.getStyle());
-//                    Image image = new Image("/trash.png");
+                    dup3.setStyle(cancelBtn.getStyle());
+
+//                    Button dup3 = new Button();
+//                    dup3.setStyle(cancelBtn.getStyle());
+//                    Image image = new Image("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\trash.png",20,20,true,true);
 //                    ImageView imageView = new ImageView(image);
-//                    imageView.setFitWidth(10);
-//                    imageView.setFitWidth(10);
-//                    imageView.setScaleX(1.5);
-//                    imageView.setScaleY(1.5);
-//                    imageView.setScaleZ(1);
+//                    imageView.setPreserveRatio(true);
 //                    dup3.setGraphic(imageView);
-                    //dup3.getStylesheets().add("src/main/resources/com/example/social_network_gui_v2/buttons.css");
-                    //dup3.getStyleClass().add("cancelbutton");
+
+//                    dup3.getStylesheets().add("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\buttons.css");
+//                    dup3.getStyleClass().add("cancelbutton");
                     dup3.setOnAction((ActionEvent e) -> onCancelButtonClick(e));
                     return new FriendshipDTO(servUser.findOne(y.getId().getLeft()).getId(),servUser.findOne(y.getId().getLeft()).getFirstName() + " " + servUser.findOne(y.getId().getLeft()).getLastName(),
                         servUser.findOne(y.getId().getRight()).getId(),servUser.findOne(y.getId().getRight()).getFirstName() + " " + servUser.findOne(y.getId().getRight()).getLastName(),
@@ -150,6 +159,8 @@ public class RequestsController {
             try {
                 servFriendship.acceptFriendship(selected.getIdFrom(), selected.getIdTo());
                 tableViewFriendhipRequests.getItems().removeAll(tableViewFriendhipRequests.getSelectionModel().getSelectedItem());
+                System.out.println(userLogin);
+
             } catch (ValidationException validationException) {
                 MessageAlert.showErrorMessage(null, validationException.getMessage());
             }
