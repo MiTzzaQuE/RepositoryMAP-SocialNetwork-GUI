@@ -1,8 +1,10 @@
 package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
+import com.example.social_network_gui_v2.domain.Message;
 import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
+import com.example.social_network_gui_v2.domain.UserFriendDTO;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.service.ServiceEvent;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
@@ -17,14 +19,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class MenuController{
+
     protected ServiceUser servUser;
     protected ServiceFriendship servFriendship;
     protected ServiceMessage servMessage;
@@ -55,6 +64,11 @@ public class MenuController{
     Button notificationsEventsButtonTab;
     @FXML
     Button chatButtonTab;
+
+    @FXML
+    public DatePicker dateStart;
+    @FXML
+    public DatePicker dateEnd;
 
     @FXML
     TableView<User> tableViewUsers;
@@ -230,11 +244,104 @@ public class MenuController{
     }
 
     @FXML
-    public void handleExportActivityButtonAction(ActionEvent actionEvent) {
+    public void handleExportActivityButtonAction(ActionEvent actionEvent) throws IOException {
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage( page );
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.COURIER, 12);
+        contentStream.setLeading(14.5f);
+        contentStream.newLineAtOffset(50, 700);
+        contentStream.showText("Friendships made in this period of time:");
+        contentStream.newLine();
+
+        Iterable<UserFriendDTO> friendsMade = servUser.getFriendsForUser(userLogin.getId());
+        List<UserFriendDTO> friends = StreamSupport.stream(friendsMade.spliterator(),false).collect(Collectors.toList());
+        friends.forEach(x -> System.out.println(x.getFriendshipDate()));
+        friends.forEach(f -> {
+            if(f.getFriendshipDate().isAfter(dateStart.getValue().atStartOfDay()) && f.getFriendshipDate().isBefore(dateEnd.getValue().atStartOfDay())){
+                try {
+                    contentStream.newLine();
+                    contentStream.showText(f.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        contentStream.newLine();
+        contentStream.newLine();
+        contentStream.showText("Messages sent and receved in this period of time:");
+        contentStream.newLine();
+
+        List<Message> messages = servMessage.userMessages(userLogin);
+        messages.sort(Comparator.comparing(Message::getId));
+        messages.forEach(m -> {
+            if(m.getDate().isAfter(dateStart.getValue().atStartOfDay()) && m.getDate().isBefore(dateEnd.getValue().atStartOfDay())){
+                try {
+                    contentStream.newLine();
+                    contentStream.showText(m.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        contentStream.endText();
+
+        contentStream.close();
+
+        document.save( "src/Export1.pdf");
+
+        document.close();
     }
 
     @FXML
-    public void handleExportPrivateButtonAction(ActionEvent actionEvent) {
+    public void handleExportPrivateButtonAction(ActionEvent actionEvent) throws IOException {
+
+        User selectedFriend = tableViewFriends.getSelectionModel().getSelectedItem();
+        if(selectedFriend != null){
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage( page );
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.COURIER, 12);
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(50, 700);
+            contentStream.showText("Private chat with " + selectedFriend.getFirstName() + " " + selectedFriend.getLastName() + " in this period of time:");
+            contentStream.newLine();
+
+            List<Message> messages = servMessage.PrivateChat(userLogin.getId(), selectedFriend.getId());
+            messages.sort(Comparator.comparing(Message::getId));
+            messages.forEach(m -> {
+                if(m.getDate().isAfter(dateStart.getValue().atStartOfDay()) && m.getDate().isBefore(dateEnd.getValue().atStartOfDay())){
+                    try {
+                        contentStream.newLine();
+                        contentStream.showText(m.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            contentStream.endText();
+
+            contentStream.close();
+
+            document.save( "src/Export2.pdf");
+
+            document.close();
+
+        }
+        else MessageAlert.showErrorMessage(null,"No selected user!");
+
     }
 
     @FXML
@@ -314,4 +421,6 @@ public class MenuController{
             MessageAlert.showErrorMessage(null,"Error!");
         }
     }
+
+
 }

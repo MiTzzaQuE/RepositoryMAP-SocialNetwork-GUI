@@ -102,8 +102,8 @@
                         <Font name="Segoe UI Semibold" size="24.0" />
                      </font>
                   </Label>
-                  <DatePicker layoutX="154.0" layoutY="48.0" prefHeight="25.0" prefWidth="131.0" promptText="from" />
-                  <DatePicker layoutX="154.0" layoutY="81.0" prefHeight="25.0" prefWidth="131.0" promptText="to" />
+                  <DatePicker fx:id="dateStart" layoutX="154.0" layoutY="48.0" prefHeight="25.0" prefWidth="131.0" promptText="from" />
+                  <DatePicker fx:id="dateEnd" layoutX="154.0" layoutY="81.0" prefHeight="25.0" prefWidth="131.0" promptText="to" />
 
                   <TextField fx:id="userFilter" layoutX="26.0" layoutY="136.0" promptText="users filter" style="-fx-background-color: #6e6e6e;" />
                   <Line endX="50.0" layoutX="127.0" layoutY="163.0" startX="-100.0" stroke="#bcfd4c" />

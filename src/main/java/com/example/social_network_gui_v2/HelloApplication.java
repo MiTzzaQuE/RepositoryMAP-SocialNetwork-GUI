@@ -50,6 +50,7 @@ public class HelloApplication extends Application {
         ServiceEvent servEvt = new ServiceEvent(repoEvents,repoNotifications);
 
         showLoginDialogStage(stage, serv, servFr, servMsg, servEvt);
+
     }
 
     private void showLoginDialogStage(Stage stage, ServiceUser serv, ServiceFriendship servFr, ServiceMessage servMsg, ServiceEvent servEvt) throws IOException {
