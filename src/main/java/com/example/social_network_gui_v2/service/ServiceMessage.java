@@ -182,8 +182,8 @@ public class ServiceMessage {
                 .filter(m-> (ids.contains(m.getFrom().getId())))
                 .filter(m-> m.getTo().size()==ids.size()-1)
                 .filter(m-> (m.getTo().stream().allMatch(x->ids.contains(x.getId()))))
-//                .sorted(Comparator.comparing(Message::getId))
-                .sorted(Comparator.comparing(Message::getDate))
+                .sorted(Comparator.comparing(Message::getId))
+//                .sorted(Comparator.comparing(Message::getDate))
                 .collect(Collectors.toList());
         return result;
 
