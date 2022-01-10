@@ -14,8 +14,20 @@ public class UserFriendDTO {
         this.friendshipDate = friendshipDate;
     }
 
+    public String getFirtsName() {
+        return firtsName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public LocalDateTime getFriendshipDate() {
+        return friendshipDate;
+    }
+
     @Override
     public String toString() {
-        return firtsName + "|" + lastName + "|" + friendshipDate;
+        return firtsName + " " + lastName + " " + friendshipDate;
     }
 }

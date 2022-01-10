@@ -48,11 +48,6 @@ public class HelloApplication extends Application {
 
         showLoginDialogStage(stage, serv, servFr, servMsg);
 
-        try{
-            generatePDF();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void showLoginDialogStage(Stage stage, ServiceUser serv, ServiceFriendship servFr, ServiceMessage servMsg) throws IOException {
@@ -64,43 +59,6 @@ public class HelloApplication extends Application {
         stage.setTitle("Sign in!");
         stage.setScene(scene);
         stage.show();
-    }
-
-    private void generatePDF() throws IOException {
-//        PDDocument pdfdoc = new PDDocument();
-//        PDPage page = new PDPage();
-//        pdfdoc.addPage(page);
-//        //path where the PDF file will be store
-//        pdfdoc.save("src/Exmaple.pdf");
-//        //prints the message if the PDF is created successfully
-//        System.out.println("PDF created");
-//        //closes the document
-//        pdfdoc.close();
-
-        // Create a document and add a page to it
-        PDDocument document = new PDDocument();
-        PDPage page = new PDPage();
-        document.addPage( page );
-
-        // Create a new font object selecting one of the PDF base fonts
-        PDFont font = PDType1Font.HELVETICA_BOLD;
-
-        // Start a new content stream which will "hold" the to be created content
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-        // Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
-        contentStream.beginText();
-        contentStream.setFont( font, 12 );
-        contentStream.moveTextPositionByAmount( 100, 700 );
-        contentStream.drawString( "Hello World2" );
-        contentStream.endText();
-
-        // Make sure that the content stream is closed:
-        contentStream.close();
-
-        // Save the results and ensure that the document is properly closed:
-        document.save( "src/Hello World.pdf");
-        document.close();
     }
 
     public static void main(String[] args) {
