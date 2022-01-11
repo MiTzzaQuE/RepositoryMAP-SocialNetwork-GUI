@@ -43,6 +43,8 @@ public class Page extends User{
         this.friendRequestsReceived.remove(fr);
     }
 
+    public void addFrRequestRec(Friendship fr){ this.friendRequestsReceived.add(fr); }
+
     public void removeFrRequestSent(Friendship fr)
     {
         this.friendRequestsSent.remove(fr);
