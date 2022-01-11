@@ -7,8 +7,8 @@ import java.util.Objects;
 public class Page extends User{
 
     List<Message> messages;
-    List<FriendshipDTO> friendRequestsReceived;
-    List<FriendshipDTO> friendRequestsSent;
+    List<Friendship> friendRequestsReceived;
+    List<Friendship> friendRequestsSent;
     List<User> friends;
     /**
      * constructor
@@ -26,24 +26,24 @@ public class Page extends User{
         this.messages = messages;
     }
 
-    public List<FriendshipDTO> getFriendRequestsReceived() {
+    public List<Friendship> getFriendRequestsReceived() {
         return friendRequestsReceived;
     }
 
-    public void setFriendRequestsReceived(List<FriendshipDTO> friendRequestsReceived) { this.friendRequestsReceived = friendRequestsReceived; }
+    public void setFriendRequestsReceived(List<Friendship> friendRequestsReceived) { this.friendRequestsReceived = friendRequestsReceived; }
 
-    public List<FriendshipDTO> getFriendRequestsSent() {
+    public List<Friendship> getFriendRequestsSent() {
         return friendRequestsSent;
     }
 
-    public void setFriendRequestsSent(List<FriendshipDTO> friendRequestsSent) { this.friendRequestsSent = friendRequestsSent; }
+    public void setFriendRequestsSent(List<Friendship> friendRequestsSent) { this.friendRequestsSent = friendRequestsSent; }
 
-    public void removeFrRequestRec(FriendshipDTO fr)
+    public void removeFrRequestRec(Friendship fr)
     {
         this.friendRequestsReceived.remove(fr);
     }
 
-    public void removeFrRequestSent(FriendshipDTO fr)
+    public void removeFrRequestSent(Friendship fr)
     {
         this.friendRequestsSent.remove(fr);
     }
@@ -61,7 +61,7 @@ public class Page extends User{
         this.friends.removeIf(frr -> Objects.equals(frr.getId(), fr.getId()));
     }
 
-    public void addRequestSent(FriendshipDTO frRSent)
+    public void addRequestSent(Friendship frRSent)
     {
         friendRequestsSent.add(frRSent);
     }

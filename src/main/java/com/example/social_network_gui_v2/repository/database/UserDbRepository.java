@@ -3,6 +3,10 @@ package com.example.social_network_gui_v2.repository.database;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.Validator;
 import com.example.social_network_gui_v2.repository.Repository;
+import com.example.social_network_gui_v2.repository.paging.Pageable;
+import com.example.social_network_gui_v2.repository.paging.Pages;
+import com.example.social_network_gui_v2.repository.paging.Paginator;
+import com.example.social_network_gui_v2.repository.paging.PagingRepository;
 import com.example.social_network_gui_v2.utils.BCrypt;
 
 import java.sql.*;
@@ -14,7 +18,7 @@ import java.util.Set;
  * implements the base interface Repository
  * contains objects of type Long and User
  */
-public class UserDbRepository implements Repository<Long, User> {
+public class UserDbRepository implements PagingRepository<Long, User> {
     private final String url;
     private final String username;
     private final String password;
@@ -192,4 +196,31 @@ public class UserDbRepository implements Repository<Long, User> {
         }
         return null;
     }
+
+    @Override
+    public Pages<User> findAll(Pageable pageable) {
+        String sql = "SELECT * FROM (SELECT *, ROW_NUMBER() over (ORDER BY id ASC) AS NoOfRows FROM users) AS Unused WHERE NoOfRows >= ? AND NoOfRows < ?";
+        Set<User> users = new HashSet<>();
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement ps = connection.prepareStatement(sql)){
+
+            ps.setInt(1, pageable.getPageNumber() * pageable.getPageSize() + 1);
+            ps.setInt(2, (pageable.getPageNumber() + 1) * pageable.getPageSize() + 1);
+
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Long id = resultSet.getLong("id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+
+                User user = new User(firstName,lastName);
+                user.setId(id);
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Paginator<User> paginator = new Paginator<>(pageable, users.stream().toList());
+        return paginator.paginate();    }
 }

@@ -4,6 +4,10 @@ import com.example.social_network_gui_v2.domain.*;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.repository.Repository;
 import com.example.social_network_gui_v2.repository.database.UserDbRepository;
+import com.example.social_network_gui_v2.repository.paging.Pageable;
+import com.example.social_network_gui_v2.repository.paging.PageableImplementation;
+import com.example.social_network_gui_v2.repository.paging.Pages;
+import com.example.social_network_gui_v2.repository.paging.PagingRepository;
 import com.example.social_network_gui_v2.utils.BCrypt;
 
 import java.util.*;
@@ -17,7 +21,7 @@ import java.util.stream.StreamSupport;
  */
 public class ServiceUser {
     //private final Repository<Long, User> repoUser;
-    private UserDbRepository repoUser;
+    PagingRepository<Long,User> repoUser;
     private final Repository<Tuple<Long, Long>, Friendship> repoFriends;
 
     /**
@@ -25,9 +29,9 @@ public class ServiceUser {
      * @param RepoUser UserRepository
      * @param RepoFriends FriendsRepository
      */
-    public ServiceUser(UserDbRepository RepoUser, Repository<Tuple<Long, Long>, Friendship> RepoFriends) {
-        repoFriends = RepoFriends;
+    public ServiceUser(PagingRepository<Long,User> RepoUser, Repository<Tuple<Long, Long>, Friendship> RepoFriends) {
         repoUser = RepoUser;
+        repoFriends = RepoFriends;
     }
 
 
@@ -237,4 +241,22 @@ public class ServiceUser {
                 .collect(Collectors.toList());
     }
 
+    private int pageNumber = 0;
+    private int pageSize = 3;
+
+    public List<User> getNextUsers() {
+        this.pageNumber++;
+        return getUsersOnPage(this.pageNumber);
+    }
+
+    public void setPageSize(int size) {
+        this.pageSize = size;
+    }
+
+    public List<User> getUsersOnPage(int page) {
+        this.pageNumber = page;
+        Pageable pageable = new PageableImplementation(page, this.pageSize);
+        Pages<User> studentPage = repoUser.findAll(pageable);
+        return studentPage.getContent().toList();
+    }
 }

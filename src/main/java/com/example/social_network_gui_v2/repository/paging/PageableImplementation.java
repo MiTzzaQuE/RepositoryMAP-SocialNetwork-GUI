@@ -1,4 +1,5 @@
 package com.example.social_network_gui_v2.repository.paging;
+
 public class PageableImplementation implements Pageable {
 
     private int pageNumber;

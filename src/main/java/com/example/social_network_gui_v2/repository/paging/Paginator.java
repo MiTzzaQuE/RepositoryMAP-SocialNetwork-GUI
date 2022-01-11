@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Paginator<E> {
+
     private Pageable pageable;
     private Iterable<E> elements;
 
@@ -13,9 +14,7 @@ public class Paginator<E> {
     }
 
     public Pages<E> paginate() {
-        Stream<E> result = StreamSupport.stream(elements.spliterator(), false)
-                .skip(pageable.getPageNumber()  * pageable.getPageSize())
-                .limit(pageable.getPageSize());
-        return new PagesImplementation<>(pageable, result);
+
+        return new PageImplementation<>(pageable, StreamSupport.stream(elements.spliterator(), false));
     }
 }
