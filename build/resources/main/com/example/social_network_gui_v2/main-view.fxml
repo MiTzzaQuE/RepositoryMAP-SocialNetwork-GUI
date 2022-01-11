@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -47,6 +48,7 @@
                         <Image url="@images/Logo.png" />
                      </image>
                   </ImageView>
+                  <Pagination layoutX="-2.0" layoutY="69.0" maxPageIndicatorCount="3" pageCount="10" prefHeight="200.0" prefWidth="200.0" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #6e6e6e;">
@@ -57,7 +59,7 @@
                       <TableColumn fx:id="tableColumnLastNameF" prefWidth="100.0" text="Last Name" />
                     </columns>
                   </TableView>
-                  <TableView fx:id="tableViewUsers" layoutY="206.0" prefHeight="200.0" prefWidth="200.0">
+                  <TableView fx:id="tableViewUsers" layoutY="206.0" onScroll="#onScrollUpdate" onScrollTo="#onScrollToUpdate" prefHeight="200.0" prefWidth="200.0">
                      <columns>
                         <TableColumn fx:id="tableColumnFirstNameU" prefWidth="100.0" text="First Name" />
                         <TableColumn fx:id="tableColumnLastNameU" prefWidth="100.0" text="Last Name" />

@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ScrollEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -83,7 +84,8 @@ public class MenuController{
 
     protected void initModelMenu() {
 
-        users = getUsersNoFriends();
+//        users = getUsersNoFriends();
+        users = servUser.getUsersOnPage(0);
         friends = getFriends();
         modelUser.setAll(users);
         modelFriends.setAll(friends);
@@ -290,5 +292,14 @@ public class MenuController{
     public void handleNotificationsEventsButtonTab(ActionEvent actionEvent) {
 
 
+    }
+
+    public void onScrollUpdate(ScrollEvent scrollEvent) {
+        users = servUser.getNextUsers();
+        modelUser.setAll(users);
+    }
+
+    public void onScrollToUpdate(ScrollToEvent<Integer> integerScrollToEvent) {
+//        if(integerScrollToEvent.)
     }
 }

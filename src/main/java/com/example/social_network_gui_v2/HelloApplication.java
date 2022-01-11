@@ -8,6 +8,7 @@ import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.FriendshipValidator;
 import com.example.social_network_gui_v2.domain.validation.MessageValidator;
 import com.example.social_network_gui_v2.domain.validation.UserValidator;
+import com.example.social_network_gui_v2.repository.paging.PagingRepository;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -30,7 +31,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        UserDbRepository repo =
+        PagingRepository<Long,User> repo =
                 new UserDbRepository("jdbc:postgresql://localhost:5432/socialnetwork","postgres","1234",new UserValidator());
         Repository<Tuple<Long,Long>, Friendship> repofriends =
                 new com.example.social_network_gui_v2.repository.database.FriendshipDbRepository("jdbc:postgresql://localhost:5432/socialnetwork","postgres","1234", new FriendshipValidator());
@@ -49,6 +50,33 @@ public class HelloApplication extends Application {
         stage.setTitle("Sign in!");
         stage.setScene(scene);
         stage.show();
+
+
+        //TEST PAGING
+        serv.printUs().forEach(System.out::println);
+        serv.setPageSize(6);
+
+
+        System.out.println("\nElements on page 0");
+        serv.getUsersOnPage(0).stream()
+                .forEach(System.out::println);
+
+//        System.out.println("\nElements on page 1");
+//        serv.getUsersOnPage(1).stream()
+//                .forEach(System.out::println);
+//
+//        System.out.println("\nElements on page 2");
+//        serv.getUsersOnPage(2).stream()
+//                .forEach(System.out::println);
+
+        System.out.println("\nElements on next page");
+        serv.getNextUsers().stream()
+                .forEach(System.out::println);
+
+        System.out.println("\nElements on next page");
+        serv.getNextUsers().stream()
+                .forEach(System.out::println);
+
     }
 
     public static void main(String[] args) {

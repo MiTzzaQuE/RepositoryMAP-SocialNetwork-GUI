@@ -57,7 +57,7 @@
                       <TableColumn fx:id="tableColumnLastNameF" prefWidth="100.0" text="Last Name" />
                     </columns>
                   </TableView>
-                  <TableView fx:id="tableViewUsers" layoutY="206.0" prefHeight="200.0" prefWidth="200.0">
+                  <TableView fx:id="tableViewUsers" layoutY="206.0" onScroll="#onScrollUpdate" onScrollTo="#onScrollToUpdate" prefHeight="200.0" prefWidth="200.0">
                      <columns>
                         <TableColumn fx:id="tableColumnFirstNameU" prefWidth="100.0" text="First Name" />
                         <TableColumn fx:id="tableColumnLastNameU" prefWidth="100.0" text="Last Name" />
