@@ -195,14 +195,14 @@ public class MenuController{
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("requests-view.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load(), 630, 450);
-            Stage stage = new Stage();
-            stage.setTitle("Friendship requests");
-            stage.setScene(scene);
+//            Stage stage = new Stage();
+            dialogStage.setTitle("Friendship requests!");
+            dialogStage.setScene(scene);
 
             RequestsController requestsController = fxmlLoader.getController();
-            requestsController.setService(servUser, servFriendship, servMessage, userLogin);
+            requestsController.setService(servUser, servFriendship, servMessage, servEvent, dialogStage, userLogin);
 
-            stage.show();
+            dialogStage.show();
 
         }
         catch (IOException e) {
@@ -332,13 +332,9 @@ public class MenuController{
             });
 
             contentStream.endText();
-
             contentStream.close();
-
             document.save( "src/Export2.pdf");
-
             document.close();
-
         }
         else MessageAlert.showErrorMessage(null,"No selected user!");
 

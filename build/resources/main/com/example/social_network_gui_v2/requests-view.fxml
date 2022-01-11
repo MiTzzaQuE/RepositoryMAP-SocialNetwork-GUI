@@ -58,7 +58,7 @@
                   <Font name="Segoe UI Semibold" size="24.0" />
                </font>
             </Label>
-            <Button fx:id="cancelBtn" layoutX="244.0" layoutY="14.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="26.0" prefWidth="26.0" style="-fx-background-size: 20; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;">
+            <Button fx:id="cancelBtn" layoutX="175.0" layoutY="14.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="26.0" prefWidth="26.0" style="-fx-background-size: 20; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;">
                <graphic>
                   <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" scaleX="1.5" scaleY="1.5">
                      <image>
@@ -70,6 +70,15 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
+            </Button>
+            <Button fx:id="goBackButton" layoutX="243.0" layoutY="7.0" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="40.0" prefWidth="40.0" style="-fx-background-size: 34; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: #bcfd4c;">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
          </children>
       </AnchorPane>

@@ -45,7 +45,7 @@
                         <Font name="Segoe UI Semibold" size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="chooseButton" layoutX="212.0" layoutY="415.0" mnemonicParsing="false" onAction="#Choose" prefHeight="25.0" prefWidth="78.0" style="-fx-background-color: #bcfd4c;" text="Choose" textAlignment="CENTER" textFill="#6e6e6e">
+                  <Button fx:id="chooseButton" layoutX="118.0" layoutY="416.0" mnemonicParsing="false" onAction="#Choose" prefHeight="25.0" prefWidth="133.0" style="-fx-background-color: #bcfd4c;" text="Choose" textAlignment="CENTER" textFill="#6e6e6e">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

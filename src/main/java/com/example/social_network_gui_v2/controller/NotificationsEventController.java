@@ -61,6 +61,7 @@ public class NotificationsEventController extends MenuController {
         this.servEvent=servEvent;
         this.dialogStage = stage;
         this.userLogin = userLogin;
+
         chooseButton.setVisible(false);
         initModelEvents();
         displayAppointmentNotification();
@@ -87,6 +88,7 @@ public class NotificationsEventController extends MenuController {
         }
         //modelEvents.setAll(list);
     }
+
     @FXML
     private void onCreateEventButton(ActionEvent event) {
         String name=titleEvent.getText();
@@ -111,38 +113,40 @@ public class NotificationsEventController extends MenuController {
 
     @FXML
     public void onEventListViewClick(){
-
-        Event selected = eventsListView.getSelectionModel().getSelectedItem();
-        if(selected!=null)
-            lastEventSelected=selected;
-
-        //System.out.println(selected.getId());
-        long nr = ChronoUnit.DAYS.between(LocalDate.now(),  lastEventSelected.getDate());
-        if(nr>=0){
-            if(lastEventSelected!=null && ! lastEventSelected.getIds().containsKey(userLogin.getId())) {
-                chooseButton.setText("Going");
-                chooseButton.setVisible(true);
+        try {
+            Event selected = eventsListView.getSelectionModel().getSelectedItem();
+            if(selected!=null)
+                lastEventSelected=selected;
+            else{
+                throw new ValidationException("No Event Selected!");
             }
-            else if(lastEventSelected!=null &&  lastEventSelected.getIds().get(userLogin.getId()).longValue()==1L) {
-                chooseButton.setText("Notifications off");
-                chooseButton.setVisible(true);
+            long nr = ChronoUnit.DAYS.between(LocalDate.now(), lastEventSelected.getDate());
+            if (nr >= 0) {
+                if (lastEventSelected != null && !lastEventSelected.getIds().containsKey(userLogin.getId())) {
+                    chooseButton.setText("Subscribe!");
+                    chooseButton.setVisible(true);
+                } else if (lastEventSelected != null && lastEventSelected.getIds().get(userLogin.getId()).longValue() == 1L) {
+                    chooseButton.setText("Notifications off");
+                    chooseButton.setVisible(true);
+                } else if (lastEventSelected != null) {
+                    chooseButton.setText("Notifications on");
+                    chooseButton.setVisible(true);
+                }
             }
-            else if(lastEventSelected!=null) {
-                chooseButton.setText("Notifications on");
-                chooseButton.setVisible(true);
-            }
+        } catch (ValidationException e) {
+            MessageAlert.showErrorMessage(null, e.getMessage());
         }
-
     }
+
     @FXML
-    public void Choose()
-    {
+    public void Choose() {
+
         try {
             Event selected =  eventsListView.getSelectionModel().getSelectedItem();
             if(selected!=null)
                 lastEventSelected=selected;
 
-            if(Objects.equals(chooseButton.getText(), "Going")) {
+            if(Objects.equals(chooseButton.getText(), "Subscribe!")) {
                 Map<Long,Long> ids = lastEventSelected.getIds();
 
                 ids.put(userLogin.getId(), 1L);
@@ -211,9 +215,9 @@ public class NotificationsEventController extends MenuController {
     public void notifyy() {
 
         long delay = ChronoUnit.MILLIS.between(LocalTime.now(), LocalTime.of(0, 0, 1));
-        System.out.println(delay);
+//        System.out.println(delay);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        //scheduler.schedule(this::startNotifications, delay, TimeUnit.MILLISECONDS);
+//        scheduler.schedule(this::startNotifications, delay, TimeUnit.MILLISECONDS);
         scheduler.scheduleAtFixedRate(this::startNotifications, delay, 86400000, TimeUnit.MILLISECONDS);
         initModelNotifEvents();
     }
