@@ -5,13 +5,13 @@ import com.example.social_network_gui_v2.domain.Friendship;
 import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
+import com.example.social_network_gui_v2.service.ServiceEvent;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
 import com.example.social_network_gui_v2.service.ServiceMessage;
 import com.example.social_network_gui_v2.service.ServiceUser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -34,16 +34,18 @@ public class LoginController {
     private ServiceUser servUser;
     private ServiceFriendship servFriendship;
     private ServiceMessage servMessage;
+    private ServiceEvent servEvent;
     private Page userLogin;
     Stage dialogStage;
 
     @FXML
     public void initialize(){ }
 
-    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,Stage dialogStage) {
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, ServiceEvent servEvt, Stage dialogStage) {
         this.servUser = servUser;
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
+        this.servEvent = servEvt;
         this.dialogStage = dialogStage;
     }
 
@@ -82,7 +84,7 @@ public class LoginController {
         dialogStage.setScene(scene);
 
         MenuController menuController = fxmlLoader.getController();
-        menuController.setService(servUser, servFriendship, servMessage, userLogin, dialogStage);
+        menuController.setService(servUser, servFriendship, servMessage, servEvent, userLogin, dialogStage);
 
         dialogStage.show();
     }
@@ -97,7 +99,7 @@ public class LoginController {
             dialogStage.setScene(scene);
 
             RegisterController registerController = fxmlLoader.getController();
-            registerController.setService(servUser,servFriendship,servMessage,dialogStage);
+            registerController.setService(servUser,servFriendship,servMessage, servEvent, dialogStage);
 
             dialogStage.show();
         }

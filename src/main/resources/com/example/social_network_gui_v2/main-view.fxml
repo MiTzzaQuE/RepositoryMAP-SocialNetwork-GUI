@@ -13,6 +13,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
@@ -45,6 +49,29 @@
                   <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="-1.0" layoutY="385.0" onMouseClicked="#onCloseButtonClick" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/Logo.png" />
+                     </image>
+                  </ImageView>
+                  <Circle layoutX="98.0" layoutY="152.0" radius="72.0" stroke="BLACK" strokeType="INSIDE">
+                     <fill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.7372549176216125" green="0.9921568632125854" blue="0.2980392277240753" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Circle>
+                  <ImageView fitHeight="101.0" fitWidth="100.0" layoutX="48.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/crazy.jpg" />
                      </image>
                   </ImageView>
                </children>
@@ -102,8 +129,8 @@
                         <Font name="Segoe UI Semibold" size="24.0" />
                      </font>
                   </Label>
-                  <DatePicker layoutX="154.0" layoutY="48.0" prefHeight="25.0" prefWidth="131.0" promptText="from" />
-                  <DatePicker layoutX="154.0" layoutY="81.0" prefHeight="25.0" prefWidth="131.0" promptText="to" />
+                  <DatePicker fx:id="dateStart" layoutX="154.0" layoutY="48.0" prefHeight="25.0" prefWidth="131.0" promptText="from" />
+                  <DatePicker fx:id="dateEnd" layoutX="154.0" layoutY="81.0" prefHeight="25.0" prefWidth="131.0" promptText="to" />
 
                   <TextField fx:id="userFilter" layoutX="26.0" layoutY="136.0" promptText="users filter" style="-fx-background-color: #6e6e6e;" />
                   <Line endX="50.0" layoutX="127.0" layoutY="163.0" startX="-100.0" stroke="#bcfd4c" />
