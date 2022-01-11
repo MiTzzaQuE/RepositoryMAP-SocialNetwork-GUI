@@ -1,6 +1,7 @@
 package com.example.social_network_gui_v2.controller;
 
 import com.example.social_network_gui_v2.HelloApplication;
+import com.example.social_network_gui_v2.domain.Friendship;
 import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
@@ -112,11 +113,11 @@ public class LoginController {
     }
 
     private void initPage() {
-        initModelFriendsUser();
-//        initModelFriendshipReqUser();
-//        initModelFriendshipReqUser2();
-        initModelChatUser();
 
+        initModelFriendsUser();
+        initModelFriendshipReqUser();
+        initModelFriendshipReqUser2();
+        initModelChatUser();
     }
 
     private void initModelChatUser() {
@@ -131,33 +132,17 @@ public class LoginController {
         userLogin.setFriends(friendList);
     }
 
-//    protected void initModelFriendshipReqUser() {
-//        Predicate<FriendRequest> certainUserRight = x -> x.getId().getRight().equals(user.getId());
-//
-//        List<FriendRequestDTO> friendshipsReqList = StreamSupport.stream(servFriendRequest.findAllRenew().spliterator(), false)
-//                .filter(certainUserRight)
-//                .map(x ->
-//                {
-//                    User u1 = servUser.findOne(x.getId().getLeft());
-//                    FriendRequestDTO pp=new FriendRequestDTO(u1.getFirstName() + " " + u1.getLastName(), user.getFirstName() + " " + user.getLastName(), x.getDate(), x.getStatus());
-//                    return pp;
-//                })
-//                .collect(Collectors.toList());
-//        user.setFriendRequestsReceived(friendshipsReqList);
-//    }
-//
-//    protected void initModelFriendshipReqUser2() {
-//        Predicate<FriendRequest> certainUserLeft = x -> x.getId().getLeft().equals(user.getId());
-//
-//        //am facut aici o susta de functie pt findall()
-//        List<FriendRequestDTO> friendshipsReqList = StreamSupport.stream(servFriendRequest.findAllRenew().spliterator(), false)
-//                .filter(certainUserLeft)
-//                .map(x ->
-//                {
-//                    User u1 = servUser.findOne(x.getId().getRight());
-//                    return new FriendRequestDTO(user.getFirstName() + " " + user.getLastName(), u1.getFirstName() + " " + u1.getLastName(), x.getDate(), x.getStatus());
-//                })
-//                .collect(Collectors.toList());
-//        user.setFriendRequestsSent(friendshipsReqList);
-//    }
+    protected void initModelFriendshipReqUser() {
+        Iterable<Friendship> friendships = servUser.getFriendshipRequestForUser(userLogin.getId());
+        List<Friendship> friendshipsReqList = StreamSupport.stream(friendships.spliterator(),false)
+                        .collect(Collectors.toList());
+        userLogin.setFriendRequestsReceived(friendshipsReqList);
+    }
+
+    protected void initModelFriendshipReqUser2() {
+        Iterable<Friendship> friendships = servUser.getRequestsSentForUser(userLogin.getId());
+        List<Friendship> friendshipsReqList = StreamSupport.stream(friendships.spliterator(),false)
+                .collect(Collectors.toList());
+        userLogin.setFriendRequestsSent(friendshipsReqList);
+    }
 }
