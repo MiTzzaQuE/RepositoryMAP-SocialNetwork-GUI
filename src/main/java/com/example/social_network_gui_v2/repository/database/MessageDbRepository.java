@@ -4,6 +4,11 @@ import com.example.social_network_gui_v2.domain.Message;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.Validator;
 import com.example.social_network_gui_v2.repository.Repository;
+import com.example.social_network_gui_v2.repository.paging.Pageable;
+import com.example.social_network_gui_v2.repository.paging.Pages;
+import com.example.social_network_gui_v2.repository.paging.Paginator;
+import com.example.social_network_gui_v2.repository.paging.PagingRepository;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +19,7 @@ import java.util.*;
  * implements the base interface Repository
  * contains objects of type Long and Message
  */
-public class MessageDbRepository implements Repository<Long, Message> {
+public class MessageDbRepository implements PagingRepository<Long, Message> {
 
     private final String url;
     private final String username;
@@ -228,6 +233,73 @@ public class MessageDbRepository implements Repository<Long, Message> {
         catch (SQLException throwables){
             throwables.printStackTrace();
         }
+        return null;
+    }
+
+    //STILL WORKING
+    @Override
+    public Pages<Message> findAll(Pageable pageable) {
+        String sql = "SELECT * FROM (SELECT *, ROW_NUMBER() over (ORDER BY id ASC) AS NoOfRows FROM messages) AS Unused WHERE NoOfRows >= ? AND NoOfRows < ?";
+
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, pageable.getPageNumber() * pageable.getPageSize() + 1);
+            ps.setInt(2, (pageable.getPageNumber() + 1) * pageable.getPageSize() + 1);
+
+            ResultSet resultSet = ps.executeQuery();
+            Set<Message> all = new HashSet<>();
+            while (resultSet.next()) {
+                Long idCurent = resultSet.getLong("id");
+                Long from = resultSet.getLong("fromm");
+
+                String sql1 = "select * from users where id = " + from;
+
+                PreparedStatement ps1 = connection.prepareStatement(sql1);
+                ResultSet resultSet1 = ps1.executeQuery();
+                User user = null;
+                while (resultSet1.next()) {
+                    String firstName = resultSet1.getString("first_name");
+                    String lastName = resultSet1.getString("last_name");
+                    user.setFirstName(firstName);
+                    user.setLastName(lastName);
+                    user.setId(Long.valueOf(from));
+                }
+
+                String toString = resultSet.getString("to");
+                String toString1 = toString.strip();
+                String[] listTo = toString1.split(" ");
+                List<User> list = new ArrayList<>();
+                for(String curent: listTo) {
+                    String sql2 = "select * from users where id = " + curent;
+
+                    PreparedStatement ps2 = connection.prepareStatement(sql2);
+                    ResultSet resultSet2 = ps2.executeQuery();
+                    while (resultSet2.next()) {
+                        String firstName1 = resultSet2.getString("first_name");
+                        String lastName1 = resultSet2.getString("last_name");
+                        User user1 = new User(firstName1, lastName1);
+                        user1.setId(Long.valueOf(curent));
+                        list.add(user1);
+                    }
+                }
+                String msg = resultSet.getString("msg");
+                LocalDateTime date = resultSet.getTimestamp("data").toLocalDateTime();
+                Message message = new Message(user,list,msg);
+                message.setId(idCurent);
+                message.setDate(date);
+                all.add(message);
+            }
+            Paginator<Message> paginator = new Paginator<>(pageable, all.stream().toList());
+            return paginator.paginate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;    }
+
+    @Override
+    public Message findUserByUsernameAndPassword(String username, String password) {
         return null;
     }
 

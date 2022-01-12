@@ -22,7 +22,7 @@ import java.util.stream.StreamSupport;
 public class ServiceUser {
     //private final Repository<Long, User> repoUser;
     PagingRepository<Long,User> repoUser;
-    private final Repository<Tuple<Long, Long>, Friendship> repoFriends;
+    Repository<Tuple<Long, Long>, Friendship> repoFriends;
 
     /**
      * constructor for the com.example.social_network_gui_v2.service
@@ -241,6 +241,8 @@ public class ServiceUser {
                 .collect(Collectors.toList());
     }
 
+
+    //Paging
     private int pageNumber = 0;
     private int pageSize = 3;
 

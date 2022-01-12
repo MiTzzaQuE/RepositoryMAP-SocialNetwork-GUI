@@ -4,6 +4,10 @@ import com.example.social_network_gui_v2.domain.Friendship;
 import com.example.social_network_gui_v2.domain.Tuple;
 import com.example.social_network_gui_v2.domain.validation.Validator;
 import com.example.social_network_gui_v2.repository.Repository;
+import com.example.social_network_gui_v2.repository.paging.Pageable;
+import com.example.social_network_gui_v2.repository.paging.Pages;
+import com.example.social_network_gui_v2.repository.paging.Paginator;
+import com.example.social_network_gui_v2.repository.paging.PagingRepository;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +20,7 @@ import java.util.Set;
  * contains objects of type Tuple of (Long,Long) and Friendship
  */
 
-public class FriendshipDbRepository implements Repository<Tuple<Long,Long>,Friendship> {
+public class FriendshipDbRepository implements PagingRepository<Tuple<Long,Long>,Friendship> {
     private final String url;
     private final String username;
     private final String password;
@@ -173,4 +177,40 @@ public class FriendshipDbRepository implements Repository<Tuple<Long,Long>,Frien
         return friendship;
     }
 
+    @Override
+    public Pages<Friendship> findAll(Pageable pageable) {
+
+        String sql = "SELECT * FROM (SELECT *, ROW_NUMBER() over (ORDER BY id1 ASC) AS NoOfRows FROM friendships) AS Unused WHERE NoOfRows >= ? AND NoOfRows < ?";
+        Set<Friendship> friends = new HashSet<>();
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, pageable.getPageNumber() * pageable.getPageSize() + 1);
+            ps.setInt(2, (pageable.getPageNumber() + 1) * pageable.getPageSize() + 1);
+
+            ResultSet resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                Long id1 = resultSet.getLong("id1");
+                Long id2 = resultSet.getLong("id2");
+                LocalDateTime date = resultSet.getTimestamp("date").toLocalDateTime();
+                String status = resultSet.getString("state");
+                Friendship friendship = new Friendship();
+                Tuple<Long, Long> tuple = new Tuple(id1, id2);
+                friendship.setId(tuple);
+                friendship.setDate(date);
+                friendship.setState(status);
+                friends.add(friendship);
+            }
+            Paginator<Friendship> paginator = new Paginator<>(pageable, friends.stream().toList());
+            return paginator.paginate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;    }
+
+    @Override
+    public Friendship findUserByUsernameAndPassword(String username, String password) {
+        return null;
+    }
 }

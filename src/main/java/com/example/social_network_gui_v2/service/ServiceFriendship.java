@@ -1,13 +1,15 @@
 package com.example.social_network_gui_v2.service;
 
-import com.example.social_network_gui_v2.domain.Entity;
-import com.example.social_network_gui_v2.domain.Friendship;
-import com.example.social_network_gui_v2.domain.Tuple;
-import com.example.social_network_gui_v2.domain.User;
+import com.example.social_network_gui_v2.domain.*;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.repository.Repository;
+import com.example.social_network_gui_v2.repository.paging.Pageable;
+import com.example.social_network_gui_v2.repository.paging.PageableImplementation;
+import com.example.social_network_gui_v2.repository.paging.Pages;
+import com.example.social_network_gui_v2.repository.paging.PagingRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -16,15 +18,15 @@ import java.util.Objects;
  * repoFriends-Repository for Friendships
  */
 public class ServiceFriendship {
-    private Repository<Long, User> repoUser;
-    private Repository<Tuple<Long,Long>, Friendship> repoFriends;
+    private PagingRepository<Long, User> repoUser;
+    private PagingRepository<Tuple<Long,Long>, Friendship> repoFriends;
 
     /**
      * constructor for the com.example.social_network_gui_v2.service
      * @param RepoUser UserRepository
      * @param RepoFriends FriendsRepository
      */
-    public ServiceFriendship(Repository<Long, User> RepoUser, Repository<Tuple<Long, Long>, Friendship> RepoFriends){
+    public ServiceFriendship(PagingRepository<Long, User> RepoUser, PagingRepository<Tuple<Long, Long>, Friendship> RepoFriends){
         repoFriends = RepoFriends;
         repoUser = RepoUser;
     }
@@ -133,5 +135,27 @@ public class ServiceFriendship {
             throw new ValidationException("\uD83C\uDD74\uD83C\uDD81\uD83C\uDD81\uD83C\uDD7E\uD83C\uDD81 " +
                     ": id invalid!");
     }
+
+
+    //Paging
+    private int pageNumber = 0;
+    private int pageSize = 3;
+
+    public List<Friendship> getNextFriends() {
+        this.pageNumber++;
+        return getFriendsOnPage(this.pageNumber);
+    }
+
+    public void setPageSize(int size) {
+        this.pageSize = size;
+    }
+
+    public List<Friendship> getFriendsOnPage(int page) {
+        this.pageNumber = page;
+        Pageable pageable = new PageableImplementation(page, this.pageSize);
+        Pages<Friendship> messagesPage = repoFriends.findAll(pageable);
+        return messagesPage.getContent().toList();
+    }
+
 
 }
