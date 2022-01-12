@@ -59,7 +59,7 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(rootLayout, 630, 400);
         stage.setTitle("Sign in!");
         stage.setScene(scene);
-//        stage.show();
+        stage.show();
 
 
         //TEST PAGING USERS

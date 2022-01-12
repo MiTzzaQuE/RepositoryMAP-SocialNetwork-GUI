@@ -77,7 +77,7 @@ public class LoginController {
             MessageAlert.showErrorMessage(null,exception.getMessage());
         }
         catch (IllegalArgumentException exception){
-            MessageAlert.showErrorMessage(null,"ID null!");
+            MessageAlert.showErrorMessage(null,"Invalid password!");
         }
 
     }
