@@ -66,13 +66,13 @@ public class HelloApplication extends Application {
 
 
         //TEST PAGING
-        serv.printUs().forEach(System.out::println);
-        serv.setPageSize(6);
-
-
-        System.out.println("\nElements on page 0");
-        serv.getUsersOnPage(0).stream()
-                .forEach(System.out::println);
+//        serv.printUs().forEach(System.out::println);
+//        serv.setPageSize(6);
+//
+//
+//        System.out.println("\nElements on page 0");
+//        serv.getUsersOnPage(0).stream()
+//                .forEach(System.out::println);
 
 //        System.out.println("\nElements on page 1");
 //        serv.getUsersOnPage(1).stream()
@@ -82,15 +82,15 @@ public class HelloApplication extends Application {
 //        serv.getUsersOnPage(2).stream()
 //                .forEach(System.out::println);
 
-        System.out.println("\nElements on next page");
-        serv.getNextUsers().stream()
-                .forEach(System.out::println);
-
-        System.out.println("\nElements on next page");
-        serv.getNextUsers().stream()
-                .forEach(System.out::println);
-
-    }
+//        System.out.println("\nElements on next page");
+//        serv.getNextUsers().stream()
+//                .forEach(System.out::println);
+//
+//        System.out.println("\nElements on next page");
+//        serv.getNextUsers().stream()
+//                .forEach(System.out::println);
+//
+   }
 
     public static void main(String[] args) {
         launch();

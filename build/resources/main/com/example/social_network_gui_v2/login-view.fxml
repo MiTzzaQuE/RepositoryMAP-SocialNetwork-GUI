@@ -109,7 +109,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Text fx:id="actiontarget" wrappingWidth="105.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Text fx:id="actiontarget" fill="#bcfd4c" wrappingWidth="225.00006103515625" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <ImageView fitHeight="123.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                      <image>
                         <Image url="@images/Logo.png" />
