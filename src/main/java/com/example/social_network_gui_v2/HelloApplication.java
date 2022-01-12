@@ -26,18 +26,15 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
-/*silvis
-* ai scris gresit
-* se zice "Silviu"
-* */
+
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
         PagingRepository<Long,User> repo =
                 new UserDbRepository("jdbc:postgresql://localhost:5432/socialnetwork","postgres","1234",new UserValidator());
-        Repository<Tuple<Long,Long>, Friendship> repofriends =
-                new FriendshipDbRepository("jdbc:postgresql://localhost:5432/socialnetwork","postgres","1234", new FriendshipValidator());
+        PagingRepository<Tuple<Long,Long>, Friendship> repofriends =
+                new com.example.social_network_gui_v2.repository.database.FriendshipDbRepository("jdbc:postgresql://localhost:5432/socialnetwork","postgres","1234", new FriendshipValidator());
         Repository<Long, Message> repoMessage =
                 new MessageDbRepository("jdbc:postgresql://localhost:5432/socialnetwork","postgres","1234", new MessageValidator());
         Repository<Long, Event> repoEvents =
@@ -62,32 +59,43 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(rootLayout, 630, 400);
         stage.setTitle("Sign in!");
         stage.setScene(scene);
-        stage.show();
+//        stage.show();
 
 
-        //TEST PAGING
-        serv.printUs().forEach(System.out::println);
-        serv.setPageSize(6);
+        //TEST PAGING USERS
+//        serv.printUs().forEach(System.out::println);
+//        serv.setPageSize(6);
+//
+//
+//        System.out.println("\nElements on page 0");
+//        serv.getUsersOnPage(0).stream()
+//                .forEach(System.out::println);
+//
+//        System.out.println("\nElements on next page");
+//        serv.getNextUsers().stream()
+//                .forEach(System.out::println);
+//
+//        System.out.println("\nElements on next page");
+//        serv.getNextUsers().stream()
+//                .forEach(System.out::println);
+
+
+        //TEST PAGING FRIENDS
+        System.out.println("\n");
+        servFr.printFr().forEach(System.out::println);
+        servFr.setPageSize(3);
 
 
         System.out.println("\nElements on page 0");
-        serv.getUsersOnPage(0).stream()
-                .forEach(System.out::println);
-
-//        System.out.println("\nElements on page 1");
-//        serv.getUsersOnPage(1).stream()
-//                .forEach(System.out::println);
-//
-//        System.out.println("\nElements on page 2");
-//        serv.getUsersOnPage(2).stream()
-//                .forEach(System.out::println);
-
-        System.out.println("\nElements on next page");
-        serv.getNextUsers().stream()
+        servFr.getFriendsOnPage(0).stream()
                 .forEach(System.out::println);
 
         System.out.println("\nElements on next page");
-        serv.getNextUsers().stream()
+        servFr.getNextFriends().stream()
+                .forEach(System.out::println);
+
+        System.out.println("\nElements on next page");
+        servFr.getNextFriends().stream()
                 .forEach(System.out::println);
 
     }
