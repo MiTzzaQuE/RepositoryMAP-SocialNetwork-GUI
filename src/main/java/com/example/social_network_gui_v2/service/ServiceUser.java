@@ -244,10 +244,25 @@ public class ServiceUser {
 
     //Paging
     private int pageNumber = 0;
-    private int pageSize = 3;
+    private int pageSize = 7;
+
+    public int getPageNumber(){
+        return this.pageNumber;
+    }
 
     public List<User> getNextUsers() {
         this.pageNumber++;
+        List<User> nextUsers = getUsersOnPage(this.pageNumber);
+        if(nextUsers.size() == 0){
+            throw new ValidationException("No more next pages!");
+        }
+        return nextUsers;
+    }
+
+    public List<User> getPreviousUsers() {
+        pageNumber--;
+        if(pageNumber < 0)
+            throw new ValidationException("No more previous pages!");
         return getUsersOnPage(this.pageNumber);
     }
 

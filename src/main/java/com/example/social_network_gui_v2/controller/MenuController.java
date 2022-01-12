@@ -35,6 +35,7 @@ import java.util.stream.StreamSupport;
 
 public class MenuController{
 
+
     protected ServiceUser servUser;
     protected ServiceFriendship servFriendship;
     protected ServiceMessage servMessage;
@@ -50,6 +51,8 @@ public class MenuController{
 
     @FXML
     Label Name;
+    @FXML
+    public Label pageNumber;
     @FXML
     TextField userFilter;
     @FXML
@@ -126,6 +129,7 @@ public class MenuController{
     private void setFields(User user) {
         String name = new String(user.getFirstName()+ " " + user.getLastName());
         Name.setText(name);
+        pageNumber.setText("0");
     }
 
     private void handleFilter1() {
@@ -420,13 +424,25 @@ public class MenuController{
         }
     }
 
-    public void onScrollUpdate(ScrollEvent scrollEvent) {
-        users = servUser.getNextUsers();
-        modelUser.setAll(users);
+    public void onPreviousButtonClick(ActionEvent actionEvent) {
+        try{
+            users = servUser.getPreviousUsers();
+            modelUser.setAll(users);
+            int pageNr = servUser.getPageNumber();
+            pageNumber.setText(Integer.toString(pageNr));
+        }catch (ValidationException ex){
+            MessageAlert.showErrorMessage(null, ex.getMessage());
+        }
     }
 
-    public void onScrollToUpdate(ScrollToEvent<Integer> integerScrollToEvent) {
-//        if(integerScrollToEvent.)
+    public void onNextButtonClick(ActionEvent actionEvent) {
+        try {
+            users = servUser.getNextUsers();
+            modelUser.setAll(users);
+            int pageNr = servUser.getPageNumber();
+            pageNumber.setText(Integer.toString(pageNr));
+        }catch (ValidationException ex) {
+            MessageAlert.showErrorMessage(null, ex.getMessage());
+        }
     }
-
 }

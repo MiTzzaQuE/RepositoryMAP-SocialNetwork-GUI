@@ -80,25 +80,33 @@ public class HelloApplication extends Application {
 //                .forEach(System.out::println);
 
 
-        //TEST PAGING FRIENDS
-        System.out.println("\n");
-        servFr.printFr().forEach(System.out::println);
-        servFr.setPageSize(3);
+        //TEST PAGING
+//        serv.printUs().forEach(System.out::println);
+//        serv.setPageSize(6);
+//
+//
+//        System.out.println("\nElements on page 0");
+//        serv.getUsersOnPage(0).stream()
+//                .forEach(System.out::println);
 
+//        System.out.println("\nElements on page 1");
+//        serv.getUsersOnPage(1).stream()
+//                .forEach(System.out::println);
+//
+//        System.out.println("\nElements on page 2");
+//        serv.getUsersOnPage(2).stream()
+//                .forEach(System.out::println);
 
-        System.out.println("\nElements on page 0");
-        servFr.getFriendsOnPage(0).stream()
-                .forEach(System.out::println);
+//        System.out.println("\nElements on next page");
+//        serv.getNextUsers().stream()
+//                .forEach(System.out::println);
+//
+//        System.out.println("\nElements on next page");
+//        serv.getNextUsers().stream()
+//                .forEach(System.out::println);
+//
+   }
 
-        System.out.println("\nElements on next page");
-        servFr.getNextFriends().stream()
-                .forEach(System.out::println);
-
-        System.out.println("\nElements on next page");
-        servFr.getNextFriends().stream()
-                .forEach(System.out::println);
-
-    }
 
     public static void main(String[] args) {
         launch();

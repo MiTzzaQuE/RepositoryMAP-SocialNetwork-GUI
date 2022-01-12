@@ -166,7 +166,7 @@ public class RequestsController extends MenuController{
             try {
                 servFriendship.acceptFriendship(selected.getIdFrom(), selected.getIdTo());
                 tableViewFriendhipRequests.getItems().removeAll(tableViewFriendhipRequests.getSelectionModel().getSelectedItem());
-                //userLogin.addFrRequestRec(servFriendship.); DE ADAUGAT FIND ONE IN SERVICE
+                //userLogin.addFrRequestRec(servFriendship.);
                 System.out.println(userLogin);
 
             } catch (ValidationException validationException) {

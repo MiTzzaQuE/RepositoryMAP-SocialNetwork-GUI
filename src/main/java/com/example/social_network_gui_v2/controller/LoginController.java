@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -52,13 +53,17 @@ public class LoginController {
     @FXML
     public void handleSubmitButtonAction(ActionEvent actionEvent) {
 
-        actiontarget.setText("Sign in button pressed");
-
         String ID = usernameField.getText();
         String password = passwordField.getText();
 
         try {
             User userC = servUser.findUserByUsernamePassword(ID, password);
+            if(userC == null){
+                actiontarget.setText("Invalid username or password!");
+                usernameField.clear();
+                passwordField.clear();
+                return;
+            }
             userLogin = new Page(userC.getFirstName(),userC.getLastName());
             userLogin.setId(userC.getId());
 
@@ -74,6 +79,7 @@ public class LoginController {
         catch (IllegalArgumentException exception){
             MessageAlert.showErrorMessage(null,"ID null!");
         }
+
     }
 
     public void showMenuDialogStage() throws IOException {
