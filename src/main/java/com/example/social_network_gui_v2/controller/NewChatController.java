@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class NewChatController extends ChatController {
@@ -31,9 +32,15 @@ public class NewChatController extends ChatController {
     TextField newMess;
     @FXML
     Button buttonAdd;
+    @FXML
+    TextField textFieldSearch;
+    @FXML
+    Label selectedUsers;
 
     ObservableList<User> modelNewChat = FXCollections.observableArrayList();
     List<Long> newChatUsers = new ArrayList<>();
+    List<String> selectedUser = new ArrayList<>();
+    List<User> listUsers = new ArrayList<>();
     ChatController controllerChat;
 
     @FXML
@@ -43,6 +50,8 @@ public class NewChatController extends ChatController {
         tableColumnFirstNameS.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
         tableColumnLastNameS.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
         tableViewUsersSearch.setItems(modelNewChat);
+
+        textFieldSearch.textProperty().addListener(o -> handleFilter());
     }
 
     public void setService(ServiceUser servUser, ServiceMessage servMessage, Stage stage, Page user, ChatController controller) {
@@ -59,11 +68,20 @@ public class NewChatController extends ChatController {
     protected void initModelNewChat() {
 
         Iterable<User> users = servUser.printUs();
-        List<User> listUsers = new ArrayList<>();
         for (User ur : users)
             if (!newChatUsers.contains(ur.getId()))
                 listUsers.add(ur);
         modelNewChat.setAll(listUsers);
+    }
+
+    private void handleFilter() {
+        Predicate<User> p1 = n -> n.getFirstName().startsWith(textFieldSearch.getText());
+        Predicate<User> p2 = n -> n.getLastName().startsWith(textFieldSearch.getText());
+
+        modelNewChat.setAll(listUsers
+                .stream()
+                .filter(p1.or(p2))
+                .collect(Collectors.toList()));
     }
 
     @FXML
@@ -83,6 +101,10 @@ public class NewChatController extends ChatController {
         }
         if (!found) {
             try {
+                if(Objects.equals(newMess.getText(), "")) {
+                    MessageAlert.showErrorMessage(null, "Please write a message!");
+                    return;
+                }
                 Long Id = servMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(newChatUsers), newMess.getText());
                 Message newMessageChat = servMessage.findOne(Id);
                 userLogin.addMessage(newMessageChat);
@@ -111,10 +133,13 @@ public class NewChatController extends ChatController {
         try {
             User selected = (User) tableViewUsersSearch.getSelectionModel().getSelectedItem();
             User found = servUser.findOne(selected.getId());
+            selectedUser.add(found.getFirstName());
+            selectedUsers.setText(String.valueOf(selectedUser));
             if (Objects.equals(found.getId(), userLogin.getId()))
                 throw new Exception("This is you");
             newChatUsers.add(found.getId());
             initModelNewChat();
+            textFieldSearch.clear();
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
         }

@@ -103,7 +103,6 @@ public class ChatController extends MenuController{
 
     private boolean containsPeople(List<Long> idsInvolved, List<Chat> chats) {
         for (Chat ch : chats) {
-            //System.out.println(ch.getPeople());
             if (ch.getPeople().equals(idsInvolved))
                 return true;
         }
@@ -144,7 +143,6 @@ public class ChatController extends MenuController{
                         setText(null);
                         setGraphic(null);
                     } else {
-//                        System.out.println(item.getFrom());
                         if (!item.getFrom().getId().equals(userLogin.getId())) {
                             lblUserLeft.setText(item.getFrom().getFirstName() + ":");
                             lblTextLeft.setText(item.getMessage());
@@ -165,6 +163,14 @@ public class ChatController extends MenuController{
     @FXML
     private void handleUser1SubmitMessage(ActionEvent event) {
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
+        if(Objects.equals(newMessage.getText(), "")) {
+            MessageAlert.showErrorMessage(null, "Please write a message!");
+            return;
+        }
+        else if(selected == null){
+            MessageAlert.showErrorMessage(null, "No selected conversation!");
+            return;
+        }
         try {
             Long Id = null;
             Message selectedMessage = lvChatWindow.getSelectionModel().getSelectedItem();

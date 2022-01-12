@@ -1,8 +1,8 @@
 package com.example.social_network_gui_v2.repository.database;
 
 import com.example.social_network_gui_v2.domain.User;
+import com.example.social_network_gui_v2.domain.validation.ValidationException;
 import com.example.social_network_gui_v2.domain.validation.Validator;
-import com.example.social_network_gui_v2.repository.Repository;
 import com.example.social_network_gui_v2.repository.paging.Pageable;
 import com.example.social_network_gui_v2.repository.paging.Pages;
 import com.example.social_network_gui_v2.repository.paging.Paginator;
@@ -90,26 +90,22 @@ public class UserDbRepository implements PagingRepository<Long, User> {
     public User save(User entity) {
         if(entity == null)
             throw new IllegalArgumentException("Entity must not be null");
+        else if(findUserByUsername(entity.getUsername()))
+            throw new ValidationException("Username already used!");
         validator.validate(entity);
         String sql = "insert into users (first_name, last_name ) values (?, ?)";
-        //String sql2 = "select users.id from users order by users.id desc limit 1";
         String sql3 = "insert into usernames (id,username,password) values ((select users.id from users order by users.id desc limit 1), ?, ?)";
 
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            //PreparedStatement ps2 = connection.prepareStatement(sql2);
             PreparedStatement ps3 = connection.prepareStatement(sql3);
 
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
             ps.executeUpdate();
 
-            //ResultSet resultSet = ps2.executeQuery();
-            //int id = resultSet.getInt("id");
-
-            //ps3.setInt(1,id);
             ps3.setString(1,entity.getUsername());
             ps3.setString(2,entity.getPassword());
             ps3.executeUpdate();
@@ -222,5 +218,28 @@ public class UserDbRepository implements PagingRepository<Long, User> {
         }
 
         Paginator<User> paginator = new Paginator<>(pageable, users.stream().toList());
-        return paginator.paginate();    }
+        return paginator.paginate();
+    }
+
+
+    public boolean findUserByUsername(String usernameC){
+        if(usernameC == null)
+            throw new IllegalArgumentException("Username must not be null");
+
+        String sql = "select un.username from users u inner join usernames un on u.id = un.id where un.username = ?";
+        User user;
+
+        try(Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1,usernameC);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
 }
+

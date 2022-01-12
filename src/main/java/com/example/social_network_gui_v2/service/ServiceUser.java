@@ -244,7 +244,7 @@ public class ServiceUser {
 
     //Paging
     private int pageNumber = 0;
-    private int pageSize = 7;
+    private int pageSize = 6;
 
     public int getPageNumber(){
         return this.pageNumber;

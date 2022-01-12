@@ -129,14 +129,14 @@ public class MenuController{
     private void setFields(User user) {
         String name = new String(user.getFirstName()+ " " + user.getLastName());
         Name.setText(name);
-        pageNumber.setText("0");
+        pageNumber.setText("1");
     }
 
     private void handleFilter1() {
         Predicate<User> p1 = n -> n.getFirstName().startsWith(userFilter.getText());
         Predicate<User> p2 = n -> n.getLastName().startsWith(userFilter.getText());
 
-        modelUser.setAll(users
+        modelUser.setAll(getUsersNoFriends()
                 .stream()
                 .filter(p1.or(p2))
                 .collect(Collectors.toList()));
@@ -217,10 +217,6 @@ public class MenuController{
     }
 
     @FXML
-    public void onHelpButtonClick(ActionEvent actionEvent) {
-    }
-
-    @FXML
     public void onCloseButtonClick(ActionEvent actionEvent) throws IOException {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
@@ -246,45 +242,80 @@ public class MenuController{
     }
 
     @FXML
-    public void handleOpenChatButtonAction(ActionEvent actionEvent) {
+    public void handleExportActivityButtonAction(ActionEvent actionEvent) throws IOException {
+
+        if(dateStart.getValue() == null || dateEnd.getValue() == null)
+            MessageAlert.showErrorMessage(null,"No selected dates!");
+        else {
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.COURIER, 12);
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(50, 700);
+            contentStream.showText("Friendships made in this period of time:");
+            contentStream.newLine();
+
+            Iterable<UserFriendDTO> friendsMade = servUser.getFriendsForUser(userLogin.getId());
+            List<UserFriendDTO> friends = StreamSupport.stream(friendsMade.spliterator(), false).collect(Collectors.toList());
+            friends.forEach(f -> {
+                if (f.getFriendshipDate().isAfter(dateStart.getValue().atStartOfDay()) && f.getFriendshipDate().isBefore(dateEnd.getValue().atStartOfDay())) {
+                    try {
+                        contentStream.newLine();
+                        contentStream.showText(f.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            contentStream.newLine();
+            contentStream.newLine();
+            contentStream.showText("Messages sent and receved in this period of time:");
+            contentStream.newLine();
+
+            List<Message> messages = servMessage.userMessages(userLogin);
+            extractMessagesForExport(contentStream, messages);
+
+            document.save("src/Export1.pdf");
+            document.close();
+        }
     }
 
     @FXML
-    public void handleExportActivityButtonAction(ActionEvent actionEvent) throws IOException {
+    public void handleExportPrivateButtonAction(ActionEvent actionEvent) throws IOException {
 
-        PDDocument document = new PDDocument();
-        PDPage page = new PDPage();
-        document.addPage( page );
+        User selectedFriend = tableViewFriends.getSelectionModel().getSelectedItem();
+        if(dateStart.getValue() == null || dateEnd.getValue() == null)
+            MessageAlert.showErrorMessage(null,"No selected dates!");
+        else if(selectedFriend != null){
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage( page );
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-        contentStream.beginText();
-        contentStream.setFont(PDType1Font.COURIER, 12);
-        contentStream.setLeading(14.5f);
-        contentStream.newLineAtOffset(50, 700);
-        contentStream.showText("Friendships made in this period of time:");
-        contentStream.newLine();
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.COURIER, 12);
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(50, 700);
+            contentStream.showText("Private chat with " + selectedFriend.getFirstName() + " " + selectedFriend.getLastName() + " in this period of time:");
+            contentStream.newLine();
 
-        Iterable<UserFriendDTO> friendsMade = servUser.getFriendsForUser(userLogin.getId());
-        List<UserFriendDTO> friends = StreamSupport.stream(friendsMade.spliterator(),false).collect(Collectors.toList());
-        friends.forEach(x -> System.out.println(x.getFriendshipDate()));
-        friends.forEach(f -> {
-            if(f.getFriendshipDate().isAfter(dateStart.getValue().atStartOfDay()) && f.getFriendshipDate().isBefore(dateEnd.getValue().atStartOfDay())){
-                try {
-                    contentStream.newLine();
-                    contentStream.showText(f.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+            List<Message> messages = servMessage.PrivateChat(userLogin.getId(), selectedFriend.getId());
+            extractMessagesForExport(contentStream, messages);
+            document.save( "src/Export2.pdf");
+            document.close();
+        }
+        else MessageAlert.showErrorMessage(null,"No selected user!");
 
-        contentStream.newLine();
-        contentStream.newLine();
-        contentStream.showText("Messages sent and receved in this period of time:");
-        contentStream.newLine();
+    }
 
-        List<Message> messages = servMessage.userMessages(userLogin);
+    private void extractMessagesForExport(PDPageContentStream contentStream, List<Message> messages) throws IOException {
         messages.sort(Comparator.comparing(Message::getId));
         messages.forEach(m -> {
             if(m.getDate().isAfter(dateStart.getValue().atStartOfDay()) && m.getDate().isBefore(dateEnd.getValue().atStartOfDay())){
@@ -300,76 +331,6 @@ public class MenuController{
         contentStream.endText();
 
         contentStream.close();
-
-        document.save( "src/Export1.pdf");
-
-        document.close();
-    }
-
-    @FXML
-    public void handleExportPrivateButtonAction(ActionEvent actionEvent) throws IOException {
-
-        User selectedFriend = tableViewFriends.getSelectionModel().getSelectedItem();
-        if(selectedFriend != null){
-            PDDocument document = new PDDocument();
-            PDPage page = new PDPage();
-            document.addPage( page );
-
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.COURIER, 12);
-            contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(50, 700);
-            contentStream.showText("Private chat with " + selectedFriend.getFirstName() + " " + selectedFriend.getLastName() + " in this period of time:");
-            contentStream.newLine();
-
-            List<Message> messages = servMessage.PrivateChat(userLogin.getId(), selectedFriend.getId());
-            messages.sort(Comparator.comparing(Message::getId));
-            messages.forEach(m -> {
-                if(m.getDate().isAfter(dateStart.getValue().atStartOfDay()) && m.getDate().isBefore(dateEnd.getValue().atStartOfDay())){
-                    try {
-                        contentStream.newLine();
-                        contentStream.showText(m.toString());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            contentStream.endText();
-            contentStream.close();
-            document.save( "src/Export2.pdf");
-            document.close();
-        }
-        else MessageAlert.showErrorMessage(null,"No selected user!");
-
-    }
-
-    @FXML
-    public void handleChatButtonTab(ActionEvent actionEvent) {
-
-        try{
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("chat-view.fxml"));
-
-            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
-            dialogStage.setTitle("Chat Menu!");
-            dialogStage.setScene(scene);
-
-            ChatController chatController = fxmlLoader.getController();
-            chatController.setService(servUser, servFriendship, servMessage, servEvent, userLogin, dialogStage);
-
-            dialogStage.show();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (ValidationException exception){
-            MessageAlert.showErrorMessage(null,exception.getMessage());
-        }
-        catch (IllegalArgumentException exception){
-            MessageAlert.showErrorMessage(null,"Error!");
-        }
     }
 
     @FXML
@@ -424,23 +385,51 @@ public class MenuController{
         }
     }
 
-    public void onPreviousButtonClick(ActionEvent actionEvent) {
+    @FXML
+    public void handleChatButtonTab(ActionEvent actionEvent) {
+
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("chat-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            dialogStage.setTitle("Chat Menu!");
+            dialogStage.setScene(scene);
+
+            ChatController chatController = fxmlLoader.getController();
+            chatController.setService(servUser, servFriendship, servMessage, servEvent, userLogin, dialogStage);
+
+            dialogStage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"Error!");
+        }
+    }
+
+    @FXML
+    protected void onPreviousButtonClick(ActionEvent actionEvent) {
         try{
             users = servUser.getPreviousUsers();
             modelUser.setAll(users);
             int pageNr = servUser.getPageNumber();
-            pageNumber.setText(Integer.toString(pageNr));
+            pageNumber.setText(Integer.toString(pageNr+1));
         }catch (ValidationException ex){
             MessageAlert.showErrorMessage(null, ex.getMessage());
         }
     }
 
-    public void onNextButtonClick(ActionEvent actionEvent) {
+    @FXML
+    protected void onNextButtonClick(ActionEvent actionEvent) {
         try {
             users = servUser.getNextUsers();
             modelUser.setAll(users);
             int pageNr = servUser.getPageNumber();
-            pageNumber.setText(Integer.toString(pageNr));
+            pageNumber.setText(Integer.toString(pageNr+1));
         }catch (ValidationException ex) {
             MessageAlert.showErrorMessage(null, ex.getMessage());
         }

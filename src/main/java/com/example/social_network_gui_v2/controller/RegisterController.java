@@ -96,8 +96,11 @@ public class RegisterController extends MenuController{
                 id = servUser.save(firstName, lastName, userName, password);
                 userLogin.setId(id);
             }
-            else
-                MessageAlert.showErrorMessage(null,"Invalid Password!");
+            else {
+                MessageAlert.showErrorMessage(null, "Passwords don't match!");
+                clearAll();
+                return;
+            }
             showMenuDialogStage();
         }
         catch (IOException e) {
@@ -111,7 +114,16 @@ public class RegisterController extends MenuController{
         }
     }
 
+    private void clearAll() {
+        firstNameField.clear();
+        lastNameField.clear();
+        userNameField.clear();
+        passwordField.clear();
+        confirmPasswordField.clear();
+    }
+
     private void showMenuDialogStage() throws IOException {
+
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 615, 450);
