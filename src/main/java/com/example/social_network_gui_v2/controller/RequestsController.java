@@ -1,9 +1,12 @@
 package com.example.social_network_gui_v2.controller;
 
+import com.example.social_network_gui_v2.HelloApplication;
 import com.example.social_network_gui_v2.domain.Friendship;
 import com.example.social_network_gui_v2.domain.FriendshipDTO;
+import com.example.social_network_gui_v2.domain.Page;
 import com.example.social_network_gui_v2.domain.User;
 import com.example.social_network_gui_v2.domain.validation.ValidationException;
+import com.example.social_network_gui_v2.service.ServiceEvent;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
 import com.example.social_network_gui_v2.service.ServiceMessage;
 import com.example.social_network_gui_v2.service.ServiceUser;
@@ -11,11 +14,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -26,7 +33,7 @@ public class RequestsController extends MenuController{
     private ServiceUser servUser;
     private ServiceFriendship servFriendship;
     private ServiceMessage servMessage;
-    User userLogin;
+    Page userLogin;
     ObservableList<FriendshipDTO> modelFriendship = FXCollections.observableArrayList();
     ObservableList<FriendshipDTO> modelSentRequests = FXCollections.observableArrayList();
 
@@ -55,11 +62,13 @@ public class RequestsController extends MenuController{
     @FXML
     public TableView<FriendshipDTO> tableViewRequestsSent;
 
-    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage,User user){
+    public void setService(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, ServiceEvent servEvent, Stage dialogStage, Page user){
 
         this.servUser = servUser;
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
+        this.servEvent = servEvent;
+        this.dialogStage = dialogStage;
         this.userLogin = user;
         initModelRequest();
     }
@@ -73,14 +82,27 @@ public class RequestsController extends MenuController{
 
                     Button dup1 = new Button("Accept");
                     dup1.setStyle(simpleBtn.getStyle());
+//                    Button dup1 = new Button();
+//                    dup1.setStyle(simpleBtn.getStyle());
+//                    Image image = new Image("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\accept_icon2.png",30,20,true,true);
+//                    ImageView imageView = new ImageView(image);
+//                    imageView.setPreserveRatio(true);
+//                    dup1.setGraphic(imageView);
                     dup1.setOnAction((ActionEvent e) -> onAcceptButtonClick(e));
+
 
                     Button dup2 = new Button("Decline");
                     dup2.setStyle(simpleBtn.getStyle());
+//                    Button dup2 = new Button();
+//                    dup2.setStyle(simpleBtn.getStyle());
+//                    Image image2 = new Image("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\reject.png",30,20,true,true);
+//                    ImageView imageView2 = new ImageView(image2);
+//                    imageView.setPreserveRatio(true);
+//                    dup2.setGraphic(imageView2);
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
 
                     Button dup3 = new Button();
-                    dup3.setStyle(cancelBtn.getStyle());
+                    dup3.setStyle(simpleBtn.getStyle());
                     //dup3.setStyle(cancelBtn.getStyle());
                     dup3.setOnAction((ActionEvent e) -> onCancelButtonClick(e));
                     return new FriendshipDTO(servUser.findOne(y.getId().getLeft()).getId(),servUser.findOne(y.getId().getLeft()).getFirstName() + " " + servUser.findOne(y.getId().getLeft()).getLastName(),
@@ -99,17 +121,17 @@ public class RequestsController extends MenuController{
                     dup2.setStyle(rejectBtn.getStyle());
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
                     Button dup3 = new Button("Cancel");
-                    dup3.setStyle(simpleBtn.getStyle());
-//                    Image image = new Image("/trash.png");
+                    dup3.setStyle(cancelBtn.getStyle());
+
+//                    Button dup3 = new Button();
+//                    dup3.setStyle(cancelBtn.getStyle());
+//                    Image image = new Image("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\trash.png",20,20,true,true);
 //                    ImageView imageView = new ImageView(image);
-//                    imageView.setFitWidth(10);
-//                    imageView.setFitWidth(10);
-//                    imageView.setScaleX(1.5);
-//                    imageView.setScaleY(1.5);
-//                    imageView.setScaleZ(1);
+//                    imageView.setPreserveRatio(true);
 //                    dup3.setGraphic(imageView);
-                    //dup3.getStylesheets().add("src/main/resources/com/example/social_network_gui_v2/buttons.css");
-                    //dup3.getStyleClass().add("cancelbutton");
+
+//                    dup3.getStylesheets().add("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\buttons.css");
+//                    dup3.getStyleClass().add("cancelbutton");
                     dup3.setOnAction((ActionEvent e) -> onCancelButtonClick(e));
                     return new FriendshipDTO(servUser.findOne(y.getId().getLeft()).getId(),servUser.findOne(y.getId().getLeft()).getFirstName() + " " + servUser.findOne(y.getId().getLeft()).getLastName(),
                         servUser.findOne(y.getId().getRight()).getId(),servUser.findOne(y.getId().getRight()).getFirstName() + " " + servUser.findOne(y.getId().getRight()).getLastName(),
@@ -124,12 +146,10 @@ public class RequestsController extends MenuController{
         tableColumnFrom.setCellValueFactory(new PropertyValueFactory<FriendshipDTO, String>("userFrom"));
         tableColumnAccept.setCellValueFactory(new PropertyValueFactory<FriendshipDTO, Button>("acceptButton"));
         tableColumnReject.setCellValueFactory(new PropertyValueFactory<FriendshipDTO, Button>("rejectButton"));
-
         tableViewFriendhipRequests.setItems(modelFriendship);
 
         tableColumnTo.setCellValueFactory(new PropertyValueFactory<FriendshipDTO, String>("userTo"));
         tableColumnCancel.setCellValueFactory(new PropertyValueFactory<FriendshipDTO, Button>("cancelButton"));
-
         tableViewRequestsSent.setItems(modelSentRequests);
 
         acceptBtn.setVisible(false);
@@ -145,6 +165,9 @@ public class RequestsController extends MenuController{
         if(selected != null) {
             try {
                 servFriendship.acceptFriendship(selected.getIdFrom(), selected.getIdTo());
+//                User user = servUser.findOne(selected.getIdFrom());
+//                modelFriends.add(user);
+//                tableViewFriends.setItems(modelFriends);   //DE REZOLVAT
                 tableViewFriendhipRequests.getItems().removeAll(tableViewFriendhipRequests.getSelectionModel().getSelectedItem());
                 System.out.println(userLogin);
 
@@ -183,5 +206,29 @@ public class RequestsController extends MenuController{
             }
         }
         else MessageAlert.showErrorMessage(null,"No selected item!");
+    }
+
+    public void onBackButtonClick(ActionEvent actionEvent) {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load(), 630, 450);
+            dialogStage.setTitle("Main Menu!");
+            dialogStage.setScene(scene);
+
+            MenuController menuController = fxmlLoader.getController();
+            menuController.setService(servUser, servFriendship, servMessage, servEvent, userLogin, dialogStage);
+
+            dialogStage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ValidationException exception){
+            MessageAlert.showErrorMessage(null,exception.getMessage());
+        }
+        catch (IllegalArgumentException exception){
+            MessageAlert.showErrorMessage(null,"Error!");
+        }
     }
 }

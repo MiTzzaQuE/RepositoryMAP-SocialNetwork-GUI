@@ -1,5 +1,6 @@
 package com.example.social_network_gui_v2.repository.paging;
 
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Paginator<E> {
@@ -13,6 +14,7 @@ public class Paginator<E> {
     }
 
     public Pages<E> paginate() {
+
         return new PageImplementation<>(pageable, StreamSupport.stream(elements.spliterator(), false));
     }
 }
