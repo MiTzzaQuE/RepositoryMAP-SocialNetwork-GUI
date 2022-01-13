@@ -147,5 +147,6 @@ public class NewChatController extends ChatController {
 
     @FXML
     public void onButtonCloseSearch(ActionEvent actionEvent) {
+        this.dialogStage.close();
     }
 }
