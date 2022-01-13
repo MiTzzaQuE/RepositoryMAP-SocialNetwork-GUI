@@ -20,9 +20,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -80,25 +83,24 @@ public class RequestsController extends MenuController{
         List<FriendshipDTO> friendshipDTOList = StreamSupport.stream(friendships.spliterator(),false)
                 .map(y -> {
 
-                    Button dup1 = new Button("Accept");
-                    dup1.setStyle(simpleBtn.getStyle());
-//                    Button dup1 = new Button();
+//                    Button dup1 = new Button("Accept");
 //                    dup1.setStyle(simpleBtn.getStyle());
-//                    Image image = new Image("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\accept_icon2.png",30,20,true,true);
-//                    ImageView imageView = new ImageView(image);
-//                    imageView.setPreserveRatio(true);
-//                    dup1.setGraphic(imageView);
+                    Button dup1 = new Button();
+                    dup1.setStyle(simpleBtn.getStyle());
+                    Image image = new Image(this.getClass().getClassLoader().getResourceAsStream("com/example/social_network_gui_v2/images/accept_icon2.png"),30,20,true,true);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setPreserveRatio(true);
+                    dup1.setGraphic(imageView);
                     dup1.setOnAction((ActionEvent e) -> onAcceptButtonClick(e));
 
-
-                    Button dup2 = new Button("Decline");
-                    dup2.setStyle(simpleBtn.getStyle());
-//                    Button dup2 = new Button();
+//                    Button dup2 = new Button("Decline");
 //                    dup2.setStyle(simpleBtn.getStyle());
-//                    Image image2 = new Image("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\reject.png",30,20,true,true);
-//                    ImageView imageView2 = new ImageView(image2);
-//                    imageView.setPreserveRatio(true);
-//                    dup2.setGraphic(imageView2);
+                    Button dup2 = new Button();
+                    dup2.setStyle(simpleBtn.getStyle());
+                    Image image2 = new Image(this.getClass().getClassLoader().getResourceAsStream("com/example/social_network_gui_v2/images/reject.png"),30,20,true,true);
+                    ImageView imageView2 = new ImageView(image2);
+                    imageView.setPreserveRatio(true);
+                    dup2.setGraphic(imageView2);
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
 
                     Button dup3 = new Button();
@@ -120,15 +122,16 @@ public class RequestsController extends MenuController{
                     Button dup2 = new Button();
                     dup2.setStyle(rejectBtn.getStyle());
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
-                    Button dup3 = new Button("Cancel");
-                    dup3.setStyle(cancelBtn.getStyle());
-
-//                    Button dup3 = new Button();
+//                    Button dup3 = new Button("Cancel");
 //                    dup3.setStyle(cancelBtn.getStyle());
-//                    Image image = new Image("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\trash.png",20,20,true,true);
-//                    ImageView imageView = new ImageView(image);
-//                    imageView.setPreserveRatio(true);
-//                    dup3.setGraphic(imageView);
+
+//sau                    URL url = this.getClass().getClassLoader().getResource("com/example/social_network_gui_v2/images/trash.png");
+                    Button dup3 = new Button();
+                    dup3.setStyle(cancelBtn.getStyle());
+                    Image image = new Image(this.getClass().getClassLoader().getResourceAsStream("com/example/social_network_gui_v2/images/trash.png"),20,20,true,true);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setPreserveRatio(true);
+                    dup3.setGraphic(imageView);
 
 //                    dup3.getStylesheets().add("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\buttons.css");
 //                    dup3.getStyleClass().add("cancelbutton");
