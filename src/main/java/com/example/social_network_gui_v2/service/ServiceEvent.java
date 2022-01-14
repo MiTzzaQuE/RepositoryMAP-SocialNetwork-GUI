@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class ServiceEvent {
     private Repository<Long, Event> repoEvents;
@@ -53,6 +55,13 @@ public class ServiceEvent {
     }
 
     public Iterable<Event> printUs() { return repoEvents.findAll(); }
+
+    public List<Event> getEventsForUser(Long id) {
+        Iterable<Event> ev = printUs();
+        return StreamSupport.stream(ev.spliterator(), false)
+                .filter(y -> y.getIds().containsKey(id))
+                .collect(Collectors.toList());
+    }
 
     public Iterable<Notification> printUsNotif() { return repoNotif.findAll(); }
 
