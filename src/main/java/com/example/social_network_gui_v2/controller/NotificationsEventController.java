@@ -38,7 +38,7 @@ public class NotificationsEventController extends MenuController {
     @FXML
     ListView<String> notificationsListView;
     @FXML
-    ListView<Event> myEventsListView;
+    ListView<String> myEventsListView;
     @FXML
     TextField titleEvent;
     @FXML
@@ -51,6 +51,7 @@ public class NotificationsEventController extends MenuController {
     Event lastEventSelected=null;
 
     ObservableList<Event> modelEvents = FXCollections.observableArrayList();
+    ObservableList<String> modelUsersEvents = FXCollections.observableArrayList();
     ObservableList<String> modelNotifications = FXCollections.observableArrayList();
 
     public void setService( ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, ServiceEvent servEvent, Page userLogin, Stage stage) {
@@ -64,6 +65,7 @@ public class NotificationsEventController extends MenuController {
 
         chooseButton.setVisible(false);
         initModelEvents();
+        initModelUsersEvents();
         displayAppointmentNotification();
     }
 
@@ -73,6 +75,7 @@ public class NotificationsEventController extends MenuController {
         Platform.setImplicitExit(false);
         chooseButton.setVisible(false);
         eventsListView.setItems(modelEvents);
+        myEventsListView.setItems(modelUsersEvents);
         notificationsListView.setItems(modelNotifications.sorted(Comparator.reverseOrder()));
 
     }
@@ -89,6 +92,16 @@ public class NotificationsEventController extends MenuController {
         //modelEvents.setAll(list);
     }
 
+    protected void initModelUsersEvents() {
+        List<Event> list = servEvent.getEventsForUser(userLogin.getId());
+        modelUsersEvents.clear();
+        for(Event ev : list) {
+            if(!ev.getDate().isBefore(LocalDate.now())) {
+                modelUsersEvents.add(ev.getName());
+            }
+        }
+    }
+
     @FXML
     private void onCreateEventButton(ActionEvent event) {
         String name=titleEvent.getText();
@@ -100,6 +113,7 @@ public class NotificationsEventController extends MenuController {
             servEvent.save(name, dateNew, ids);
             modelEvents.add(ev);//get 1st user's text from his/her textfield and add message to observablelist
             initModelEvents();
+            initModelUsersEvents();
             titleEvent.setText("");//clear 1st user's textfield
             datePickerEvent.getEditor().clear();
         }catch (ValidationException e) {
@@ -151,6 +165,7 @@ public class NotificationsEventController extends MenuController {
 
                 ids.put(userLogin.getId(), 1L);
                 servEvent.update(lastEventSelected.getId(), lastEventSelected.getName(), lastEventSelected.getDate(), ids);
+                initModelUsersEvents();
                 chooseButton.setText("Notifications off");
             }
             else
