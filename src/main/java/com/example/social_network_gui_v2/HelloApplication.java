@@ -14,6 +14,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import com.example.social_network_gui_v2.repository.Repository;
 import com.example.social_network_gui_v2.service.ServiceFriendship;
@@ -25,6 +27,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.io.File;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
@@ -104,7 +107,6 @@ public class HelloApplication extends Application {
 //        System.out.println("\nElements on next page");
 //        serv.getNextUsers().stream()
 //                .forEach(System.out::println);
-//
    }
 
 

@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ScrollEvent;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -26,6 +27,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -281,7 +283,11 @@ public class MenuController{
             List<Message> messages = servMessage.userMessages(userLogin);
             extractMessagesForExport(contentStream, messages);
 
-            document.save("src/Export1.pdf");
+            DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle("Choose path to export!");
+            File selectedDirectory = chooser.showDialog(null);
+
+            document.save(selectedDirectory.getAbsolutePath() + "/Export1.pdf");
             document.close();
         }
     }
@@ -308,7 +314,12 @@ public class MenuController{
 
             List<Message> messages = servMessage.PrivateChat(userLogin.getId(), selectedFriend.getId());
             extractMessagesForExport(contentStream, messages);
-            document.save( "src/Export2.pdf");
+
+            DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle("Choose path to export!");
+            File selectedDirectory = chooser.showDialog(null);
+
+            document.save(selectedDirectory.getAbsolutePath() + "/Export2.pdf");
             document.close();
         }
         else MessageAlert.showErrorMessage(null,"No selected user!");
