@@ -46,10 +46,10 @@ public class NewChatController extends ChatController {
     @FXML
     public void initialize() {
 
-//        buttonAdd.setVisible(false);
         tableColumnFirstNameS.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
         tableColumnLastNameS.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
         tableViewUsersSearch.setItems(modelNewChat);
+        tableViewUsersSearch.setStyle("-fx-selection-bar: #6e6e6e");
 
         textFieldSearch.textProperty().addListener(o -> handleFilter());
     }

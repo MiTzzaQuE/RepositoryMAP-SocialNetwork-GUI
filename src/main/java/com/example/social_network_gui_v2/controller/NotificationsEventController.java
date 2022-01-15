@@ -75,9 +75,11 @@ public class NotificationsEventController extends MenuController {
         Platform.setImplicitExit(false);
         chooseButton.setVisible(false);
         eventsListView.setItems(modelEvents);
+        eventsListView.setStyle("-fx-selection-bar: #6e6e6e");
         myEventsListView.setItems(modelUsersEvents);
+        myEventsListView.setStyle("-fx-selection-bar: #6e6e6e");
         notificationsListView.setItems(modelNotifications.sorted(Comparator.reverseOrder()));
-
+        notificationsListView.setStyle("-fx-selection-bar: #6e6e6e");
     }
 
     protected void initModelEvents() {

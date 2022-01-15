@@ -677,7 +677,6 @@ public class BCrypt {
         }
 
         saltb = decode_base64(real_salt, BCRYPT_SALT_LEN);
-        System.out.println("Sarea este: " + saltb);
 
         B = new BCrypt();
         hashed = B.crypt_raw(passwordb, saltb, rounds);

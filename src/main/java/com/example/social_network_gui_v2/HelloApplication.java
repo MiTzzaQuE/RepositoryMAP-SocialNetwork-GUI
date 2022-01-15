@@ -63,50 +63,6 @@ public class HelloApplication extends Application {
         stage.setTitle("Sign in!");
         stage.setScene(scene);
         stage.show();
-
-
-        //TEST PAGING USERS
-//        serv.printUs().forEach(System.out::println);
-//        serv.setPageSize(6);
-//
-//
-//        System.out.println("\nElements on page 0");
-//        serv.getUsersOnPage(0).stream()
-//                .forEach(System.out::println);
-//
-//        System.out.println("\nElements on next page");
-//        serv.getNextUsers().stream()
-//                .forEach(System.out::println);
-//
-//        System.out.println("\nElements on next page");
-//        serv.getNextUsers().stream()
-//                .forEach(System.out::println);
-
-
-        //TEST PAGING
-//        serv.printUs().forEach(System.out::println);
-//        serv.setPageSize(6);
-//
-//
-//        System.out.println("\nElements on page 0");
-//        serv.getUsersOnPage(0).stream()
-//                .forEach(System.out::println);
-
-//        System.out.println("\nElements on page 1");
-//        serv.getUsersOnPage(1).stream()
-//                .forEach(System.out::println);
-//
-//        System.out.println("\nElements on page 2");
-//        serv.getUsersOnPage(2).stream()
-//                .forEach(System.out::println);
-
-//        System.out.println("\nElements on next page");
-//        serv.getNextUsers().stream()
-//                .forEach(System.out::println);
-//
-//        System.out.println("\nElements on next page");
-//        serv.getNextUsers().stream()
-//                .forEach(System.out::println);
    }
 
 

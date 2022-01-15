@@ -29,6 +29,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -106,11 +107,11 @@ public class MenuController{
 
     protected void initModelMenu() {
 
-//        users = getUsersNoFriends();
         users = servUser.getUsersOnPage(0);
         friends = getFriends();
         modelUser.setAll(users);
         modelFriends.setAll(friends);
+        datePickerDataField.setValue(LocalDate.parse("2001-09-06"));
     }
 
     @FXML
@@ -119,10 +120,12 @@ public class MenuController{
         tableColumnFirstNameU.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
         tableColumnLastNameU.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
         tableViewUsers.setItems(modelUser);
+        tableViewUsers.setStyle("-fx-selection-bar: #6e6e6e");
 
         tableColumnFirstNameF.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
         tableColumnLastNameF.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
         tableViewFriends.setItems(modelFriends);
+        tableViewFriends.setStyle("-fx-selection-bar: #6e6e6e");
 
         userFilter.textProperty().addListener(o -> handleFilter1());
         friendFilter.textProperty().addListener(o -> handleFilter2());
@@ -358,6 +361,8 @@ public class MenuController{
             menuController.setService(servUser, servFriendship, servMessage, servEvent, userLogin, dialogStage);
 
             dialogStage.show();
+
+            accountButtonTab.setStyle("-fx-border-color: #ffffff");;
         }
         catch (IOException e) {
             e.printStackTrace();
