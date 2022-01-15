@@ -127,20 +127,6 @@ public class ChatController extends MenuController{
         lvChatWindow.setItems(chatMessages);//attach the observable list to the listview
         lvChatWindow.setCellFactory(param -> {
             ListCell<Message> cell = new ListCell<Message>() {
-                final Label lblUserLeft = new Label();
-                final Label lblTextLeft = new Label();
-                final HBox hBoxLeft = new HBox(lblUserLeft, lblTextLeft);
-
-                final Label lblUserRight = new Label();
-                final Label lblTextRight = new Label();
-                final HBox hBoxRight = new HBox(lblTextRight, lblUserRight);
-
-                {
-                    hBoxLeft.setAlignment(Pos.CENTER_LEFT);
-                    hBoxLeft.setSpacing(5);
-                    hBoxRight.setAlignment(Pos.CENTER_RIGHT);
-                    hBoxRight.setSpacing(5);
-                }
 
                 @Override
                 protected void updateItem(Message item, boolean empty) {

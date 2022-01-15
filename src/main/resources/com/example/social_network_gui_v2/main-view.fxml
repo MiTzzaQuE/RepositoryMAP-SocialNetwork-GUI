@@ -87,7 +87,7 @@
                   <TableView fx:id="tableViewUsers" layoutY="206.0" prefHeight="200.0" prefWidth="200.0">
                      <columns>
                         <TableColumn fx:id="tableColumnFirstNameU" prefWidth="100.0" text="First Name" />
-                        <TableColumn fx:id="tableColumnLastNameU" prefWidth="100.0" text="Last Name" />
+                        <TableColumn fx:id="tableColumnLastNameU" prefWidth="100.0" style="-fx-border-radius: 20; -fx-background-radius: 10;" text="Last Name" />
                      </columns>
                   </TableView>
                   <ButtonBar layoutX="199.0" layoutY="413.0" prefHeight="28.0" prefWidth="200.0">

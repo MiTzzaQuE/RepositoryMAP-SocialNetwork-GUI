@@ -18,8 +18,8 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="235.0" style="-fx-background-color: #505050;">
                     <children>
-                  <ListView fx:id="notificationsListView" layoutX="51.0" layoutY="64.0" prefHeight="160.0" prefWidth="200.0" />
-                  <ListView fx:id="eventsListView" layoutX="51.0" layoutY="251.0" onMouseClicked="#onEventListViewClick" prefHeight="160.0" prefWidth="200.0" />
+                  <ListView fx:id="notificationsListView" layoutX="51.0" layoutY="64.0" prefHeight="160.0" prefWidth="200.0" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #bcfd4c;" />
+                  <ListView fx:id="eventsListView" layoutX="51.0" layoutY="251.0" onMouseClicked="#onEventListViewClick" prefHeight="160.0" prefWidth="200.0" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #bcfd4c;" />
                         <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="-1.0" layoutY="385.0" onMouseClicked="#onCloseButtonClick" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@images/Logo.png" />
@@ -44,7 +44,7 @@
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #6e6e6e; -fx-border-radius: 25px;">
                <children>
-                  <ListView fx:id="myEventsListView" layoutX="51.0" layoutY="251.0" prefHeight="160.0" prefWidth="200.0" />
+                  <ListView fx:id="myEventsListView" layoutX="51.0" layoutY="251.0" prefHeight="160.0" prefWidth="200.0" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #bcfd4c;" />
                   <Label layoutX="93.0" layoutY="224.0" text="YOUR EVENTS" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Semibold" size="18.0" />

@@ -120,7 +120,8 @@ public class MenuController{
         tableColumnFirstNameU.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
         tableColumnLastNameU.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
         tableViewUsers.setItems(modelUser);
-        tableViewUsers.setStyle("-fx-selection-bar: #6e6e6e");
+        tableViewUsers.setStyle("-fx-selection-bar: #6e6e6e;" +
+                                "-fx-border-radius: 0 0 18 18;");
 
         tableColumnFirstNameF.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
         tableColumnLastNameF.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
