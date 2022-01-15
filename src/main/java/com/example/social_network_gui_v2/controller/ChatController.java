@@ -61,19 +61,22 @@ public class ChatController extends MenuController{
 
     @FXML
     public void initialize() {
+
         tableColumnNameChat.setCellValueFactory(new PropertyValueFactory<Chat, String>("name"));
         tableViewChat.setItems(modelChat);
+        tableViewChat.setStyle("-fx-selection-bar:  #bcfd4c;" +
+                "-fx-background-color:  #bcfd4c;");
     }
 
 
     public List<Chat> initModelChat() {
+
         Iterable<Message> mess = userLogin.getMessages();
 
         List<Chat> chats = new ArrayList<>();
         for (Message ms : mess) {
             List<Long> messageInvolved = new ArrayList<>();
-            if (Objects.equals(ms.getFrom().getId(), userLogin.getId()) ||
-                    ms.getTo().contains(userLogin)) {
+            if (Objects.equals(ms.getFrom().getId(), userLogin.getId()) || ms.getTo().contains(userLogin)) {
                 ms.getTo().forEach(x -> messageInvolved.add(x.getId()));
                 messageInvolved.add(ms.getFrom().getId());
                 List<Long> messageInvolvedSorted = messageInvolved.stream().sorted().collect(Collectors.toList());
@@ -89,7 +92,8 @@ public class ChatController extends MenuController{
                     if (messageInvolved.get(0) == userLogin.getId()) {
                         User u2 = servUser.findOne(id2);
                         chatNew = new Chat(u2.getFirstName() + " " + u2.getLastName(), messageInvolvedSorted);
-                    } else {
+                    }
+                    else {
                         User u1 = servUser.findOne(id1);
                         chatNew = new Chat(u1.getFirstName() + " " + u1.getLastName(), messageInvolvedSorted);
                     }
@@ -102,6 +106,7 @@ public class ChatController extends MenuController{
     }
 
     private boolean containsPeople(List<Long> idsInvolved, List<Chat> chats) {
+
         for (Chat ch : chats) {
             if (ch.getPeople().equals(idsInvolved))
                 return true;
@@ -114,6 +119,8 @@ public class ChatController extends MenuController{
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
         if (selected == null)
             return;
+        lvChatWindow.setStyle("-fx-selection-bar:transparent;" +
+                "-fx-control-inner-background:  #6e6e6e;");
 
         chatMessages.setAll(servMessage.groupChat(userLogin.getMessages(), selected.getPeople()));
 
@@ -137,21 +144,28 @@ public class ChatController extends MenuController{
 
                 @Override
                 protected void updateItem(Message item, boolean empty) {
+
                     super.updateItem(item, empty);
 
                     if (empty) {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        if (!item.getFrom().getId().equals(userLogin.getId())) {
-                            lblUserLeft.setText(item.getFrom().getFirstName() + ":");
-                            lblTextLeft.setText(item.getMessage());
-                            //lblTextLeft.setTextFill(Color.color(1, 0, 0));
-                            setGraphic(hBoxLeft);
-                        } else {
-                            lblUserRight.setText(": " + item.getFrom().getFirstName());
-                            lblTextRight.setText(item.getMessage());
-                            setGraphic(hBoxRight);
+                        if (!item.getFrom().getId().equals(userLogin.getId()) && item.getRepliedTo() == null) {
+                            VBox vBoxLeft = getMessLeft(item.getFrom().getFirstName(), item.getMessage());
+                            setGraphic(vBoxLeft);
+                        }
+                        else if(!item.getFrom().getId().equals(userLogin.getId()) && item.getRepliedTo().getId() != null){
+                            VBox vBoxLeft = getReplyLeft(item.getFrom().getFirstName(), item.getMessage(), item.getRepliedTo().getMessage());
+                            setGraphic(vBoxLeft);
+                        }
+                        else if(item.getFrom().getId().equals(userLogin.getId()) && item.getRepliedTo() == null){
+                            VBox vBoxRight = getMessRight(item.getFrom().getFirstName(),item.getMessage());
+                            setGraphic(vBoxRight);
+                        }
+                        else{
+                            VBox vBoxRight = getReplyRight(item.getFrom().getFirstName(),item.getMessage(),item.getRepliedTo().getMessage());
+                            setGraphic(vBoxRight);
                         }
                     }
                 }
@@ -162,6 +176,7 @@ public class ChatController extends MenuController{
 
     @FXML
     private void handleUser1SubmitMessage(ActionEvent event) {
+
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
         if(Objects.equals(newMessage.getText(), "")) {
             MessageAlert.showErrorMessage(null, "Please write a message!");
@@ -192,15 +207,8 @@ public class ChatController extends MenuController{
         }
     }
 
-    private List<User> takeToWithoutUserLoginUsers(List<Long> ids) {
-        List<User> idsNew = new ArrayList<>();
-        for (Long id : ids)
-            if (id != userLogin.getId())
-                idsNew.add(servUser.findOne(id));
-        return idsNew;
-    }
-
     protected List<Long> takeToWithoutUserLoginIds(List<Long> ids) {
+
         List<Long> idsNew = new ArrayList<>();
         for (Long id : ids)
             if (id != userLogin.getId())
@@ -210,6 +218,7 @@ public class ChatController extends MenuController{
 
     @FXML
     private void showNewChatEditDialog() {
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("chat-new-view.fxml"));
 
@@ -227,5 +236,127 @@ public class ChatController extends MenuController{
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String newLinesInString(String s, int x) {
+
+        StringBuilder c = new StringBuilder(s);
+        for(int i = x; i<s.length(); i = i +x) {
+            while(i<c.length() && c.charAt(i)!=' ') {
+                i++;
+            }
+            if(i<c.length())
+                c.setCharAt(i,'\n');
+        }
+        String output = c.toString();
+        return output;
+    }
+
+    public VBox getReplyLeft(String SenderName, String message, String replied) {
+
+        Label Name= new Label(SenderName);
+        Label mess = new Label(message);
+        Label rep = new Label(replied);
+        mess.setText(newLinesInString(mess.getText(),30));
+        rep.setMaxSize(120,30);
+        rep.setStyle("-fx-background-color:rgb(166, 166, 166);" +
+                "-fx-padding: 3 10 3 10;" +
+                "-fx-background-radius: 15;");
+        VBox container = new VBox();
+        container.getChildren().addAll(Name,rep,mess);
+        Name.setStyle("-fx-text-fill: #ffffff;" +
+                "-fx-padding: 0 0 5 13;");
+        mess.setStyle("-fx-background-color:  #505050;" +
+                "-fx-background-radius: 10;" +
+                "-fx-text-fill: #ffffff;" +
+                "-fx-padding: 3 10 10 10;");
+        container.setAlignment(Pos.CENTER_LEFT);
+        container.setOnMousePressed(Event ->{ mess.setStyle(
+                "-fx-background-color:   #6e6e6e;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-text-fill: #ffffff;" +
+                        "-fx-padding: 3 10 10 10;"+
+                        "-fx-border-color: #bcfd4c;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-border-width: 2;" );});
+        return container;
+    }
+
+    public VBox getReplyRight(String SenderName, String message, String replied) {
+
+        Label Name= new Label(SenderName);
+        Label mess = new Label(message);
+        mess.setText(newLinesInString(mess.getText(),30));
+        Label rep = new Label(replied);
+        rep.setMaxSize(120,30);
+        rep.setStyle("-fx-background-color:rgb(166, 166, 166);" +
+                "-fx-padding: 3 10 3 10;" +
+                "-fx-background-radius: 15;");
+        VBox container = new VBox();
+        container.getChildren().addAll(Name,rep,mess);
+        Name.setStyle("-fx-text-fill: #ffffff;" +
+                "-fx-padding: 0 0 5 13;");
+        mess.setStyle("-fx-background-color:  #bcfd4c;" +
+                "-fx-background-radius: 10;" +
+                "-fx-text-fill: #6e6e6e;" +
+                "-fx-padding: 3 10 10 10");
+        container.setAlignment(Pos.CENTER_RIGHT);
+        container.setOnMousePressed(Event ->{ mess.setStyle(
+                "-fx-background-color:   #6e6e6e;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-text-fill: #ffffff;" +
+                        "-fx-padding: 3 10 10 10;"+
+                        "-fx-border-color: #bcfd4c;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-border-width: 2;");});
+        return container;
+    }
+
+    public VBox getMessLeft(String SenderName, String message) {
+
+        Label Name = new Label(SenderName);
+        Label mess = new Label(message);
+        mess.setText(newLinesInString(mess.getText(),30));
+        VBox container = new VBox(Name,mess);
+        Name.setStyle("-fx-text-fill: #ffffff;" +
+                "-fx-padding: 0 0 5 13;");
+        mess.setStyle("-fx-background-color:  #505050;" +
+                "-fx-background-radius: 10;" +
+                "-fx-text-fill: #ffffff;" +
+                "-fx-padding: 3 10 10 10;");
+        container.setAlignment(Pos.CENTER_LEFT);
+        container.setOnMousePressed(Event ->{ mess.setStyle(
+                "-fx-background-color:   #6e6e6e;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-text-fill: #ffffff;" +
+                        "-fx-padding: 3 10 10 10;"+
+                        "-fx-border-color: #bcfd4c;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-border-width: 2;" );});
+        return container;
+    }
+
+    public VBox getMessRight(String SenderName, String message) {
+
+        Label Name = new Label(SenderName);
+        Label mess = new Label(message);
+        mess.setText(newLinesInString(mess.getText(),30));
+        VBox container = new VBox(Name,mess);
+        Name.setStyle("-fx-text-fill: #ffffff;" +
+                "-fx-padding: 0 0 5 13;");
+        mess.setStyle("-fx-background-color:  #bcfd4c;" +
+                "-fx-background-radius: 10;" +
+                "-fx-text-fill: #6e6e6e;" +
+                "-fx-padding: 3 10 10 10");
+        container.setAlignment(Pos.CENTER_RIGHT);
+        container.setOnMousePressed(Event ->{ mess.setStyle(
+                "-fx-background-color:   #6e6e6e;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-text-fill: #ffffff;" +
+                        "-fx-padding: 3 10 10 10;"+
+                        "-fx-border-color: #bcfd4c;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-border-width: 2;");});
+        return container;
     }
 }

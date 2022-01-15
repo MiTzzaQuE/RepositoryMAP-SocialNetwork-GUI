@@ -32,7 +32,6 @@ import java.util.stream.StreamSupport;
 
 public class RequestsController extends MenuController{
 
-
     private ServiceUser servUser;
     private ServiceFriendship servFriendship;
     private ServiceMessage servMessage;
@@ -47,7 +46,7 @@ public class RequestsController extends MenuController{
     @FXML
     public Button cancelBtn;
     @FXML
-    public Button simpleBtn;  //provizoriu pana ne dam seama cum sa punem imagine pe buton
+    public Button simpleBtn;
 
     @FXML
     TableColumn<FriendshipDTO, String> tableColumnFrom;
@@ -79,12 +78,8 @@ public class RequestsController extends MenuController{
     private void initModelRequest() {
 
         Iterable<Friendship> friendships = servUser.getFriendshipRequestForUser(userLogin.getId());
-        //Image image = new Image("file:src/main/resources/com/example/social_network_gui_v2/trash.png");
         List<FriendshipDTO> friendshipDTOList = StreamSupport.stream(friendships.spliterator(),false)
                 .map(y -> {
-
-//                    Button dup1 = new Button("Accept");
-//                    dup1.setStyle(simpleBtn.getStyle());
                     Button dup1 = new Button();
                     dup1.setStyle(simpleBtn.getStyle());
                     Image image = new Image(this.getClass().getClassLoader().getResourceAsStream("com/example/social_network_gui_v2/images/accept_icon2.png"),30,20,true,true);
@@ -93,8 +88,6 @@ public class RequestsController extends MenuController{
                     dup1.setGraphic(imageView);
                     dup1.setOnAction((ActionEvent e) -> onAcceptButtonClick(e));
 
-//                    Button dup2 = new Button("Decline");
-//                    dup2.setStyle(simpleBtn.getStyle());
                     Button dup2 = new Button();
                     dup2.setStyle(simpleBtn.getStyle());
                     Image image2 = new Image(this.getClass().getClassLoader().getResourceAsStream("com/example/social_network_gui_v2/images/reject.png"),30,20,true,true);
@@ -105,7 +98,6 @@ public class RequestsController extends MenuController{
 
                     Button dup3 = new Button();
                     dup3.setStyle(simpleBtn.getStyle());
-                    //dup3.setStyle(cancelBtn.getStyle());
                     dup3.setOnAction((ActionEvent e) -> onCancelButtonClick(e));
                     return new FriendshipDTO(servUser.findOne(y.getId().getLeft()).getId(),servUser.findOne(y.getId().getLeft()).getFirstName() + " " + servUser.findOne(y.getId().getLeft()).getLastName(),
                         servUser.findOne(y.getId().getRight()).getId(),servUser.findOne(y.getId().getRight()).getFirstName() + " " + servUser.findOne(y.getId().getRight()).getLastName(),
@@ -122,10 +114,7 @@ public class RequestsController extends MenuController{
                     Button dup2 = new Button();
                     dup2.setStyle(rejectBtn.getStyle());
                     dup2.setOnAction((ActionEvent e) -> onRejectButtonClick(e));
-//                    Button dup3 = new Button("Cancel");
-//                    dup3.setStyle(cancelBtn.getStyle());
 
-//sau                    URL url = this.getClass().getClassLoader().getResource("com/example/social_network_gui_v2/images/trash.png");
                     Button dup3 = new Button();
                     dup3.setStyle(cancelBtn.getStyle());
                     Image image = new Image(this.getClass().getClassLoader().getResourceAsStream("com/example/social_network_gui_v2/images/trash.png"),20,20,true,true);
@@ -133,8 +122,6 @@ public class RequestsController extends MenuController{
                     imageView.setPreserveRatio(true);
                     dup3.setGraphic(imageView);
 
-//                    dup3.getStylesheets().add("C:\\SILVIA\\SEM III\\Metode avansate de programare\\Laborator\\RepositoryMAP-SocialNetwork-GUI\\src\\main\\resources\\com\\example\\social_network_gui_v2\\images\\buttons.css");
-//                    dup3.getStyleClass().add("cancelbutton");
                     dup3.setOnAction((ActionEvent e) -> onCancelButtonClick(e));
                     return new FriendshipDTO(servUser.findOne(y.getId().getLeft()).getId(),servUser.findOne(y.getId().getLeft()).getFirstName() + " " + servUser.findOne(y.getId().getLeft()).getLastName(),
                         servUser.findOne(y.getId().getRight()).getId(),servUser.findOne(y.getId().getRight()).getFirstName() + " " + servUser.findOne(y.getId().getRight()).getLastName(),
@@ -150,10 +137,12 @@ public class RequestsController extends MenuController{
         tableColumnAccept.setCellValueFactory(new PropertyValueFactory<FriendshipDTO, Button>("acceptButton"));
         tableColumnReject.setCellValueFactory(new PropertyValueFactory<FriendshipDTO, Button>("rejectButton"));
         tableViewFriendhipRequests.setItems(modelFriendship);
+        tableViewFriendhipRequests.setStyle("-fx-selection-bar: #6e6e6e");
 
         tableColumnTo.setCellValueFactory(new PropertyValueFactory<FriendshipDTO, String>("userTo"));
         tableColumnCancel.setCellValueFactory(new PropertyValueFactory<FriendshipDTO, Button>("cancelButton"));
         tableViewRequestsSent.setItems(modelSentRequests);
+        tableViewRequestsSent.setStyle("-fx-selection-bar: #6e6e6e");
 
         acceptBtn.setVisible(false);
         rejectBtn.setVisible(false);
@@ -163,13 +152,11 @@ public class RequestsController extends MenuController{
 
     @FXML
     public void onAcceptButtonClick(ActionEvent actionEvent) {
-        System.out.println("click accept");
         FriendshipDTO selected = tableViewFriendhipRequests.getSelectionModel().getSelectedItem();
         if(selected != null) {
             try {
                 servFriendship.acceptFriendship(selected.getIdFrom(), selected.getIdTo());
                 tableViewFriendhipRequests.getItems().removeAll(tableViewFriendhipRequests.getSelectionModel().getSelectedItem());
-                //userLogin.addFrRequestRec(servFriendship.);
                 System.out.println(userLogin);
 
             } catch (ValidationException validationException) {
@@ -181,7 +168,10 @@ public class RequestsController extends MenuController{
 
     @FXML
     public void onRejectButtonClick(ActionEvent actionEvent) {
-        System.out.println("click reject");
+        deteleFriendRequest(tableViewFriendhipRequests);
+    }
+
+    protected void deteleFriendRequest(TableView<FriendshipDTO> tableViewFriendhipRequests) {
         FriendshipDTO selected = tableViewFriendhipRequests.getSelectionModel().getSelectedItem();
         if(selected != null) {
             try {
@@ -196,17 +186,7 @@ public class RequestsController extends MenuController{
 
     @FXML
     public void onCancelButtonClick(ActionEvent actionEvent) {
-        System.out.println("click cancel");
-        FriendshipDTO selected = tableViewRequestsSent.getSelectionModel().getSelectedItem();
-        if(selected != null) {
-            try {
-                servFriendship.deleteFriend(selected.getIdFrom(), selected.getIdTo());
-                tableViewRequestsSent.getItems().removeAll(tableViewRequestsSent.getSelectionModel().getSelectedItem());
-            } catch (ValidationException validationException) {
-                MessageAlert.showErrorMessage(null, validationException.getMessage());
-            }
-        }
-        else MessageAlert.showErrorMessage(null,"No selected item!");
+        deteleFriendRequest(tableViewRequestsSent);
     }
 
     public void onBackButtonClick(ActionEvent actionEvent) {
